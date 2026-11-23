@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FleetTrack Nexa v2 - Dashboard Prototypes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#222845',
+              dark: '#111827',
+              blue: '#2563eb',
+              light: '#f5f7fb',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex flex-col font-sans antialiased">
+  <!-- Top Bar -->
+  <header class="bg-[#222845] border-b border-white/10 px-6 py-4 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/nexa-logo.png" alt="Nexa" class="h-6 object-contain" onerror="this.src='https://placehold.co/80x24/222845/ffffff?text=NEXA'">
+        <span class="text-[10px] font-bold uppercase tracking-[2.5px] text-white/50">Fleet Track v2</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="size-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          HTML + Tailwind Pure
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-10">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-4 border border-blue-100">
+        <i data-lucide="layout-grid" class="size-3.5"></i>
+        Platform Fleetrack Nexa v2
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-[#111827] tracking-tight">
+        Koleksi Dashboard Berdasarkan Role
+      </h1>
+      <p class="mt-3 text-base text-gray-500 leading-relaxed">
+        Replika antarmuka dashboard lengkap dari <code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-sm font-mono">fe-nexa-v2</code> yang diimplementasikan dalam versi HTML murni dan Tailwind CSS. Pilih role di bawah untuk melihat dashboard masing-masing.
+      </p>
+    </div>
+
+    <!-- Role Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- 1. Super Admin Card -->
+      <a href="superadmin.html" class="group bg-white rounded-xl border border-[#e4e8f0] p-6 shadow-sm hover:shadow-xl hover:border-blue-500 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="size-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-200">
+              <i data-lucide="shield-check" class="size-6"></i>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">Platform-Wide</span>
+          </div>
+          <h2 class="text-xl font-bold text-[#111827] group-hover:text-blue-600 transition-colors">Super Admin</h2>
+          <p class="text-sm text-gray-500 mt-2">
+            Manajemen multi-tenant platform-wide, ringkasan lisensi paket & langganan, statistik invoice tertunda & overdue, top tenant profitabel, serta log aktivitas sistem.
+          </p>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-1.5 text-xs">
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Tenant KPI</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Invoice Action</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Top 5 Tenants</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">System Logs</span>
+          </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between text-blue-600 font-semibold text-sm pt-4 border-t border-gray-100">
+          <span>Buka Dashboard Super Admin</span>
+          <i data-lucide="arrow-right" class="size-4 group-hover:translate-x-1 transition-transform"></i>
+        </div>
+      </a>
+
+      <!-- 2. Executive Card -->
+      <a href="executive.html" class="group bg-white rounded-xl border border-[#e4e8f0] p-6 shadow-sm hover:shadow-xl hover:border-purple-500 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="size-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all duration-200">
+              <i data-lucide="trending-up" class="size-6"></i>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple-50 text-purple-700">Executive / C-Level</span>
+          </div>
+          <h2 class="text-xl font-bold text-[#111827] group-hover:text-purple-600 transition-colors">Executive</h2>
+          <p class="text-sm text-gray-500 mt-2">
+            Ringkasan pendapatan bulanan, margin & laba bersih, kartu gradient finansial/MRR, efisiensi BBM (L/ton), dan ringkasan interaktif tab Operasional & Auditor.
+          </p>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-1.5 text-xs">
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Pendapatan & Margin</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">MRR Gradient Cards</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Ringkasan Peran Tab</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Progress Bars</span>
+          </div>
+          <!-- Executive Menu Links -->
+          <div class="mt-3 pt-3 border-t border-dashed border-gray-100">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">Semua Menu Executive:</span>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+              <span class="px-2 py-0.5 bg-purple-50 text-purple-700 font-medium rounded hover:bg-purple-100">Dashboard</span>
+              <span class="px-2 py-0.5 bg-purple-50 text-purple-700 font-medium rounded hover:bg-purple-100">Laporan Operasional</span>
+              <span class="px-2 py-0.5 bg-purple-50 text-purple-700 font-medium rounded hover:bg-purple-100">Laporan Keuangan</span>
+              <span class="px-2 py-0.5 bg-purple-50 text-purple-700 font-medium rounded hover:bg-purple-100">Laporan Audit</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between text-purple-600 font-semibold text-sm pt-4 border-t border-gray-100">
+          <span>Buka Dashboard Executive</span>
+          <i data-lucide="arrow-right" class="size-4 group-hover:translate-x-1 transition-transform"></i>
+        </div>
+      </a>
+
+      <!-- 3. Admin Card -->
+      <a href="admin.html" class="group bg-white rounded-xl border border-[#e4e8f0] p-6 shadow-sm hover:shadow-xl hover:border-emerald-500 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="size-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200">
+              <i data-lucide="user-cog" class="size-6"></i>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Tenant Admin</span>
+          </div>
+          <h2 class="text-xl font-bold text-[#111827] group-hover:text-emerald-600 transition-colors">Admin</h2>
+          <p class="text-sm text-gray-500 mt-2">
+            Metrik operasional umum perusahaan: Total Pengguna, Total Armada, Total Driver, grafik donat interaktif distribusi role pengguna beserta log aktivitas pengguna real-time.
+          </p>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-1.5 text-xs">
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Total User/Armada/Driver</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Donut Chart Roles</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Role Progress Bars</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">User Activity Log</span>
+          </div>
+          <!-- Admin Menu Links -->
+          <div class="mt-3 pt-3 border-t border-dashed border-gray-100">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">Semua Menu Admin:</span>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-medium rounded hover:bg-emerald-100">Dashboard</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-medium rounded hover:bg-emerald-100">Tipe Armada</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-medium rounded hover:bg-emerald-100">Data Armada</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-medium rounded hover:bg-emerald-100">Data Driver</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-medium rounded hover:bg-emerald-100">Data Device</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-medium rounded hover:bg-emerald-100">Manajemen Pengguna</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between text-emerald-600 font-semibold text-sm pt-4 border-t border-gray-100">
+          <span>Buka Dashboard Admin</span>
+          <i data-lucide="arrow-right" class="size-4 group-hover:translate-x-1 transition-transform"></i>
+        </div>
+      </a>
+
+      <!-- 4. Manager Card -->
+      <a href="manager.html" class="group bg-white rounded-xl border border-[#e4e8f0] p-6 shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="size-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all duration-200">
+              <i data-lucide="truck" class="size-6"></i>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">Fleet Operations</span>
+          </div>
+          <h2 class="text-xl font-bold text-[#111827] group-hover:text-amber-600 transition-colors">Manager</h2>
+          <p class="text-sm text-gray-500 mt-2">
+            Kontrol armada real-time: Utilisasi kendaraan, operasional hari ini, persetujuan limit BBM, Live Maps Leaflet interaktif dengan simulasi marker bergerak & telemetri kendaraan.
+          </p>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-1.5 text-xs">
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Live Map Leaflet</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Real-time / Simulasi Toggle</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Fleet Status Telemetri</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Operasional Log</span>
+          </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between text-amber-600 font-semibold text-sm pt-4 border-t border-gray-100">
+          <span>Buka Dashboard Manager</span>
+          <i data-lucide="arrow-right" class="size-4 group-hover:translate-x-1 transition-transform"></i>
+        </div>
+      </a>
+
+      <!-- 5. Auditor Card -->
+      <a href="auditor.html" class="group bg-white rounded-xl border border-[#e4e8f0] p-6 shadow-sm hover:shadow-xl hover:border-red-500 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="size-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all duration-200">
+              <i data-lucide="clipboard-check" class="size-6"></i>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-50 text-red-700">Internal Audit</span>
+          </div>
+          <h2 class="text-xl font-bold text-[#111827] group-hover:text-red-600 transition-colors">Auditor</h2>
+          <p class="text-sm text-gray-500 mt-2">
+            Investigasi telemetri & kepatuhan: status armada, kasus terbuka risiko tinggi/sedang/rendah, grafik donat deteksi anomali BBM/overspeed, grafik tren insiden bertab, dan daftar kasus audit.
+          </p>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-1.5 text-xs">
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Kasus Terbuka & FPR</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Donut Distribusi Anomali</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Bar Chart Tren Insiden</span>
+            <span class="px-2 py-0.5 bg-gray-50 text-gray-600 rounded">Kasus Audit Terbaru</span>
+          </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between text-red-600 font-semibold text-sm pt-4 border-t border-gray-100">
+          <span>Buka Dashboard Auditor</span>
+          <i data-lucide="arrow-right" class="size-4 group-hover:translate-x-1 transition-transform"></i>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-[#e4e8f0] py-6 text-center text-xs text-gray-500 mt-12">
+    <p>FleetTrack Nexa v2 &copy; 2026. Dibuat dengan HTML5, Tailwind CSS, Lucide Icons, ApexCharts, dan Leaflet JS.</p>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditor Dashboard - FleetTrack Nexa v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9aa3bf; }
+  </style>
+</head>
+<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans">
+
+  <!-- Mobile Backdrop -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-white/85 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+    <!-- Logo -->
+    <div class="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
+      <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+        <img src="assets/nexa-logo.png" alt="Nexa" class="h-5.5 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
+        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Track</span>
+      </a>
+      <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
+        <i data-lucide="x" class="size-5"></i>
+      </button>
+    </div>
+
+    <!-- Navigation Menu (Auditor structure) -->
+    <div class="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs font-medium">
+      <!-- Section: Ringkasan -->
+      <div>
+        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Ringkasan</p>
+        <div class="space-y-0.5">
+          <a href="auditor.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-semibold shadow-xs">
+            <i data-lucide="layout-grid" class="size-4 shrink-0 text-blue-400"></i>
+            <span>Dashboard</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Investigasi -->
+      <div>
+        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Investigasi</p>
+        <div class="space-y-0.5">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="search" class="size-4 shrink-0"></i>
+            <span>Investigasi Kasus</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Aturan & Laporan -->
+      <div>
+        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Aturan &amp; Laporan</p>
+        <div class="space-y-0.5">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="clipboard-list" class="size-4 shrink-0"></i>
+            <span>Manajemen Aturan</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="file-chart-column" class="size-4 shrink-0"></i>
+            <span>Laporan</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar User Footer -->
+    <div class="p-2.5 pt-0 border-t border-white/5">
+      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+        <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-red-600 font-bold text-white text-xs select-none shadow-xs">
+          AU
+        </div>
+        <div class="flex flex-col leading-tight min-w-0 flex-1">
+          <span class="text-sm font-bold text-white/90 truncate">Auditor Internal</span>
+          <span class="text-[11px] text-white/50 truncate">Auditor</span>
+        </div>
+        <a href="index.html" title="Kembali ke Beranda" class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors">
+          <i data-lucide="log-out" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN CONTENT WRAPPER ─── -->
+  <div class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300">
+    
+    <!-- Top Site Header -->
+    <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between">
+      <!-- Left: Toggle & Breadcrumb -->
+      <div class="flex items-center gap-0 min-w-0 flex-1">
+        <button id="sidebar-toggle-btn" class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0">
+          <i data-lucide="panel-left" class="size-4"></i>
+        </button>
+
+        <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden">
+          <a href="index.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">FleetTrack</a>
+          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+          <span class="text-[#9aa3bf]">Auditor</span>
+          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+          <span class="font-bold text-[#111827]">Dashboard</span>
+        </nav>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-2 shrink-0 pl-2">
+        <button class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
+          <i data-lucide="bell" class="size-4"></i>
+          <span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
+        </button>
+
+        <button title="Pengaturan" class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
+          <i data-lucide="settings" class="size-4"></i>
+        </button>
+
+        <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
+
+        <!-- Role Switcher & Profile Dropdown -->
+        <div class="relative">
+          <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
+            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#dc2626] text-[11px] font-black text-white">
+              AU
+            </div>
+            <div class="hidden sm:flex flex-col text-left leading-tight">
+              <span class="text-[12.5px] font-bold text-[#111827]">Auditor Internal</span>
+              <span class="text-[10.5px] text-[#9aa3bf]">Auditor</span>
+            </div>
+            <i data-lucide="chevron-down" class="size-3.5 text-[#9aa3bf] ml-0.5"></i>
+          </button>
+
+          <!-- Dropdown Popover -->
+          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs">
+            <div class="px-4 py-2 border-b border-gray-100">
+              <p class="text-[11px] font-medium text-gray-400">Masuk sebagai</p>
+              <p class="font-bold text-[#111827] truncate">auditor@nexa.id</p>
+            </div>
+            <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              Beralih Tampilan Role:
+            </div>
+            <a href="superadmin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Super Admin</span>
+            </a>
+            <a href="executive.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Executive</span>
+            </a>
+            <a href="admin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Admin</span>
+            </a>
+            <a href="manager.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Manager</span>
+            </a>
+            <a href="auditor.html" class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60">
+              <span>Auditor</span>
+              <i data-lucide="check" class="size-3.5 text-blue-600"></i>
+            </a>
+            <div class="border-t border-gray-100 my-1"></div>
+            <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50">
+              <i data-lucide="home" class="size-3.5"></i>
+              <span>Kembali ke Beranda</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+      
+      <!-- Page Header -->
+      <div class="flex items-start justify-between mb-5.5">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">Ringkasan Dashboard</h1>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1">
+            Pemantauan dan analisis armada kendaraan secara real-time
+          </p>
+        </div>
+      </div>
+
+      <!-- ─── 1. KPI CARDS (Auditor) ─── -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-4">
+        
+        <!-- Status Armada -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Status Armada</p>
+              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">28</p>
+            </div>
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]">
+              <i data-lucide="truck" class="size-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-col gap-1 text-[12px]">
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#2563eb] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">22</strong>
+              <span class="text-[#9aa3bf] truncate">Armada Aktif</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#06b6d4] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">6</strong>
+              <span class="text-[#9aa3bf] truncate">Armada Tidak Aktif</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kasus Terbuka -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#dc2626]"></span>
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Kasus Terbuka</p>
+              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#dc2626] tracking-[-1px]">9</p>
+            </div>
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fef2f2] text-[#dc2626]">
+              <i data-lucide="alert-circle" class="size-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-col gap-1 text-[12px]">
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#dc2626] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">3</strong>
+              <span class="text-[#9aa3bf] truncate">Risiko Tinggi (High)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#f97316] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">4</strong>
+              <span class="text-[#9aa3bf] truncate">Risiko Sedang (Medium)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#d97706] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">2</strong>
+              <span class="text-[#9aa3bf] truncate">Risiko Rendah (Low)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kasus Diselesaikan -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#16a34a]"></span>
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Kasus Diselesaikan</p>
+              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">45</p>
+            </div>
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f0fdf4] text-[#16a34a]">
+              <i data-lucide="shield-alert" class="size-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-col gap-1 text-[12px]">
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">4.2%</strong>
+              <span class="text-[#9aa3bf] truncate">False Positive Rate</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#7c3aed] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">38</strong>
+              <span class="text-[#9aa3bf] truncate">Kasus Dikonfirmasi Valid</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── 2. CHARTS & CASES LOG GRID (3:2 / 5 cols) ─── -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 items-stretch">
+        
+        <!-- Left Side: 2 Charts (col-span-3) -->
+        <div class="lg:col-span-3 flex flex-col gap-4">
+          
+          <!-- Anomaly Detection Donut Chart -->
+          <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs">
+            <div class="mb-4">
+              <h2 class="text-[14px] font-bold text-[#111827]">Distribusi Kasus</h2>
+              <p class="text-[12px] text-[#9aa3bf] mt-0.5">Distribusi berdasarkan kategori template aturan V2</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-6">
+              <!-- Donut Chart Container -->
+              <div class="relative w-44 h-44 shrink-0 flex items-center justify-center">
+                <div id="anomaly-donut-chart" class="w-full h-full"></div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span class="text-[26px] font-extrabold text-[#111827] leading-none tracking-[-1px]">54</span>
+                  <span class="text-[11px] font-medium text-[#9aa3bf] mt-0.5">Total Kasus</span>
+                </div>
+              </div>
+
+              <!-- Slices Breakdown List -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3 w-full flex-1">
+                
+                <!-- 1. Pencurian BBM -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="size-2 rounded-full shrink-0 bg-[#dc2626]"></span>
+                      <span class="text-[12px] font-semibold text-[#111827] truncate">Potensi Pencurian BBM</span>
+                    </div>
+                    <span class="text-[12px] font-bold text-[#111827] ml-2 shrink-0">14</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                    <div class="h-full bg-[#dc2626] rounded-full" style="width: 26%;"></div>
+                  </div>
+                  <div class="flex items-center justify-between text-[10.5px]">
+                    <span class="text-[#9aa3bf]">3 aktif</span>
+                    <span class="font-bold text-[#dc2626]">26%</span>
+                  </div>
+                </div>
+
+                <!-- 2. Overspeed -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="size-2 rounded-full shrink-0 bg-[#f97316]"></span>
+                      <span class="text-[12px] font-semibold text-[#111827] truncate">Batas Kecepatan</span>
+                    </div>
+                    <span class="text-[12px] font-bold text-[#111827] ml-2 shrink-0">18</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                    <div class="h-full bg-[#f97316] rounded-full" style="width: 33%;"></div>
+                  </div>
+                  <div class="flex items-center justify-between text-[10.5px]">
+                    <span class="text-[#9aa3bf]">2 aktif</span>
+                    <span class="font-bold text-[#f97316]">33%</span>
+                  </div>
+                </div>
+
+                <!-- 3. Tidak Sah -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="size-2 rounded-full shrink-0 bg-[#7c3aed]"></span>
+                      <span class="text-[12px] font-semibold text-[#111827] truncate">Penggunaan Tidak Sah</span>
+                    </div>
+                    <span class="text-[12px] font-bold text-[#111827] ml-2 shrink-0">6</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                    <div class="h-full bg-[#7c3aed] rounded-full" style="width: 11%;"></div>
+                  </div>
+                  <div class="flex items-center justify-between text-[10.5px]">
+                    <span class="text-[#9aa3bf]">1 aktif</span>
+                    <span class="font-bold text-[#7c3aed]">11%</span>
+                  </div>
+                </div>
+
+                <!-- 4. Pelanggaran Rute -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="size-2 rounded-full shrink-0 bg-[#d97706]"></span>
+                      <span class="text-[12px] font-semibold text-[#111827] truncate">Deviasi Rute</span>
+                    </div>
+                    <span class="text-[12px] font-bold text-[#111827] ml-2 shrink-0">9</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                    <div class="h-full bg-[#d97706] rounded-full" style="width: 17%;"></div>
+                  </div>
+                  <div class="flex items-center justify-between text-[10.5px]">
+                    <span class="text-[#9aa3bf]">2 aktif</span>
+                    <span class="font-bold text-[#d97706]">17%</span>
+                  </div>
+                </div>
+
+                <!-- 5. Idle Berlebihan (col-span-2) -->
+                <div class="sm:col-span-2">
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="size-2 rounded-full shrink-0 bg-[#2563eb]"></span>
+                      <span class="text-[12px] font-semibold text-[#111827] truncate">Idle Berlebihan (Mesin Diam &gt;30 mnt)</span>
+                    </div>
+                    <span class="text-[12px] font-bold text-[#111827] ml-2 shrink-0">7</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                    <div class="h-full bg-[#2563eb] rounded-full" style="width: 13%;"></div>
+                  </div>
+                  <div class="flex items-center justify-between text-[10.5px]">
+                    <span class="text-[#9aa3bf]">1 aktif</span>
+                    <span class="font-bold text-[#2563eb]">13%</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Incident Trend Bar Chart with Tabs -->
+          <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs">
+            <!-- Header with Tabs -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div>
+                <h2 class="text-[14px] font-bold text-[#111827]">Tren Insiden</h2>
+                <p class="text-[12px] text-[#9aa3bf] mt-0.5">Insiden hari ini setiap 4 jam (vs kemarin)</p>
+              </div>
+
+              <!-- Tabs -->
+              <div class="flex gap-1 bg-[#f8f9fc] p-1 rounded-lg border border-[#e4e8f0] self-start sm:self-auto">
+                <button id="btn-chart-today" class="px-2.5 py-1 text-[12px] font-semibold rounded-[5px] bg-[#2563eb] text-white transition-all cursor-pointer">
+                  Hari Ini
+                </button>
+                <button id="btn-chart-yesterday" class="px-2.5 py-1 text-[12px] font-semibold rounded-[5px] bg-white text-[#4b5675] hover:text-[#2563eb] border border-[#e4e8f0] transition-all cursor-pointer">
+                  Kemarin
+                </button>
+                <button id="btn-chart-7days" class="px-2.5 py-1 text-[12px] font-semibold rounded-[5px] bg-white text-[#4b5675] hover:text-[#2563eb] border border-[#e4e8f0] transition-all cursor-pointer">
+                  7 Hari
+                </button>
+              </div>
+            </div>
+
+            <!-- Bar Chart Container -->
+            <div id="incident-bar-chart" class="w-full h-[220px]"></div>
+
+            <!-- Chart Stats Sub-boxes -->
+            <div id="chart-stats-grid" class="grid grid-cols-3 gap-2 mt-3">
+              <div class="bg-[#f8f9fc] rounded-[7px] px-3 py-2.5">
+                <p class="text-[11px] font-bold text-[#9aa3bf] uppercase">HARI INI</p>
+                <p class="font-mono text-[17px] font-bold text-[#111827] mt-0.5" id="stat-1-val">54</p>
+                <p class="text-[11px] font-semibold text-[#2563eb] mt-0.5" id="stat-1-sub">insiden</p>
+              </div>
+              <div class="bg-[#f8f9fc] rounded-[7px] px-3 py-2.5">
+                <p class="text-[11px] font-bold text-[#9aa3bf] uppercase">KEMARIN</p>
+                <p class="font-mono text-[17px] font-bold text-[#111827] mt-0.5" id="stat-2-val">48</p>
+                <p class="text-[11px] font-semibold text-[#f97316] mt-0.5" id="stat-2-sub">insiden</p>
+              </div>
+              <div class="bg-[#f8f9fc] rounded-[7px] px-3 py-2.5">
+                <p class="text-[11px] font-bold text-[#9aa3bf] uppercase">VS KEMARIN</p>
+                <p class="font-mono text-[17px] font-bold text-[#dc2626] mt-0.5" id="stat-3-val">+6</p>
+                <p class="text-[11px] font-semibold text-[#dc2626] mt-0.5" id="stat-3-sub">+12.5% peningkatan</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Recent Cases Activity Log (col-span-2) -->
+        <div class="lg:col-span-2 bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col h-full">
+          <!-- Header -->
+          <div class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between shrink-0">
+            <div>
+              <h2 class="text-[14px] font-bold text-[#111827]">Kasus Terbaru</h2>
+              <p class="text-[12px] text-[#9aa3bf] mt-0.5">Kasus yang terdeteksi sistem secara real-time</p>
+            </div>
+            <a href="#" class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline">
+              Semua Kasus <i data-lucide="chevron-right" class="size-3.5"></i>
+            </a>
+          </div>
+
+          <!-- Log List -->
+          <div class="flex-1 overflow-y-auto divide-y divide-[#e4e8f0]">
+            
+            <!-- Case 1 -->
+            <div class="flex items-start gap-2.5 px-4.5 py-3.5 hover:bg-[#f9fafc] transition-colors cursor-pointer">
+              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-semibold text-[#111827] leading-snug">
+                  <strong>Agus Susanto</strong> (B 9481 KPA)
+                </p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Potensi Pencurian BBM · Tingkat Risiko: HIGH</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">23 Nov 2026, 14:18 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">NEW</span>
+            </div>
+
+            <!-- Case 2 -->
+            <div class="flex items-start gap-2.5 px-4.5 py-3.5 hover:bg-[#f9fafc] transition-colors cursor-pointer">
+              <span class="size-2 rounded-full bg-[#f97316] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-semibold text-[#111827] leading-snug">
+                  <strong>Rahmat Hidayat</strong> (B 9102 JKL)
+                </p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Pelanggaran Batas Kecepatan · Tingkat Risiko: MEDIUM</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">23 Nov 2026, 13:52 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fff7ed] text-[#92400e]">REVIEW</span>
+            </div>
+
+            <!-- Case 3 -->
+            <div class="flex items-start gap-2.5 px-4.5 py-3.5 hover:bg-[#f9fafc] transition-colors cursor-pointer">
+              <span class="size-2 rounded-full bg-[#16a34a] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-semibold text-[#111827] leading-snug">
+                  <strong>Dedi Setiawan</strong> (B 9772 QRT)
+                </p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Idle Berlebihan (&gt;45 mnt) · Tingkat Risiko: LOW</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">23 Nov 2026, 12:40 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f0fdf4] text-[#16a34a]">RESOLVED</span>
+            </div>
+
+            <!-- Case 4 -->
+            <div class="flex items-start gap-2.5 px-4.5 py-3.5 hover:bg-[#f9fafc] transition-colors cursor-pointer">
+              <span class="size-2 rounded-full bg-[#dc2626] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-semibold text-[#111827] leading-snug">
+                  <strong>Wahyu Pratama</strong> (B 9318 XYZ)
+                </p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Penggunaan Kendaraan di Luar Jam Dinas · Risiko: HIGH</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">23 Nov 2026, 11:15 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fef2f2] text-[#dc2626]">CONFIRMED</span>
+            </div>
+
+            <!-- Case 5 -->
+            <div class="flex items-start gap-2.5 px-4.5 py-3.5 hover:bg-[#f9fafc] transition-colors cursor-pointer">
+              <span class="size-2 rounded-full bg-[#f97316] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-semibold text-[#111827] leading-snug">
+                  <strong>Slamet Riyadi</strong> (B 9044 BCD)
+                </p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Deviasi Rute Hauling Batubara · Tingkat Risiko: MEDIUM</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">23 Nov 2026, 09:30 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fff7ed] text-[#92400e]">REVIEW</span>
+            </div>
+
+          </div>
+
+          <!-- Footer -->
+          <div class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0">
+            <i data-lucide="refresh-cw" class="size-3 text-[#9aa3bf]"></i>
+            <p class="text-[11.5px] text-[#9aa3bf]">
+              Diperbarui secara <span class="font-semibold text-[#4b5675]">Langsung</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Sidebar Mobile Toggle
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const closeBtn = document.getElementById('sidebar-close-btn');
+
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      sidebarBackdrop.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      sidebarBackdrop.classList.add('hidden');
+    }
+
+    toggleBtn?.addEventListener('click', () => {
+      if (sidebar.classList.contains('-translate-x-full')) {
+        openSidebar();
+      } else {
+        closeSidebar();
+      }
+    });
+
+    closeBtn?.addEventListener('click', closeSidebar);
+    sidebarBackdrop?.addEventListener('click', closeSidebar);
+
+    // User Dropdown Toggle
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    userMenuBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+      userDropdown?.classList.add('hidden');
+    });
+
+    // ── ANOMALY DONUT CHART ──
+    const anomalyDonutOptions = {
+      series: [14, 18, 6, 9, 7],
+      labels: [
+        'Potensi Pencurian BBM',
+        'Pelanggaran Batas Kecepatan',
+        'Penggunaan Kendaraan Tidak Sah',
+        'Pelanggaran Rute Operasional',
+        'Idle Berlebihan (Mesin Diam)'
+      ],
+      colors: ['#dc2626', '#f97316', '#7c3aed', '#d97706', '#2563eb'],
+      chart: {
+        type: 'donut',
+        height: 180,
+        sparkline: { enabled: true }
+      },
+      stroke: { width: 3, colors: ['#ffffff'] },
+      plotOptions: {
+        pie: {
+          donut: { size: '70%' }
+        }
+      },
+      dataLabels: { enabled: false },
+      tooltip: {
+        theme: 'dark',
+        y: {
+          formatter: function (val) {
+            return val + " kasus (" + Math.round((val / 54) * 100) + "%)";
+          }
+        }
+      }
+    };
+
+    const anomalyDonut = new ApexCharts(document.querySelector("#anomaly-donut-chart"), anomalyDonutOptions);
+    anomalyDonut.render();
+
+    // ── INCIDENT TREND BAR CHART ──
+    const chartTabConfigs = {
+      today: {
+        categories: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],
+        series: [
+          { name: "Hari Ini", data: [3, 8, 12, 16, 10, 5] },
+          { name: "Kemarin", data: [2, 7, 10, 14, 9, 6] }
+        ],
+        stats: [
+          { label: "HARI INI", val: "54", sub: "insiden", subColor: "text-[#2563eb]" },
+          { label: "KEMARIN", val: "48", sub: "insiden", subColor: "text-[#f97316]" },
+          { label: "VS KEMARIN", val: "+6", sub: "+12.5% peningkatan", subColor: "text-[#dc2626]" }
+        ]
+      },
+      yesterday: {
+        categories: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],
+        series: [
+          { name: "Total Kemarin", data: [2, 7, 10, 14, 9, 6] }
+        ],
+        stats: [
+          { label: "TOTAL KEMARIN", val: "48", sub: "insiden", subColor: "text-[#2563eb]" },
+          { label: "RATA-RATA / 4 JAM", val: "8.0", sub: "insiden per slot", subColor: "text-[#f97316]" },
+          { label: "JAM PUNCAK", val: "12:00", sub: "14 insiden tercatat", subColor: "text-[#2563eb]" }
+        ]
+      },
+      last7days: {
+        categories: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
+        series: [
+          { name: "Total Harian", data: [42, 38, 62, 45, 50, 27, 48] }
+        ],
+        stats: [
+          { label: "TOTAL 7 HARI", val: "312", sub: "insiden", subColor: "text-[#2563eb]" },
+          { label: "RATA-RATA HARIAN", val: "44.6", sub: "insiden/hari", subColor: "text-[#f97316]" },
+          { label: "HARI PUNCAK", val: "Rabu", sub: "62 insiden", subColor: "text-[#dc2626]" }
+        ]
+      }
+    };
+
+    let barChartOptions = {
+      series: chartTabConfigs.today.series,
+      chart: {
+        type: 'bar',
+        height: 220,
+        toolbar: { show: false },
+        fontFamily: '"Plus Jakarta Sans", sans-serif',
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '45%',
+          borderRadius: 3,
+        },
+      },
+      colors: ['#2563eb', '#94a3b8'],
+      dataLabels: { enabled: false },
+      stroke: { show: true, width: 2, colors: ['transparent'] },
+      xaxis: {
+        categories: chartTabConfigs.today.categories,
+        labels: {
+          style: { colors: '#9aa3bf', fontSize: '11px', fontWeight: 600 }
+        },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+      },
+      yaxis: {
+        labels: {
+          style: { colors: '#9aa3bf', fontSize: '11px' }
+        }
+      },
+      grid: {
+        borderColor: '#f0f2f8',
+        strokeDashArray: 3,
+      },
+      tooltip: {
+        theme: 'dark',
+        y: {
+          formatter: function (val) {
+            return val + " insiden";
+          }
+        }
+      },
+      legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        fontSize: '12px',
+        labels: { colors: '#4b5675' }
+      }
+    };
+
+    const incidentBarChart = new ApexCharts(document.querySelector("#incident-bar-chart"), barChartOptions);
+    incidentBarChart.render();
+
+    // Chart Tabs Switcher
+    const btnToday = document.getElementById('btn-chart-today');
+    const btnYesterday = document.getElementById('btn-chart-yesterday');
+    const btn7Days = document.getElementById('btn-chart-7days');
+
+    function updateChartTab(tabKey, activeBtn) {
+      [btnToday, btnYesterday, btn7Days].forEach(b => {
+        b.className = 'px-2.5 py-1 text-[12px] font-semibold rounded-[5px] bg-white text-[#4b5675] hover:text-[#2563eb] border border-[#e4e8f0] transition-all cursor-pointer';
+      });
+      activeBtn.className = 'px-2.5 py-1 text-[12px] font-semibold rounded-[5px] bg-[#2563eb] text-white transition-all cursor-pointer';
+
+      const cfg = chartTabConfigs[tabKey];
+      incidentBarChart.updateOptions({
+        xaxis: { categories: cfg.categories },
+        series: cfg.series
+      });
+
+      // Update stats below
+      document.getElementById('stat-1-val').innerText = cfg.stats[0].val;
+      document.getElementById('stat-1-sub').innerText = cfg.stats[0].sub;
+      document.getElementById('stat-1-sub').className = `text-[11px] font-semibold mt-0.5 ${cfg.stats[0].subColor}`;
+
+      document.getElementById('stat-2-val').innerText = cfg.stats[1].val;
+      document.getElementById('stat-2-sub').innerText = cfg.stats[1].sub;
+      document.getElementById('stat-2-sub').className = `text-[11px] font-semibold mt-0.5 ${cfg.stats[1].subColor}`;
+
+      document.getElementById('stat-3-val').innerText = cfg.stats[2].val;
+      document.getElementById('stat-3-sub').innerText = cfg.stats[2].sub;
+      document.getElementById('stat-3-sub').className = `text-[11px] font-semibold mt-0.5 ${cfg.stats[2].subColor}`;
+    }
+
+    btnToday?.addEventListener('click', () => updateChartTab('today', btnToday));
+    btnYesterday?.addEventListener('click', () => updateChartTab('yesterday', btnYesterday));
+    btn7Days?.addEventListener('click', () => updateChartTab('last7days', btn7Days));
+  </script>
+</body>
+</html>

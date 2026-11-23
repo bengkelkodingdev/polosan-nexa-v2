@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Dashboard - FleetTrack Nexa v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Leaflet CSS & JS for Live Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9aa3bf; }
+    
+    /* Custom Leaflet popup styling */
+    .leaflet-popup-content-wrapper {
+      padding: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+    .leaflet-popup-content {
+      margin: 0;
+      line-height: 1.4;
+    }
+    .custom-fleet-pin {
+      background: transparent;
+      border: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans">
+
+  <!-- Mobile Backdrop -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-white/85 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+    <!-- Logo -->
+    <div class="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
+      <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+        <img src="assets/nexa-logo.png" alt="Nexa" class="h-5.5 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
+        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Track</span>
+      </a>
+      <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
+        <i data-lucide="x" class="size-5"></i>
+      </button>
+    </div>
+
+    <!-- Navigation Menu (Manager structure from navigation.ts) -->
+    <div class="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs font-medium">
+      <!-- Section: Ringkasan -->
+      <div>
+        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Ringkasan</p>
+        <div class="space-y-0.5">
+          <a href="manager.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-semibold shadow-xs">
+            <i data-lucide="layout-grid" class="size-4 shrink-0 text-blue-400"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="map" class="size-4 shrink-0"></i>
+            <span>Peta</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Operasional -->
+      <div>
+        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Operasional</p>
+        <div class="space-y-0.5">
+          
+          <!-- Accordion 1: Pengelolaan Operasional -->
+          <div>
+            <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left" onclick="document.getElementById('submenu-ops').classList.toggle('hidden')">
+              <span class="flex items-center gap-3">
+                <i data-lucide="calendar-check" class="size-4 shrink-0"></i>
+                <span>Pengelolaan Operasional</span>
+              </span>
+              <i data-lucide="chevron-down" class="size-3 text-white/40"></i>
+            </button>
+            <div id="submenu-ops" class="pl-9 pr-2 space-y-1 pt-0.5">
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Jadwal Operasional</a>
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Riwayat Operasional</a>
+            </div>
+          </div>
+
+          <!-- Accordion 2: Data Master -->
+          <div>
+            <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left" onclick="document.getElementById('submenu-master').classList.toggle('hidden')">
+              <span class="flex items-center gap-3">
+                <i data-lucide="truck" class="size-4 shrink-0"></i>
+                <span>Data Master</span>
+              </span>
+              <i data-lucide="chevron-down" class="size-3 text-white/40"></i>
+            </button>
+            <div id="submenu-master" class="pl-9 pr-2 space-y-1 pt-0.5">
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Data Lokasi</a>
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Data Armada</a>
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Data Driver</a>
+            </div>
+          </div>
+
+          <!-- Accordion 3: Analitik Pengisian BBM -->
+          <div>
+            <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left" onclick="document.getElementById('submenu-bbm').classList.toggle('hidden')">
+              <span class="flex items-center gap-3">
+                <i data-lucide="fuel" class="size-4 shrink-0"></i>
+                <span>Analitik Pengisian BBM</span>
+              </span>
+              <i data-lucide="chevron-down" class="size-3 text-white/40"></i>
+            </button>
+            <div id="submenu-bbm" class="pl-9 pr-2 space-y-1 pt-0.5">
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Analisis BBM</a>
+              <a href="#" class="block py-1.5 px-2 rounded text-[11.5px] text-white/60 hover:text-white hover:bg-white/5">Pengajuan Limit</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section: Laporan -->
+      <div>
+        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Laporan</p>
+        <div class="space-y-0.5">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="file-chart-column" class="size-4 shrink-0"></i>
+            <span>Laporan</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar User Footer -->
+    <div class="p-2.5 pt-0 border-t border-white/5">
+      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+        <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-amber-500 font-bold text-white text-xs select-none shadow-xs">
+          MN
+        </div>
+        <div class="flex flex-col leading-tight min-w-0 flex-1">
+          <span class="text-sm font-bold text-white/90 truncate">Manajer Armada</span>
+          <span class="text-[11px] text-white/50 truncate">Manager</span>
+        </div>
+        <a href="index.html" title="Kembali ke Beranda" class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors">
+          <i data-lucide="log-out" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN CONTENT WRAPPER ─── -->
+  <div class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300">
+    
+    <!-- Top Site Header -->
+    <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between">
+      <!-- Left: Toggle & Breadcrumb -->
+      <div class="flex items-center gap-0 min-w-0 flex-1">
+        <button id="sidebar-toggle-btn" class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0">
+          <i data-lucide="panel-left" class="size-4"></i>
+        </button>
+
+        <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden">
+          <a href="index.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">FleetTrack</a>
+          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+          <span class="text-[#9aa3bf]">Manager</span>
+          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+          <span class="font-bold text-[#111827]">Dashboard</span>
+        </nav>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-2 shrink-0 pl-2">
+        <button class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
+          <i data-lucide="bell" class="size-4"></i>
+          <span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
+        </button>
+
+        <button title="Pengaturan" class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
+          <i data-lucide="settings" class="size-4"></i>
+        </button>
+
+        <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
+
+        <!-- Role Switcher & Profile Dropdown -->
+        <div class="relative">
+          <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
+            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#f59e0b] text-[11px] font-black text-white">
+              MN
+            </div>
+            <div class="hidden sm:flex flex-col text-left leading-tight">
+              <span class="text-[12.5px] font-bold text-[#111827]">Manajer Armada</span>
+              <span class="text-[10.5px] text-[#9aa3bf]">Manager</span>
+            </div>
+            <i data-lucide="chevron-down" class="size-3.5 text-[#9aa3bf] ml-0.5"></i>
+          </button>
+
+          <!-- Dropdown Popover -->
+          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs">
+            <div class="px-4 py-2 border-b border-gray-100">
+              <p class="text-[11px] font-medium text-gray-400">Masuk sebagai</p>
+              <p class="font-bold text-[#111827] truncate">manager@nexa.id</p>
+            </div>
+            <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              Beralih Tampilan Role:
+            </div>
+            <a href="superadmin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Super Admin</span>
+            </a>
+            <a href="executive.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Executive</span>
+            </a>
+            <a href="admin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Admin</span>
+            </a>
+            <a href="manager.html" class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60">
+              <span>Manager</span>
+              <i data-lucide="check" class="size-3.5 text-blue-600"></i>
+            </a>
+            <a href="auditor.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Auditor</span>
+            </a>
+            <div class="border-t border-gray-100 my-1"></div>
+            <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50">
+              <i data-lucide="home" class="size-3.5"></i>
+              <span>Kembali ke Beranda</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+      
+      <!-- Page Header -->
+      <div class="mb-5.5">
+        <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">Dashboard</h1>
+        <p class="text-xs sm:text-sm text-[#9aa3bf] mt-1">
+          Pemantauan Operasional dan Armada
+        </p>
+      </div>
+
+      <!-- ─── 1. KPI CARDS (Manager) ─── -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-4">
+        
+        <!-- Total Armada -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Total Armada</p>
+              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">24</p>
+            </div>
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]">
+              <i data-lucide="truck" class="size-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-col gap-1 text-[12px]">
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">18</strong>
+              <span class="text-[#9aa3bf] truncate">Sedang Aktif</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#f97316] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">6</strong>
+              <span class="text-[#9aa3bf] truncate">Sedang Berhenti</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Now -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#16a34a]"></span>
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Active Now</p>
+              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">18</p>
+            </div>
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f0fdf4] text-[#16a34a]">
+              <i data-lucide="activity" class="size-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-col gap-1 text-[12px]">
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">75%</strong>
+              <span class="text-[#9aa3bf] truncate">Tingkat Pemanfaatan</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#2563eb] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">18</strong>
+              <span class="text-[#9aa3bf] truncate">Sedang Berjalan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operasional Hari Ini -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#06b6d4]"></span>
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Operasional Hari Ini</p>
+              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">36</p>
+            </div>
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#cffafe] text-[#06b6d4]">
+              <i data-lucide="route" class="size-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-col gap-1 text-[12px]">
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#2563eb] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">32</strong>
+              <span class="text-[#9aa3bf] truncate">Selesai</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="size-1.5 rounded-full bg-[#dc2626] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">4</strong>
+              <span class="text-[#9aa3bf] truncate">Batal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menunggu Persetujuan -->
+        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs pt-4 px-5 pb-3 flex flex-col justify-between hover:shadow-md transition-all">
+          <span class="absolute inset-x-0 top-0 h-1 bg-[#7c3aed]"></span>
+          <div>
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Menunggu Persetujuan</p>
+                <p class="mt-1 text-[30px] font-extrabold leading-none text-[#7c3aed] tracking-[-1px]">3</p>
+              </div>
+              <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f5f3ff] text-[#7c3aed]">
+                <i data-lucide="check-square" class="size-5"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
+              <span class="size-1.5 rounded-full bg-[#7c3aed] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">3 Pengajuan</strong>
+              <span class="text-[#9aa3bf] truncate">limit BBM perlu review</span>
+            </div>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-[#e4e8f0] flex justify-end">
+            <a href="#" class="text-[12.5px] font-semibold text-[#7c3aed] hover:text-[#6d28d9] flex items-center gap-1">
+              Tinjau Persetujuan <i data-lucide="chevron-right" class="size-3"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── 2. LIVE MAPS & OPERATIONAL ACTIVITY LOG GRID ─── -->
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+        
+        <!-- Left: Live Maps (col-span-3) -->
+        <div class="lg:col-span-3 bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col">
+          <!-- Card Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between px-5 pt-4 pb-3.5 border-b border-[#e4e8f0] gap-3">
+            <div>
+              <h3 class="text-[14px] font-bold text-[#111827] flex items-center gap-2">Live Maps</h3>
+              <p class="text-[12px] text-[#9aa3bf]">Pemantauan Real-time Posisi Armada</p>
+            </div>
+            
+            <div class="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
+              <!-- Live / Simulation Pulsing Badge -->
+              <div class="flex items-center gap-1.5 mr-1" id="live-indicator">
+                <span class="relative flex size-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-[#22c55e]"></span>
+                  <span class="relative inline-flex rounded-full size-2 bg-[#22c55e]"></span>
+                </span>
+                <span class="text-[12px] font-semibold text-[#22c55e]" id="live-status-text">Live</span>
+              </div>
+
+              <!-- Segmented Radio Mode Selector -->
+              <div class="flex items-center gap-1 bg-[#f8f9fc] border border-[#e4e8f0] rounded-xl p-1 h-8 shrink-0">
+                <button id="btn-mode-realtime" class="px-2.5 py-0.5 rounded-[6px] text-[11.5px] font-bold transition-all bg-white shadow-xs text-[#2563eb] border border-[#e4e8f0] h-full flex items-center cursor-pointer">
+                  Real-time
+                </button>
+                <button id="btn-mode-simulasi" class="px-2.5 py-0.5 rounded-[6px] text-[11.5px] font-bold transition-all text-[#9aa3bf] hover:text-[#4b5675] h-full flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="sparkles" class="size-3"></i>
+                  Simulasi
+                </button>
+              </div>
+
+              <!-- Fullscreen Button -->
+              <button class="flex items-center gap-1.5 text-[12px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] transition-colors cursor-pointer" onclick="toggleMapFullscreen()">
+                <i data-lucide="maximize-2" class="size-3.5"></i>
+                Full Screen
+              </button>
+            </div>
+          </div>
+
+          <!-- Map Container -->
+          <div class="relative w-full h-[450px]" id="map-wrapper">
+            <div id="fleet-map" class="w-full h-full z-0"></div>
+
+            <!-- Map Floating Legend -->
+            <div class="absolute bottom-4 right-4 z-[400] rounded-lg border border-white/10 bg-[#0f1623]/90 backdrop-blur-xs px-3 py-2.5 shadow-lg pointer-events-auto">
+              <p class="text-[10px] font-bold uppercase tracking-[1px] text-white/40 mb-1.5">Legend</p>
+              <div class="flex flex-col gap-1 text-[11.5px] text-white/75">
+                <div class="flex items-center gap-2">
+                  <span class="size-2.5 rounded-full ring-2 ring-white/20 bg-[#16a34a]"></span>
+                  <span>Active / Moving</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="size-2.5 rounded-full ring-2 ring-white/20 bg-[#2563eb]"></span>
+                  <span>Completed</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="size-2.5 rounded-full ring-2 ring-white/20 bg-[#f59e0b]"></span>
+                  <span>Missed / Alert</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="size-2.5 rounded-full ring-2 ring-white/20 bg-[#dc2626]"></span>
+                  <span>Critical / Canceled</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Aktivitas Terkini (col-span-1) -->
+        <div class="lg:col-span-1 bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col h-[525px]">
+          <!-- Header -->
+          <div class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between shrink-0">
+            <div>
+              <h3 class="text-[14px] font-bold text-[#111827]">Aktivitas Terkini</h3>
+              <p class="text-[12px] text-[#9aa3bf] mt-0.5">Log Operasional · real-time</p>
+            </div>
+            <a href="#" class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline">
+              Lihat Semua <i data-lucide="chevron-right" class="size-3.5"></i>
+            </a>
+          </div>
+
+          <!-- List -->
+          <div class="flex-1 overflow-y-auto divide-y divide-[#e4e8f0]">
+            <!-- Item 1 -->
+            <div class="flex items-start gap-2.5 px-4 py-3 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-bold text-[#111827] leading-snug">Dump Truck Hino (DT-01)</p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Tiba di Checkpoint Pit 3 Tambang Utara</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">14:28 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Fleet</span>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="flex items-start gap-2.5 px-4 py-3 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#16a34a] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-bold text-[#111827] leading-snug">Scania P410 (DT-04)</p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Melakukan pengisian BBM 120 Liter di SPBU Pool 1</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">14:10 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Fleet</span>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="flex items-start gap-2.5 px-4 py-3 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#f97316] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-bold text-[#111827] leading-snug">Volvo FMX (DT-07)</p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Kecepatan melebihi batas (58 km/jam) di Jalur Hauling Km 12</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">13:45 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Fleet</span>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="flex items-start gap-2.5 px-4 py-3 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-bold text-[#111827] leading-snug">Toyota Hilux (LV-02)</p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Selesai inspeksi lapangan rute Sektor Selatan</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">13:20 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Fleet</span>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="flex items-start gap-2.5 px-4 py-3 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#16a34a] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-bold text-[#111827] leading-snug">Mercedes Actros (DT-11)</p>
+                <p class="text-[11.5px] text-[#4b5675] mt-0.5">Memulai keberangkatan muatan batu bara trip ke-4</p>
+                <p class="font-mono text-[10.5px] text-[#9aa3bf] mt-0.5">12:50 WIB</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Fleet</span>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0">
+            <i data-lucide="refresh-cw" class="size-3 text-[#9aa3bf]"></i>
+            <p class="text-[11.5px] text-[#9aa3bf]">
+              Diperbarui setiap <span class="font-semibold text-[#4b5675]">30 detik</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Sidebar Mobile Toggle
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const closeBtn = document.getElementById('sidebar-close-btn');
+
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      sidebarBackdrop.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      sidebarBackdrop.classList.add('hidden');
+    }
+
+    toggleBtn?.addEventListener('click', () => {
+      if (sidebar.classList.contains('-translate-x-full')) {
+        openSidebar();
+      } else {
+        closeSidebar();
+      }
+    });
+
+    closeBtn?.addEventListener('click', closeSidebar);
+    sidebarBackdrop?.addEventListener('click', closeSidebar);
+
+    // User Dropdown Toggle
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    userMenuBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+      userDropdown?.classList.add('hidden');
+    });
+
+    // ── LEAFLET LIVE MAP INITIALIZATION ──
+    const vehiclePoints = [
+      {
+        plate: "B 9901 TQR",
+        brand: "Hino Ranger FL 235 JN",
+        driver: "Supardi Ardiansyah",
+        status: "ACTIVE",
+        map_status: "MOVING",
+        lat: -6.9824,
+        lng: 110.4300,
+        speed: 62,
+        fuel: 68,
+        temp: 86,
+        color: "#16a34a",
+        route: "Pelabuhan Tanjung Emas -> Terboyo"
+      },
+      {
+        plate: "H 1234 AB",
+        brand: "Toyota Dyna CDE",
+        driver: "Budi Setiadi",
+        status: "ACTIVE",
+        map_status: "IDLE",
+        lat: -7.0051,
+        lng: 110.4381,
+        speed: 0,
+        fuel: 45,
+        temp: 79,
+        color: "#9aa3bf",
+        route: "Depot Pertamina Pengapon -> Ungaran"
+      },
+      {
+        plate: "B 3456 GHI",
+        brand: "Mercedes Actros",
+        driver: "Ahmad Fauzi",
+        status: "ACTIVE",
+        map_status: "ALERT",
+        lat: -7.2500,
+        lng: 110.6000,
+        speed: 38,
+        fuel: 22,
+        temp: 91,
+        color: "#f59e0b",
+        route: "Terminal Boyolali -> Solo"
+      },
+      {
+        plate: "D 9012 DEF",
+        brand: "Isuzu Giga FVZ",
+        driver: "Dedi Wahyu",
+        status: "MISSED",
+        map_status: "CRITICAL",
+        lat: -7.0800,
+        lng: 110.5200,
+        speed: 0,
+        fuel: 12,
+        temp: 95,
+        color: "#dc2626",
+        route: "Kawasan Industri Bawen -> Magelang"
+      },
+      {
+        plate: "F 7890 JKL",
+        brand: "Scania P360",
+        driver: "Eko Prasetyo",
+        status: "ACTIVE",
+        map_status: "MOVING",
+        lat: -7.1500,
+        lng: 110.3800,
+        speed: 71,
+        fuel: 81,
+        temp: 84,
+        color: "#16a34a",
+        route: "Tol Kendal -> Wijayakusuma"
+      },
+      {
+        plate: "D 6789 PQR",
+        brand: "Volvo FH16",
+        driver: "Gita Rahayu",
+        status: "ACTIVE",
+        map_status: "MOVING",
+        lat: -6.8900,
+        lng: 110.2500,
+        speed: 55,
+        fuel: 73,
+        temp: 85,
+        color: "#16a34a",
+        route: "Pelabuhan Kendal -> Batang"
+      }
+    ];
+
+    const map = L.map('fleet-map', {
+      center: [-7.0600, 110.4500],
+      zoom: 10,
+      zoomControl: true
+    });
+
+    // High quality CartoDB Positron base tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Marker collection
+    const markers = [];
+
+    vehiclePoints.forEach((v) => {
+      // Create custom SVG Pin Icon
+      const customIcon = L.divIcon({
+        className: 'custom-fleet-pin',
+        html: `
+          <div style="position: relative; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+            <span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: ${v.color}; opacity: 0.25; animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;"></span>
+            <div style="width: 26px; height: 26px; border-radius: 50%; background: ${v.color}; border: 2.5px solid #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; color: white;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+            </div>
+          </div>
+        `,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+        popupAnchor: [0, -18]
+      });
+
+      const popupHtml = `
+        <div style="min-width: 210px; font-family: 'Plus Jakarta Sans', sans-serif;">
+          <div style="background: #222845; color: white; padding: 10px 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; font-size: 13px; letter-spacing: 0.5px;">${v.plate}</span>
+              <span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: ${v.color};">${v.map_status}</span>
+            </div>
+            <div style="font-size: 11px; opacity: 0.8; margin-top: 2px;">${v.brand}</div>
+          </div>
+          <div style="padding: 10px 12px; font-size: 11.5px; color: #374151; background: #ffffff;">
+            <div style="margin-bottom: 4px;"><strong>Driver:</strong> ${v.driver}</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span><strong>Kecepatan:</strong> ${v.speed} km/h</span>
+              <span><strong>BBM:</strong> ${v.fuel}%</span>
+            </div>
+            <div style="margin-bottom: 4px;"><strong>Suhu Mesin:</strong> ${v.temp}°C</div>
+            <div style="font-size: 11px; color: #6b7280; border-top: 1px solid #f3f4f6; padding-top: 6px; margin-top: 6px;">
+              <strong>Rute:</strong> ${v.route}
+            </div>
+          </div>
+        </div>
+      `;
+
+      const marker = L.marker([v.lat, v.lng], { icon: customIcon })
+        .addTo(map)
+        .bindPopup(popupHtml);
+
+      markers.push({ marker, data: v });
+    });
+
+    // Mode Toggle (Real-time vs Simulasi)
+    const btnRealtime = document.getElementById('btn-mode-realtime');
+    const btnSimulasi = document.getElementById('btn-mode-simulasi');
+    const liveIndicator = document.getElementById('live-indicator');
+    const liveStatusText = document.getElementById('live-status-text');
+
+    btnRealtime?.addEventListener('click', () => {
+      btnRealtime.className = 'px-2.5 py-0.5 rounded-[6px] text-[11.5px] font-bold transition-all bg-white shadow-xs text-[#2563eb] border border-[#e4e8f0] h-full flex items-center cursor-pointer';
+      btnSimulasi.className = 'px-2.5 py-0.5 rounded-[6px] text-[11.5px] font-bold transition-all text-[#9aa3bf] hover:text-[#4b5675] h-full flex items-center gap-1.5 cursor-pointer';
+      liveIndicator.innerHTML = `
+        <span class="relative flex size-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-[#22c55e]"></span>
+          <span class="relative inline-flex rounded-full size-2 bg-[#22c55e]"></span>
+        </span>
+        <span class="text-[12px] font-semibold text-[#22c55e]">Live</span>
+      `;
+    });
+
+    btnSimulasi?.addEventListener('click', () => {
+      btnSimulasi.className = 'px-2.5 py-0.5 rounded-[6px] text-[11.5px] font-bold transition-all bg-[#fffbeb] shadow-xs text-[#d97706] border border-[#fde68a] h-full flex items-center gap-1.5 cursor-pointer';
+      btnRealtime.className = 'px-2.5 py-0.5 rounded-[6px] text-[11.5px] font-bold transition-all text-[#9aa3bf] hover:text-[#4b5675] h-full flex items-center cursor-pointer';
+      liveIndicator.innerHTML = `
+        <span class="relative flex size-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-[#f59e0b]"></span>
+          <span class="relative inline-flex rounded-full size-2 bg-[#f59e0b]"></span>
+        </span>
+        <span class="text-[12px] font-semibold text-[#f59e0b]">Simulasi</span>
+      `;
+    });
+
+    function toggleMapFullscreen() {
+      const mapWrapper = document.getElementById('map-wrapper');
+      if (!document.fullscreenElement) {
+        mapWrapper.requestFullscreen().catch(err => {
+          alert(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
