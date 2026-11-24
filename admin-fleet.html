@@ -34,12 +34,12 @@
   <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
 
   <!-- ─── SIDEBAR ─── -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-white/85 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
     <!-- Logo -->
-    <div class="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
+    <div class="h-14 px-4 flex items-center gap-2.5">
       <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-        <img src="assets/nexa-logo.png" alt="Nexa" class="h-5.5 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
-        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Track</span>
+        <img src="assets/nexa-logo.png" alt="Nexa" class="h-9 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
+        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Management</span>
       </a>
       <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
         <i data-lucide="x" class="size-5"></i>
@@ -47,12 +47,12 @@
     </div>
 
     <!-- Navigation Menu -->
-    <div class="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs font-medium">
+    <div class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium">
       <!-- Section: Ringkasan -->
       <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Ringkasan</p>
-        <div class="space-y-0.5">
-          <a href="admin.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+        <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Ringkasan</p>
+        <div class="space-y-1.5">
+          <a href="admin.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
             <i data-lucide="layout-grid" class="size-4 shrink-0"></i>
             <span>Dashboard</span>
           </a>
@@ -61,26 +61,26 @@
 
       <!-- Section: Manajemen -->
       <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Manajemen</p>
-        <div class="space-y-0.5">
-          <a href="admin-fleet-type.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+        <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Manajemen</p>
+        <div class="space-y-1.5">
+          <a href="admin-fleet-type.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
             <i data-lucide="layers" class="size-4 shrink-0"></i>
             <span>Tipe Armada</span>
           </a>
           <!-- Active: Data Armada -->
-          <a href="admin-fleet.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-semibold shadow-xs">
-            <i data-lucide="truck" class="size-4 shrink-0 text-blue-400"></i>
+          <a href="admin-fleet.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20">
+            <i data-lucide="truck" class="size-4 shrink-0 text-white"></i>
             <span>Data Armada</span>
           </a>
-          <a href="admin-driver.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+          <a href="admin-driver.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
             <i data-lucide="users" class="size-4 shrink-0"></i>
             <span>Data Driver</span>
           </a>
-          <a href="admin-device.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+          <a href="admin-device.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
             <i data-lucide="cpu" class="size-4 shrink-0"></i>
             <span>Data Device</span>
           </a>
-          <a href="admin-users.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+          <a href="admin-users.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
             <i data-lucide="user-cog" class="size-4 shrink-0"></i>
             <span>Manajemen Pengguna</span>
           </a>

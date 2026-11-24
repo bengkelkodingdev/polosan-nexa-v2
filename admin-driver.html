@@ -1,756 +1,1453 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Master Data Driver - Admin FleetTrack Nexa v2</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          }
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Data Driver - Admin FleetTrack Nexa v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
       }
-    }
-  </script>
-  <style>
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9aa3bf; }
-  </style>
-</head>
-<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans">
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d0d6e8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9aa3bf;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"
+    ></div>
 
-  <!-- Mobile Backdrop -->
-  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
-
-  <!-- ─── SIDEBAR ─── -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-white/85 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
-    <!-- Logo -->
-    <div class="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
-      <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-        <img src="assets/nexa-logo.png" alt="Nexa" class="h-5.5 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
-        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Track</span>
-      </a>
-      <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
-        <i data-lucide="x" class="size-5"></i>
-      </button>
-    </div>
-
-    <!-- Navigation Menu -->
-    <div class="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs font-medium">
-      <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Ringkasan</p>
-        <div class="space-y-0.5">
-          <a href="admin.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="layout-grid" class="size-4 shrink-0"></i>
-            <span>Dashboard</span>
-          </a>
-        </div>
-      </div>
-
-      <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Manajemen</p>
-        <div class="space-y-0.5">
-          <a href="admin-fleet-type.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="layers" class="size-4 shrink-0"></i>
-            <span>Tipe Armada</span>
-          </a>
-          <a href="admin-fleet.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="truck" class="size-4 shrink-0"></i>
-            <span>Data Armada</span>
-          </a>
-          <!-- Active: Data Driver -->
-          <a href="admin-driver.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-semibold shadow-xs">
-            <i data-lucide="users" class="size-4 shrink-0 text-blue-400"></i>
-            <span>Data Driver</span>
-          </a>
-          <a href="admin-device.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="cpu" class="size-4 shrink-0"></i>
-            <span>Data Device</span>
-          </a>
-          <a href="admin-users.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="user-cog" class="size-4 shrink-0"></i>
-            <span>Manajemen Pengguna</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sidebar User Footer -->
-    <div class="p-2.5 pt-0 border-t border-white/5">
-      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
-        <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white text-xs select-none shadow-xs">
-          AD
-        </div>
-        <div class="flex flex-col leading-tight min-w-0 flex-1">
-          <span class="text-sm font-bold text-white/90 truncate">Administrator</span>
-          <span class="text-[11px] text-white/50 truncate">admin@nexa.id</span>
-        </div>
-        <a href="index.html" title="Kembali ke Beranda" class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors">
-          <i data-lucide="log-out" class="size-4"></i>
+    <!-- ─── SIDEBAR ─── -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0"
+    >
+      <!-- Logo -->
+      <div class="h-14 px-4 flex items-center gap-2.5">
+        <a
+          href="index.html"
+          class="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src="assets/nexa-logo.png"
+            alt="Nexa"
+            class="h-9 object-contain"
+            onerror="
+              this.src = 'https://placehold.co/72x22/222845/ffffff?text=NEXA'
+            "
+          />
+          <span
+            class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap"
+            >Fleet Management</span
+          >
         </a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ─── MAIN CONTENT WRAPPER ─── -->
-  <div class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300">
-    
-    <!-- Top Site Header -->
-    <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between">
-      <div class="flex items-center gap-0 min-w-0 flex-1">
-        <button id="sidebar-toggle-btn" class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0">
-          <i data-lucide="panel-left" class="size-4"></i>
-        </button>
-
-        <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
-
-        <nav class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden">
-          <a href="index.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">FleetTrack</a>
-          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <a href="admin.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">Admin</a>
-          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <span class="font-bold text-[#111827]">Data Driver</span>
-        </nav>
-      </div>
-
-      <div class="flex items-center gap-2 shrink-0 pl-2">
-        <button class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
-          <i data-lucide="bell" class="size-4"></i>
-          <span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
-        </button>
-
-        <button title="Pengaturan" class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
-          <i data-lucide="settings" class="size-4"></i>
-        </button>
-
-        <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
-
-        <!-- Profile Dropdown -->
-        <div class="relative">
-          <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
-            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white">
-              AD
-            </div>
-            <div class="hidden sm:flex flex-col text-left leading-tight">
-              <span class="text-[12.5px] font-bold text-[#111827]">Administrator</span>
-              <span class="text-[10.5px] text-[#9aa3bf]">Admin</span>
-            </div>
-            <i data-lucide="chevron-down" class="size-3.5 text-[#9aa3bf] ml-0.5"></i>
-          </button>
-
-          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs">
-            <div class="px-4 py-2 border-b border-gray-100">
-              <p class="text-[11px] font-medium text-gray-400">Masuk sebagai</p>
-              <p class="font-bold text-[#111827] truncate">admin@nexa.id</p>
-            </div>
-            <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-              Beralih Tampilan Role:
-            </div>
-            <a href="superadmin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Super Admin</span>
-            </a>
-            <a href="executive.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Executive</span>
-            </a>
-            <a href="admin.html" class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60">
-              <span>Admin</span>
-              <i data-lucide="check" class="size-3.5 text-blue-600"></i>
-            </a>
-            <a href="manager.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Manager</span>
-            </a>
-            <a href="auditor.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Auditor</span>
-            </a>
-            <div class="border-t border-gray-100 my-1"></div>
-            <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50">
-              <i data-lucide="home" class="size-3.5"></i>
-              <span>Kembali ke Beranda</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Page Body -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
-      
-      <!-- Page Header -->
-      <div class="mb-5.5">
-        <h1 class="text-2xl font-bold text-[#1a1f36]">Master Data Driver</h1>
-        <p class="text-sm text-[#52607a] mt-1">Kelola data pengemudi armada dan sertifikasi berkendara</p>
-      </div>
-
-      <!-- Data Table Card Container -->
-      <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
-        
-        <!-- Table Toolbar -->
-        <div class="p-4 sm:p-5 border-b border-[#e4e8f0] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-          
-          <!-- Filters Left -->
-          <div class="flex flex-wrap items-center gap-2.5 flex-1">
-            <div class="relative flex-1 min-w-[220px] max-w-sm">
-              <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#9aa3bf]"></i>
-              <input 
-                type="text" 
-                id="search-input"
-                placeholder="Cari ID, Nama, atau Nomor HP..." 
-                class="w-full h-9 pl-9 pr-3 text-[13px] bg-white border border-[#d0d6e8] rounded-[7px] text-[#1a1f36] placeholder-[#9aa3bf] focus:outline-none focus:border-[#2563eb] transition-colors"
-              />
-            </div>
-
-            <select id="filter-license" class="h-9 px-3 text-[12.5px] border border-[#d0d6e8] rounded-[7px] bg-white text-[#52607a] focus:outline-none focus:border-[#2563eb]">
-              <option value="">Semua Tipe SIM</option>
-              <option value="SIM A">SIM A</option>
-              <option value="SIM B1">SIM B1</option>
-              <option value="SIM B2">SIM B2</option>
-              <option value="SIM C">SIM C</option>
-            </select>
-
-            <select id="filter-status" class="h-9 px-3 text-[12.5px] border border-[#d0d6e8] rounded-[7px] bg-white text-[#52607a] focus:outline-none focus:border-[#2563eb]">
-              <option value="">Semua Status</option>
-              <option value="Active">Active</option>
-              <option value="Under Review">Under Review</option>
-              <option value="Suspended">Suspended</option>
-              <option value="On Leave">On Leave</option>
-            </select>
-          </div>
-
-          <!-- Toolbar Actions Right -->
-          <div class="flex items-center gap-2 self-end lg:self-auto shrink-0">
-            <button 
-              id="btn-delete-bulk" 
-              disabled 
-              onclick="openDeleteModal()"
-              class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#fef2f2] disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <i data-lucide="trash-2" class="size-4"></i>
-              <span>Hapus</span>
-            </button>
-
-            <button 
-              onclick="openAddModal()" 
-              class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] bg-[#2563eb] text-white hover:bg-[#1d4ed8] shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <i data-lucide="plus" class="size-4"></i>
-              <span>Tambah Driver</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Table -->
-        <div class="overflow-x-auto">
-          <table class="w-full border-collapse text-left" id="main-table">
-            <thead>
-              <tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]">
-                <th class="py-3 pl-5 pr-2 w-10">
-                  <input type="checkbox" id="check-all" class="rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
-                </th>
-                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] w-14">No</th>
-                <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Nama Lengkap</th>
-                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tipe SIM</th>
-                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Nomor HP</th>
-                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th>
-                <th class="py-3 pr-5 pl-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right w-20">Aksi</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[#f1f3f9] text-[13px]" id="table-body">
-              
-              <!-- Row 1 -->
-              <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openDetailModal('Supardi Ardiansyah', 'SIM B2', 'SIM-B2-990123', '081122334455', 'Active', '12 Jan 2022')">
-                <td class="py-3.5 pl-5 pr-2" onclick="event.stopPropagation()">
-                  <input type="checkbox" class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]">1</td>
-                <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">Supardi Ardiansyah</td>
-                <td class="py-3.5 px-3">
-                  <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#fff7ed] text-[#ea580c]">SIM B2</span>
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[#52607a]">081122334455</td>
-                <td class="py-3.5 px-3">
-                  <span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]">Active</span>
-                </td>
-                <td class="py-3.5 pr-5 pl-3 text-right" onclick="event.stopPropagation()">
-                  <div class="relative inline-block text-left dropdown-parent">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors" onclick="toggleRowMenu(event, this)">
-                      <i data-lucide="more-vertical" class="size-4"></i>
-                    </button>
-                    <div class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs">
-                      <button onclick="openDetailModal('Supardi Ardiansyah', 'SIM B2', 'SIM-B2-990123', '081122334455', 'Active', '12 Jan 2022')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="eye" class="size-3.5"></i> Detail
-                      </button>
-                      <button onclick="openEditModal('Supardi Ardiansyah', 'SIM B2', 'SIM-B2-990123', '081122334455', 'Active')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="pencil" class="size-3.5"></i> Edit
-                      </button>
-                      <button onclick="suspendDriver('Supardi Ardiansyah')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left">
-                        <i data-lucide="ban" class="size-3.5 text-[#f97316]"></i> Suspend
-                      </button>
-                      <div class="my-1 border-t border-gray-100"></div>
-                      <button onclick="openDeleteModal('Supardi Ardiansyah')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left">
-                        <i data-lucide="trash-2" class="size-3.5 text-[#dc2626]"></i> Hapus
-                      </button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Row 2 -->
-              <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openDetailModal('Budi Setiadi', 'SIM B1', 'SIM-B1-441290', '081299887766', 'Active', '05 Mar 2022')">
-                <td class="py-3.5 pl-5 pr-2" onclick="event.stopPropagation()">
-                  <input type="checkbox" class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]">2</td>
-                <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">Budi Setiadi</td>
-                <td class="py-3.5 px-3">
-                  <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#f0fdf4] text-[#16a34a]">SIM B1</span>
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[#52607a]">081299887766</td>
-                <td class="py-3.5 px-3">
-                  <span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]">Active</span>
-                </td>
-                <td class="py-3.5 pr-5 pl-3 text-right" onclick="event.stopPropagation()">
-                  <div class="relative inline-block text-left dropdown-parent">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors" onclick="toggleRowMenu(event, this)">
-                      <i data-lucide="more-vertical" class="size-4"></i>
-                    </button>
-                    <div class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs">
-                      <button onclick="openDetailModal('Budi Setiadi', 'SIM B1', 'SIM-B1-441290', '081299887766', 'Active', '05 Mar 2022')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="eye" class="size-3.5"></i> Detail
-                      </button>
-                      <button onclick="openEditModal('Budi Setiadi', 'SIM B1', 'SIM-B1-441290', '081299887766', 'Active')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="pencil" class="size-3.5"></i> Edit
-                      </button>
-                      <button onclick="suspendDriver('Budi Setiadi')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left">
-                        <i data-lucide="ban" class="size-3.5 text-[#f97316]"></i> Suspend
-                      </button>
-                      <div class="my-1 border-t border-gray-100"></div>
-                      <button onclick="openDeleteModal('Budi Setiadi')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left">
-                        <i data-lucide="trash-2" class="size-3.5 text-[#dc2626]"></i> Hapus
-                      </button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Row 3 -->
-              <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openDetailModal('Ahmad Fauzi', 'SIM B2', 'SIM-B2-881231', '081233445566', 'Under Review', '18 Jun 2023')">
-                <td class="py-3.5 pl-5 pr-2" onclick="event.stopPropagation()">
-                  <input type="checkbox" class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]">3</td>
-                <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">Ahmad Fauzi</td>
-                <td class="py-3.5 px-3">
-                  <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#fff7ed] text-[#ea580c]">SIM B2</span>
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[#52607a]">081233445566</td>
-                <td class="py-3.5 px-3">
-                  <span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#fffbeb] text-[#d97706]">Under Review</span>
-                </td>
-                <td class="py-3.5 pr-5 pl-3 text-right" onclick="event.stopPropagation()">
-                  <div class="relative inline-block text-left dropdown-parent">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors" onclick="toggleRowMenu(event, this)">
-                      <i data-lucide="more-vertical" class="size-4"></i>
-                    </button>
-                    <div class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs">
-                      <button onclick="openDetailModal('Ahmad Fauzi', 'SIM B2', 'SIM-B2-881231', '081233445566', 'Under Review', '18 Jun 2023')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="eye" class="size-3.5"></i> Detail
-                      </button>
-                      <button onclick="openEditModal('Ahmad Fauzi', 'SIM B2', 'SIM-B2-881231', '081233445566', 'Under Review')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="pencil" class="size-3.5"></i> Edit
-                      </button>
-                      <button onclick="suspendDriver('Ahmad Fauzi')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left">
-                        <i data-lucide="ban" class="size-3.5 text-[#f97316]"></i> Suspend
-                      </button>
-                      <div class="my-1 border-t border-gray-100"></div>
-                      <button onclick="openDeleteModal('Ahmad Fauzi')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left">
-                        <i data-lucide="trash-2" class="size-3.5 text-[#dc2626]"></i> Hapus
-                      </button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Row 4 -->
-              <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openDetailModal('Dedi Wahyu', 'SIM B2', 'SIM-B2-772109', '081244556677', 'Suspended', '10 Jan 2023')">
-                <td class="py-3.5 pl-5 pr-2" onclick="event.stopPropagation()">
-                  <input type="checkbox" class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]">4</td>
-                <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">Dedi Wahyu</td>
-                <td class="py-3.5 px-3">
-                  <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#fff7ed] text-[#ea580c]">SIM B2</span>
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[#52607a]">081244556677</td>
-                <td class="py-3.5 px-3">
-                  <span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#fef2f2] text-[#dc2626]">Suspended</span>
-                </td>
-                <td class="py-3.5 pr-5 pl-3 text-right" onclick="event.stopPropagation()">
-                  <div class="relative inline-block text-left dropdown-parent">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors" onclick="toggleRowMenu(event, this)">
-                      <i data-lucide="more-vertical" class="size-4"></i>
-                    </button>
-                    <div class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs">
-                      <button onclick="openDetailModal('Dedi Wahyu', 'SIM B2', 'SIM-B2-772109', '081244556677', 'Suspended', '10 Jan 2023')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="eye" class="size-3.5"></i> Detail
-                      </button>
-                      <button onclick="openEditModal('Dedi Wahyu', 'SIM B2', 'SIM-B2-772109', '081244556677', 'Suspended')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="pencil" class="size-3.5"></i> Edit
-                      </button>
-                      <div class="my-1 border-t border-gray-100"></div>
-                      <button onclick="openDeleteModal('Dedi Wahyu')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left">
-                        <i data-lucide="trash-2" class="size-3.5 text-[#dc2626]"></i> Hapus
-                      </button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Row 5 -->
-              <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openDetailModal('Gita Rahayu', 'SIM A', 'SIM-A-220199', '081277889900', 'Active', '20 Agu 2023')">
-                <td class="py-3.5 pl-5 pr-2" onclick="event.stopPropagation()">
-                  <input type="checkbox" class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]">5</td>
-                <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">Gita Rahayu</td>
-                <td class="py-3.5 px-3">
-                  <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#eff6ff] text-[#2563eb]">SIM A</span>
-                </td>
-                <td class="py-3.5 px-3 font-mono text-[#52607a]">081277889900</td>
-                <td class="py-3.5 px-3">
-                  <span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]">Active</span>
-                </td>
-                <td class="py-3.5 pr-5 pl-3 text-right" onclick="event.stopPropagation()">
-                  <div class="relative inline-block text-left dropdown-parent">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors" onclick="toggleRowMenu(event, this)">
-                      <i data-lucide="more-vertical" class="size-4"></i>
-                    </button>
-                    <div class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs">
-                      <button onclick="openDetailModal('Gita Rahayu', 'SIM A', 'SIM-A-220199', '081277889900', 'Active', '20 Agu 2023')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="eye" class="size-3.5"></i> Detail
-                      </button>
-                      <button onclick="openEditModal('Gita Rahayu', 'SIM A', 'SIM-A-220199', '081277889900', 'Active')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left">
-                        <i data-lucide="pencil" class="size-3.5"></i> Edit
-                      </button>
-                      <button onclick="suspendDriver('Gita Rahayu')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left">
-                        <i data-lucide="ban" class="size-3.5 text-[#f97316]"></i> Suspend
-                      </button>
-                      <div class="my-1 border-t border-gray-100"></div>
-                      <button onclick="openDeleteModal('Gita Rahayu')" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left">
-                        <i data-lucide="trash-2" class="size-3.5 text-[#dc2626]"></i> Hapus
-                      </button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Table Pagination Footer -->
-        <div class="px-5 py-3.5 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]">
-          <div>
-            Menampilkan <span class="font-semibold text-[#1a1f36]">1</span> sampai <span class="font-semibold text-[#1a1f36]">5</span> dari <span class="font-semibold text-[#1a1f36]">35</span> driver
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button class="h-8 px-2.5 rounded-[6px] border border-[#d0d6e8] bg-white text-[#52607a] hover:bg-[#f5f7fb]">Sebelumnya</button>
-            <button class="h-8 px-3 rounded-[6px] bg-[#2563eb] text-white font-semibold">1</button>
-            <button class="h-8 px-3 rounded-[6px] border border-[#d0d6e8] bg-white text-[#52607a] hover:bg-[#f5f7fb]">2</button>
-            <button class="h-8 px-2.5 rounded-[6px] border border-[#d0d6e8] bg-white text-[#52607a] hover:bg-[#f5f7fb]">Selanjutnya</button>
-          </div>
-        </div>
-
-      </div>
-
-    </main>
-  </div>
-
-  <!-- ─── MODAL: TAMBAH / EDIT DRIVER ─── -->
-  <div id="form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeFormModal()"></div>
-    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 animate-fade-in">
-      <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
-        <h3 id="modal-title" class="text-base font-bold text-[#111827]">Tambah Driver Baru</h3>
-        <button onclick="closeFormModal()" class="text-gray-400 hover:text-gray-600 p-1">
+        <button
+          id="sidebar-close-btn"
+          class="ml-auto lg:hidden text-white/50 hover:text-white p-1"
+        >
           <i data-lucide="x" class="size-5"></i>
         </button>
       </div>
-      <form onsubmit="handleFormSubmit(event)">
-        <div class="space-y-3.5">
-          <div>
-            <label class="block text-xs font-semibold text-[#374151] mb-1.5">Nama Lengkap *</label>
-            <input type="text" id="input-name" required placeholder="Nama pengemudi" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]" />
-          </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Tipe SIM *</label>
-              <select id="input-license" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
-                <option value="SIM B2">SIM B2</option>
-                <option value="SIM B1">SIM B1</option>
+      <!-- Navigation Menu -->
+      <div
+        class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium"
+      >
+        <div>
+          <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Ringkasan</p>
+          <div class="space-y-1.5">
+            <a
+              href="admin.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="layout-grid" class="size-4 shrink-0"></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Manajemen</p>
+          <div class="space-y-1.5">
+            <a
+              href="admin-fleet-type.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="layers" class="size-4 shrink-0"></i>
+              <span>Tipe Armada</span>
+            </a>
+            <a
+              href="admin-fleet.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="truck" class="size-4 shrink-0"></i>
+              <span>Data Armada</span>
+            </a>
+            <!-- Active: Data Driver -->
+            <a
+              href="admin-driver.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20"
+            >
+              <i data-lucide="users" class="size-4 shrink-0 text-white"></i>
+              <span>Data Driver</span>
+            </a>
+            <a
+              href="admin-device.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="cpu" class="size-4 shrink-0"></i>
+              <span>Data Device</span>
+            </a>
+            <a
+              href="admin-users.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="user-cog" class="size-4 shrink-0"></i>
+              <span>Manajemen Pengguna</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="p-2.5 pt-0 border-t border-white/5">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+          <div
+            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white text-xs select-none shadow-xs"
+          >
+            AD
+          </div>
+          <div class="flex flex-col leading-tight min-w-0 flex-1">
+            <span class="text-sm font-bold text-white/90 truncate"
+              >Administrator</span
+            >
+            <span class="text-[11px] text-white/50 truncate"
+              >admin@nexa.id</span
+            >
+          </div>
+          <a
+            href="index.html"
+            title="Kembali ke Beranda"
+            class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors"
+          >
+            <i data-lucide="log-out" class="size-4"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT WRAPPER ─── -->
+    <div
+      class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300"
+    >
+      <!-- Top Site Header -->
+      <header
+        class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between"
+      >
+        <div class="flex items-center gap-0 min-w-0 flex-1">
+          <button
+            id="sidebar-toggle-btn"
+            class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0"
+          >
+            <i data-lucide="panel-left" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+          <nav
+            class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden"
+          >
+            <a
+              href="index.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >FleetTrack</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <a
+              href="admin.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >Admin</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="font-bold text-[#111827]">Data Driver</span>
+          </nav>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0 pl-2">
+          <button
+            class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all"
+          >
+            <i data-lucide="bell" class="size-4"></i>
+            <span
+              class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"
+            ></span>
+          </button>
+
+          <button
+            title="Pengaturan"
+            class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all"
+          >
+            <i data-lucide="settings" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
+
+          <!-- Profile Dropdown -->
+          <div class="relative">
+            <button
+              id="user-menu-btn"
+              class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors"
+            >
+              <div
+                class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white"
+              >
+                AD
+              </div>
+              <div class="hidden sm:flex flex-col text-left leading-tight">
+                <span class="text-[12.5px] font-bold text-[#111827]"
+                  >Administrator</span
+                >
+                <span class="text-[10.5px] text-[#9aa3bf]">Admin</span>
+              </div>
+              <i
+                data-lucide="chevron-down"
+                class="size-3.5 text-[#9aa3bf] ml-0.5"
+              ></i>
+            </button>
+
+            <div
+              id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs"
+            >
+              <div class="px-4 py-2 border-b border-gray-100">
+                <p class="text-[11px] font-medium text-gray-400">
+                  Masuk sebagai
+                </p>
+                <p class="font-bold text-[#111827] truncate">admin@nexa.id</p>
+              </div>
+              <div
+                class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400"
+              >
+                Beralih Tampilan Role:
+              </div>
+              <a
+                href="superadmin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Super Admin</span>
+              </a>
+              <a
+                href="executive.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Executive</span>
+              </a>
+              <a
+                href="admin.html"
+                class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60"
+              >
+                <span>Admin</span>
+                <i data-lucide="check" class="size-3.5 text-blue-600"></i>
+              </a>
+              <a
+                href="manager.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Manager</span>
+              </a>
+              <a
+                href="auditor.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Auditor</span>
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50"
+              >
+                <i data-lucide="home" class="size-3.5"></i>
+                <span>Kembali ke Beranda</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+        <!-- Page Header -->
+        <div class="mb-5.5">
+          <h1 class="text-2xl font-bold text-[#1a1f36]">Master Data Driver</h1>
+          <p class="text-sm text-[#52607a] mt-1">
+            Kelola data pengemudi armada dan sertifikasi berkendara
+          </p>
+        </div>
+
+        <!-- Data Table Card Container -->
+        <div
+          class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden"
+        >
+          <!-- Table Toolbar -->
+          <div
+            class="p-4 sm:p-5 border-b border-[#e4e8f0] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3"
+          >
+            <!-- Filters Left -->
+            <div class="flex flex-wrap items-center gap-2.5 flex-1">
+              <div class="relative flex-1 min-w-[220px] max-w-sm">
+                <i
+                  data-lucide="search"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#9aa3bf]"
+                ></i>
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="Cari ID, Nama, atau Nomor HP..."
+                  class="w-full h-9 pl-9 pr-3 text-[13px] bg-white border border-[#d0d6e8] rounded-[7px] text-[#1a1f36] placeholder-[#9aa3bf] focus:outline-none focus:border-[#2563eb] transition-colors"
+                />
+              </div>
+
+              <select
+                id="filter-license"
+                class="h-9 px-3 text-[12.5px] border border-[#d0d6e8] rounded-[7px] bg-white text-[#52607a] focus:outline-none focus:border-[#2563eb]"
+              >
+                <option value="">Semua Tipe SIM</option>
                 <option value="SIM A">SIM A</option>
+                <option value="SIM B1">SIM B1</option>
+                <option value="SIM B2">SIM B2</option>
                 <option value="SIM C">SIM C</option>
               </select>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5">No. SIM *</label>
-              <input type="text" id="input-lic-num" required placeholder="Nomor lisensi" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]" />
-            </div>
-          </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Nomor Telepon / HP *</label>
-              <input type="tel" id="input-phone" required placeholder="08xxxxxxxxxx" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Status Akun</label>
-              <select id="input-status" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+              <select
+                id="filter-status"
+                class="h-9 px-3 text-[12.5px] border border-[#d0d6e8] rounded-[7px] bg-white text-[#52607a] focus:outline-none focus:border-[#2563eb]"
+              >
+                <option value="">Semua Status</option>
                 <option value="Active">Active</option>
                 <option value="Under Review">Under Review</option>
                 <option value="Suspended">Suspended</option>
                 <option value="On Leave">On Leave</option>
               </select>
             </div>
+
+            <!-- Toolbar Actions Right -->
+            <div class="flex items-center gap-2 self-end lg:self-auto shrink-0">
+              <button
+                id="btn-delete-bulk"
+                disabled
+                onclick="openDeleteModal()"
+                class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#fef2f2] disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <i data-lucide="trash-2" class="size-4"></i>
+                <span>Hapus</span>
+              </button>
+
+              <button
+                onclick="openAddModal()"
+                class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] bg-[#2563eb] text-white hover:bg-[#1d4ed8] shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <i data-lucide="plus" class="size-4"></i>
+                <span>Tambah Driver</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-left" id="main-table">
+              <thead>
+                <tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]">
+                  <th class="py-3 pl-5 pr-2 w-10">
+                    <input
+                      type="checkbox"
+                      id="check-all"
+                      class="rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer"
+                    />
+                  </th>
+                  <th
+                    class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] w-14"
+                  >
+                    No
+                  </th>
+                  <th
+                    class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
+                  >
+                    Nama Lengkap
+                  </th>
+                  <th
+                    class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
+                  >
+                    Tipe SIM
+                  </th>
+                  <th
+                    class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
+                  >
+                    Nomor HP
+                  </th>
+                  <th
+                    class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="py-3 pr-5 pl-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right w-20"
+                  >
+                    Aksi
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                class="divide-y divide-[#f1f3f9] text-[13px]"
+                id="table-body"
+              >
+                <!-- Row 1 -->
+                <tr
+                  class="hover:bg-[#f8f9fc] transition-colors cursor-pointer"
+                  onclick="
+                    openDetailModal(
+                      'Supardi Ardiansyah',
+                      'SIM B2',
+                      'SIM-B2-990123',
+                      '081122334455',
+                      'Active',
+                      '12 Jan 2022',
+                    )
+                  "
+                >
+                  <td
+                    class="py-3.5 pl-5 pr-2"
+                    onclick="event.stopPropagation()"
+                  >
+                    <input
+                      type="checkbox"
+                      class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer"
+                    />
+                  </td>
+                  <td
+                    class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]"
+                  >
+                    1
+                  </td>
+                  <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
+                    Supardi Ardiansyah
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#fff7ed] text-[#ea580c]"
+                      >SIM B2</span
+                    >
+                  </td>
+                  <td class="py-3.5 px-3 font-mono text-[#52607a]">
+                    081122334455
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]"
+                      >Active</span
+                    >
+                  </td>
+                  <td
+                    class="py-3.5 pr-5 pl-3 text-right"
+                    onclick="event.stopPropagation()"
+                  >
+                    <div
+                      class="relative inline-block text-left dropdown-parent"
+                    >
+                      <button
+                        class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors"
+                        onclick="toggleRowMenu(event, this)"
+                      >
+                        <i data-lucide="more-vertical" class="size-4"></i>
+                      </button>
+                      <div
+                        class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs"
+                      >
+                        <button
+                          onclick="
+                            openDetailModal(
+                              'Supardi Ardiansyah',
+                              'SIM B2',
+                              'SIM-B2-990123',
+                              '081122334455',
+                              'Active',
+                              '12 Jan 2022',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="eye" class="size-3.5"></i> Detail
+                        </button>
+                        <button
+                          onclick="
+                            openEditModal(
+                              'Supardi Ardiansyah',
+                              'SIM B2',
+                              'SIM-B2-990123',
+                              '081122334455',
+                              'Active',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="pencil" class="size-3.5"></i> Edit
+                        </button>
+                        <button
+                          onclick="suspendDriver('Supardi Ardiansyah')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left"
+                        >
+                          <i
+                            data-lucide="ban"
+                            class="size-3.5 text-[#f97316]"
+                          ></i>
+                          Suspend
+                        </button>
+                        <div class="my-1 border-t border-gray-100"></div>
+                        <button
+                          onclick="openDeleteModal('Supardi Ardiansyah')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left"
+                        >
+                          <i
+                            data-lucide="trash-2"
+                            class="size-3.5 text-[#dc2626]"
+                          ></i>
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr
+                  class="hover:bg-[#f8f9fc] transition-colors cursor-pointer"
+                  onclick="
+                    openDetailModal(
+                      'Budi Setiadi',
+                      'SIM B1',
+                      'SIM-B1-441290',
+                      '081299887766',
+                      'Active',
+                      '05 Mar 2022',
+                    )
+                  "
+                >
+                  <td
+                    class="py-3.5 pl-5 pr-2"
+                    onclick="event.stopPropagation()"
+                  >
+                    <input
+                      type="checkbox"
+                      class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer"
+                    />
+                  </td>
+                  <td
+                    class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]"
+                  >
+                    2
+                  </td>
+                  <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
+                    Budi Setiadi
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#f0fdf4] text-[#16a34a]"
+                      >SIM B1</span
+                    >
+                  </td>
+                  <td class="py-3.5 px-3 font-mono text-[#52607a]">
+                    081299887766
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]"
+                      >Active</span
+                    >
+                  </td>
+                  <td
+                    class="py-3.5 pr-5 pl-3 text-right"
+                    onclick="event.stopPropagation()"
+                  >
+                    <div
+                      class="relative inline-block text-left dropdown-parent"
+                    >
+                      <button
+                        class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors"
+                        onclick="toggleRowMenu(event, this)"
+                      >
+                        <i data-lucide="more-vertical" class="size-4"></i>
+                      </button>
+                      <div
+                        class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs"
+                      >
+                        <button
+                          onclick="
+                            openDetailModal(
+                              'Budi Setiadi',
+                              'SIM B1',
+                              'SIM-B1-441290',
+                              '081299887766',
+                              'Active',
+                              '05 Mar 2022',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="eye" class="size-3.5"></i> Detail
+                        </button>
+                        <button
+                          onclick="
+                            openEditModal(
+                              'Budi Setiadi',
+                              'SIM B1',
+                              'SIM-B1-441290',
+                              '081299887766',
+                              'Active',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="pencil" class="size-3.5"></i> Edit
+                        </button>
+                        <button
+                          onclick="suspendDriver('Budi Setiadi')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left"
+                        >
+                          <i
+                            data-lucide="ban"
+                            class="size-3.5 text-[#f97316]"
+                          ></i>
+                          Suspend
+                        </button>
+                        <div class="my-1 border-t border-gray-100"></div>
+                        <button
+                          onclick="openDeleteModal('Budi Setiadi')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left"
+                        >
+                          <i
+                            data-lucide="trash-2"
+                            class="size-3.5 text-[#dc2626]"
+                          ></i>
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr
+                  class="hover:bg-[#f8f9fc] transition-colors cursor-pointer"
+                  onclick="
+                    openDetailModal(
+                      'Ahmad Fauzi',
+                      'SIM B2',
+                      'SIM-B2-881231',
+                      '081233445566',
+                      'Under Review',
+                      '18 Jun 2023',
+                    )
+                  "
+                >
+                  <td
+                    class="py-3.5 pl-5 pr-2"
+                    onclick="event.stopPropagation()"
+                  >
+                    <input
+                      type="checkbox"
+                      class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer"
+                    />
+                  </td>
+                  <td
+                    class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]"
+                  >
+                    3
+                  </td>
+                  <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
+                    Ahmad Fauzi
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#fff7ed] text-[#ea580c]"
+                      >SIM B2</span
+                    >
+                  </td>
+                  <td class="py-3.5 px-3 font-mono text-[#52607a]">
+                    081233445566
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#fffbeb] text-[#d97706]"
+                      >Under Review</span
+                    >
+                  </td>
+                  <td
+                    class="py-3.5 pr-5 pl-3 text-right"
+                    onclick="event.stopPropagation()"
+                  >
+                    <div
+                      class="relative inline-block text-left dropdown-parent"
+                    >
+                      <button
+                        class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors"
+                        onclick="toggleRowMenu(event, this)"
+                      >
+                        <i data-lucide="more-vertical" class="size-4"></i>
+                      </button>
+                      <div
+                        class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs"
+                      >
+                        <button
+                          onclick="
+                            openDetailModal(
+                              'Ahmad Fauzi',
+                              'SIM B2',
+                              'SIM-B2-881231',
+                              '081233445566',
+                              'Under Review',
+                              '18 Jun 2023',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="eye" class="size-3.5"></i> Detail
+                        </button>
+                        <button
+                          onclick="
+                            openEditModal(
+                              'Ahmad Fauzi',
+                              'SIM B2',
+                              'SIM-B2-881231',
+                              '081233445566',
+                              'Under Review',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="pencil" class="size-3.5"></i> Edit
+                        </button>
+                        <button
+                          onclick="suspendDriver('Ahmad Fauzi')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left"
+                        >
+                          <i
+                            data-lucide="ban"
+                            class="size-3.5 text-[#f97316]"
+                          ></i>
+                          Suspend
+                        </button>
+                        <div class="my-1 border-t border-gray-100"></div>
+                        <button
+                          onclick="openDeleteModal('Ahmad Fauzi')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left"
+                        >
+                          <i
+                            data-lucide="trash-2"
+                            class="size-3.5 text-[#dc2626]"
+                          ></i>
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 4 -->
+                <tr
+                  class="hover:bg-[#f8f9fc] transition-colors cursor-pointer"
+                  onclick="
+                    openDetailModal(
+                      'Dedi Wahyu',
+                      'SIM B2',
+                      'SIM-B2-772109',
+                      '081244556677',
+                      'Suspended',
+                      '10 Jan 2023',
+                    )
+                  "
+                >
+                  <td
+                    class="py-3.5 pl-5 pr-2"
+                    onclick="event.stopPropagation()"
+                  >
+                    <input
+                      type="checkbox"
+                      class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer"
+                    />
+                  </td>
+                  <td
+                    class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]"
+                  >
+                    4
+                  </td>
+                  <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
+                    Dedi Wahyu
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#fff7ed] text-[#ea580c]"
+                      >SIM B2</span
+                    >
+                  </td>
+                  <td class="py-3.5 px-3 font-mono text-[#52607a]">
+                    081244556677
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#fef2f2] text-[#dc2626]"
+                      >Suspended</span
+                    >
+                  </td>
+                  <td
+                    class="py-3.5 pr-5 pl-3 text-right"
+                    onclick="event.stopPropagation()"
+                  >
+                    <div
+                      class="relative inline-block text-left dropdown-parent"
+                    >
+                      <button
+                        class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors"
+                        onclick="toggleRowMenu(event, this)"
+                      >
+                        <i data-lucide="more-vertical" class="size-4"></i>
+                      </button>
+                      <div
+                        class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs"
+                      >
+                        <button
+                          onclick="
+                            openDetailModal(
+                              'Dedi Wahyu',
+                              'SIM B2',
+                              'SIM-B2-772109',
+                              '081244556677',
+                              'Suspended',
+                              '10 Jan 2023',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="eye" class="size-3.5"></i> Detail
+                        </button>
+                        <button
+                          onclick="
+                            openEditModal(
+                              'Dedi Wahyu',
+                              'SIM B2',
+                              'SIM-B2-772109',
+                              '081244556677',
+                              'Suspended',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="pencil" class="size-3.5"></i> Edit
+                        </button>
+                        <div class="my-1 border-t border-gray-100"></div>
+                        <button
+                          onclick="openDeleteModal('Dedi Wahyu')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left"
+                        >
+                          <i
+                            data-lucide="trash-2"
+                            class="size-3.5 text-[#dc2626]"
+                          ></i>
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr
+                  class="hover:bg-[#f8f9fc] transition-colors cursor-pointer"
+                  onclick="
+                    openDetailModal(
+                      'Gita Rahayu',
+                      'SIM A',
+                      'SIM-A-220199',
+                      '081277889900',
+                      'Active',
+                      '20 Agu 2023',
+                    )
+                  "
+                >
+                  <td
+                    class="py-3.5 pl-5 pr-2"
+                    onclick="event.stopPropagation()"
+                  >
+                    <input
+                      type="checkbox"
+                      class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer"
+                    />
+                  </td>
+                  <td
+                    class="py-3.5 px-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]"
+                  >
+                    5
+                  </td>
+                  <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
+                    Gita Rahayu
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="px-2 py-0.5 text-[11px] font-bold rounded bg-[#eff6ff] text-[#2563eb]"
+                      >SIM A</span
+                    >
+                  </td>
+                  <td class="py-3.5 px-3 font-mono text-[#52607a]">
+                    081277889900
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <span
+                      class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]"
+                      >Active</span
+                    >
+                  </td>
+                  <td
+                    class="py-3.5 pr-5 pl-3 text-right"
+                    onclick="event.stopPropagation()"
+                  >
+                    <div
+                      class="relative inline-block text-left dropdown-parent"
+                    >
+                      <button
+                        class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors"
+                        onclick="toggleRowMenu(event, this)"
+                      >
+                        <i data-lucide="more-vertical" class="size-4"></i>
+                      </button>
+                      <div
+                        class="hidden row-menu absolute right-0 mt-1 w-36 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs"
+                      >
+                        <button
+                          onclick="
+                            openDetailModal(
+                              'Gita Rahayu',
+                              'SIM A',
+                              'SIM-A-220199',
+                              '081277889900',
+                              'Active',
+                              '20 Agu 2023',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="eye" class="size-3.5"></i> Detail
+                        </button>
+                        <button
+                          onclick="
+                            openEditModal(
+                              'Gita Rahayu',
+                              'SIM A',
+                              'SIM-A-220199',
+                              '081277889900',
+                              'Active',
+                            )
+                          "
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#4b5675] hover:bg-[#f5f6fa] text-left"
+                        >
+                          <i data-lucide="pencil" class="size-3.5"></i> Edit
+                        </button>
+                        <button
+                          onclick="suspendDriver('Gita Rahayu')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#f97316] hover:bg-[#fff7ed] text-left"
+                        >
+                          <i
+                            data-lucide="ban"
+                            class="size-3.5 text-[#f97316]"
+                          ></i>
+                          Suspend
+                        </button>
+                        <div class="my-1 border-t border-gray-100"></div>
+                        <button
+                          onclick="openDeleteModal('Gita Rahayu')"
+                          class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left"
+                        >
+                          <i
+                            data-lucide="trash-2"
+                            class="size-3.5 text-[#dc2626]"
+                          ></i>
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Pagination Footer -->
+          <div
+            class="px-5 py-3.5 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"
+          >
+            <div>
+              Menampilkan
+              <span class="font-semibold text-[#1a1f36]">1</span> sampai
+              <span class="font-semibold text-[#1a1f36]">5</span> dari
+              <span class="font-semibold text-[#1a1f36]">35</span> driver
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button
+                class="h-8 px-2.5 rounded-[6px] border border-[#d0d6e8] bg-white text-[#52607a] hover:bg-[#f5f7fb]"
+              >
+                Sebelumnya
+              </button>
+              <button
+                class="h-8 px-3 rounded-[6px] bg-[#2563eb] text-white font-semibold"
+              >
+                1
+              </button>
+              <button
+                class="h-8 px-3 rounded-[6px] border border-[#d0d6e8] bg-white text-[#52607a] hover:bg-[#f5f7fb]"
+              >
+                2
+              </button>
+              <button
+                class="h-8 px-2.5 rounded-[6px] border border-[#d0d6e8] bg-white text-[#52607a] hover:bg-[#f5f7fb]"
+              >
+                Selanjutnya
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ─── MODAL: TAMBAH / EDIT DRIVER ─── -->
+    <div
+      id="form-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="fixed inset-0 bg-black/50 backdrop-blur-2xs"
+        onclick="closeFormModal()"
+      ></div>
+      <div
+        class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 animate-fade-in"
+      >
+        <div
+          class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4"
+        >
+          <h3 id="modal-title" class="text-base font-bold text-[#111827]">
+            Tambah Driver Baru
+          </h3>
+          <button
+            onclick="closeFormModal()"
+            class="text-gray-400 hover:text-gray-600 p-1"
+          >
+            <i data-lucide="x" class="size-5"></i>
+          </button>
+        </div>
+        <form onsubmit="handleFormSubmit(event)">
+          <div class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5"
+                >Nama Lengkap *</label
+              >
+              <input
+                type="text"
+                id="input-name"
+                required
+                placeholder="Nama pengemudi"
+                class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
+                  >Tipe SIM *</label
+                >
+                <select
+                  id="input-license"
+                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"
+                >
+                  <option value="SIM B2">SIM B2</option>
+                  <option value="SIM B1">SIM B1</option>
+                  <option value="SIM A">SIM A</option>
+                  <option value="SIM C">SIM C</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
+                  >No. SIM *</label
+                >
+                <input
+                  type="text"
+                  id="input-lic-num"
+                  required
+                  placeholder="Nomor lisensi"
+                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
+                  >Nomor Telepon / HP *</label
+                >
+                <input
+                  type="tel"
+                  id="input-phone"
+                  required
+                  placeholder="08xxxxxxxxxx"
+                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
+                  >Status Akun</label
+                >
+                <select
+                  id="input-status"
+                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"
+                >
+                  <option value="Active">Active</option>
+                  <option value="Under Review">Under Review</option>
+                  <option value="Suspended">Suspended</option>
+                  <option value="On Leave">On Leave</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="mt-6 flex justify-end gap-2.5 pt-4 border-t border-gray-100"
+          >
+            <button
+              type="button"
+              onclick="closeFormModal()"
+              class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg shadow-xs"
+            >
+              Simpan Data
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ─── MODAL: DETAIL DRIVER ─── -->
+    <div
+      id="detail-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="fixed inset-0 bg-black/50 backdrop-blur-2xs"
+        onclick="closeDetailModal()"
+      ></div>
+      <div
+        class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 animate-fade-in"
+      >
+        <div
+          class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4"
+        >
+          <div>
+            <h3 class="text-base font-bold text-[#111827]" id="detail-name">
+              Supardi Ardiansyah
+            </h3>
+            <p class="text-xs text-[#9aa3bf]">
+              Profil &amp; Sertifikasi Pengemudi
+            </p>
+          </div>
+          <button
+            onclick="closeDetailModal()"
+            class="text-gray-400 hover:text-gray-600 p-1"
+          >
+            <i data-lucide="x" class="size-5"></i>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="flex justify-between py-1.5 border-b border-gray-50">
+            <span class="text-gray-400">Tipe Lisensi:</span>
+            <span class="font-bold text-[#111827]" id="detail-license"
+              >SIM B2</span
+            >
+          </div>
+          <div class="flex justify-between py-1.5 border-b border-gray-50">
+            <span class="text-gray-400">Nomor SIM:</span>
+            <span class="font-mono font-bold text-[#111827]" id="detail-lic-num"
+              >SIM-B2-990123</span
+            >
+          </div>
+          <div class="flex justify-between py-1.5 border-b border-gray-50">
+            <span class="text-gray-400">Kontak HP:</span>
+            <span class="font-bold text-[#111827]" id="detail-phone"
+              >081122334455</span
+            >
+          </div>
+          <div class="flex justify-between py-1.5 border-b border-gray-50">
+            <span class="text-gray-400">Tanggal Bergabung:</span>
+            <span class="font-bold text-[#111827]" id="detail-join"
+              >12 Jan 2022</span
+            >
+          </div>
+          <div class="flex justify-between py-1.5">
+            <span class="text-gray-400">Status Akun:</span>
+            <span class="font-bold text-[#16a34a]" id="detail-status"
+              >Active</span
+            >
           </div>
         </div>
 
-        <div class="mt-6 flex justify-end gap-2.5 pt-4 border-t border-gray-100">
-          <button type="button" onclick="closeFormModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
-          <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg shadow-xs">Simpan Data</button>
+        <div class="mt-6 flex justify-end pt-4 border-t border-gray-100">
+          <button
+            onclick="closeDetailModal()"
+            class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] rounded-lg"
+          >
+            Tutup
+          </button>
         </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ─── MODAL: DETAIL DRIVER ─── -->
-  <div id="detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeDetailModal()"></div>
-    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 animate-fade-in">
-      <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
-        <div>
-          <h3 class="text-base font-bold text-[#111827]" id="detail-name">Supardi Ardiansyah</h3>
-          <p class="text-xs text-[#9aa3bf]">Profil &amp; Sertifikasi Pengemudi</p>
-        </div>
-        <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 p-1">
-          <i data-lucide="x" class="size-5"></i>
-        </button>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div class="flex justify-between py-1.5 border-b border-gray-50">
-          <span class="text-gray-400">Tipe Lisensi:</span>
-          <span class="font-bold text-[#111827]" id="detail-license">SIM B2</span>
-        </div>
-        <div class="flex justify-between py-1.5 border-b border-gray-50">
-          <span class="text-gray-400">Nomor SIM:</span>
-          <span class="font-mono font-bold text-[#111827]" id="detail-lic-num">SIM-B2-990123</span>
-        </div>
-        <div class="flex justify-between py-1.5 border-b border-gray-50">
-          <span class="text-gray-400">Kontak HP:</span>
-          <span class="font-bold text-[#111827]" id="detail-phone">081122334455</span>
-        </div>
-        <div class="flex justify-between py-1.5 border-b border-gray-50">
-          <span class="text-gray-400">Tanggal Bergabung:</span>
-          <span class="font-bold text-[#111827]" id="detail-join">12 Jan 2022</span>
-        </div>
-        <div class="flex justify-between py-1.5">
-          <span class="text-gray-400">Status Akun:</span>
-          <span class="font-bold text-[#16a34a]" id="detail-status">Active</span>
-        </div>
-      </div>
-
-      <div class="mt-6 flex justify-end pt-4 border-t border-gray-100">
-        <button onclick="closeDetailModal()" class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] rounded-lg">Tutup</button>
       </div>
     </div>
-  </div>
 
-  <!-- ─── MODAL: DELETE CONFIRMATION ─── -->
-  <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeDeleteModal()"></div>
-    <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 text-center animate-fade-in">
-      <div class="size-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3.5">
-        <i data-lucide="alert-triangle" class="size-6"></i>
-      </div>
-      <h3 class="text-base font-bold text-[#111827]">Hapus Data Driver?</h3>
-      <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
-        Apakah Anda yakin ingin menghapus data pengemudi yang dipilih?
-      </p>
-      <div class="mt-6 flex justify-center gap-2.5">
-        <button onclick="closeDeleteModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
-        <button onclick="confirmDelete()" class="px-4 py-2 text-xs font-semibold text-white bg-[#dc2626] hover:bg-[#b91c1c] rounded-lg shadow-xs">Hapus Sekarang</button>
+    <!-- ─── MODAL: DELETE CONFIRMATION ─── -->
+    <div
+      id="delete-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="fixed inset-0 bg-black/50 backdrop-blur-2xs"
+        onclick="closeDeleteModal()"
+      ></div>
+      <div
+        class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 text-center animate-fade-in"
+      >
+        <div
+          class="size-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3.5"
+        >
+          <i data-lucide="alert-triangle" class="size-6"></i>
+        </div>
+        <h3 class="text-base font-bold text-[#111827]">Hapus Data Driver?</h3>
+        <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+          Apakah Anda yakin ingin menghapus data pengemudi yang dipilih?
+        </p>
+        <div class="mt-6 flex justify-center gap-2.5">
+          <button
+            onclick="closeDeleteModal()"
+            class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg"
+          >
+            Batal
+          </button>
+          <button
+            onclick="confirmDelete()"
+            class="px-4 py-2 text-xs font-semibold text-white bg-[#dc2626] hover:bg-[#b91c1c] rounded-lg shadow-xs"
+          >
+            Hapus Sekarang
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    lucide.createIcons();
+    <script>
+      lucide.createIcons();
 
-    // Sidebar Mobile Toggle
-    const sidebar = document.getElementById('sidebar');
-    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
-    const toggleBtn = document.getElementById('sidebar-toggle-btn');
-    const closeBtn = document.getElementById('sidebar-close-btn');
+      // Sidebar Mobile Toggle
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+      const toggleBtn = document.getElementById("sidebar-toggle-btn");
+      const closeBtn = document.getElementById("sidebar-close-btn");
 
-    function openSidebar() {
-      sidebar.classList.remove('-translate-x-full');
-      sidebarBackdrop.classList.remove('hidden');
-    }
-    function closeSidebar() {
-      sidebar.classList.add('-translate-x-full');
-      sidebarBackdrop.classList.add('hidden');
-    }
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarBackdrop.classList.remove("hidden");
+      }
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarBackdrop.classList.add("hidden");
+      }
 
-    toggleBtn?.addEventListener('click', () => {
-      if (sidebar.classList.contains('-translate-x-full')) openSidebar();
-      else closeSidebar();
-    });
-    closeBtn?.addEventListener('click', closeSidebar);
-    sidebarBackdrop?.addEventListener('click', closeSidebar);
-
-    // User Dropdown
-    const userMenuBtn = document.getElementById('user-menu-btn');
-    const userDropdown = document.getElementById('user-dropdown');
-    userMenuBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      userDropdown.classList.toggle('hidden');
-    });
-    document.addEventListener('click', () => {
-      userDropdown?.classList.add('hidden');
-      document.querySelectorAll('.row-menu').forEach(m => m.classList.add('hidden'));
-    });
-
-    // Row Menu Dropdown
-    function toggleRowMenu(e, btn) {
-      e.stopPropagation();
-      const menu = btn.nextElementSibling;
-      document.querySelectorAll('.row-menu').forEach(m => {
-        if (m !== menu) m.classList.add('hidden');
+      toggleBtn?.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) openSidebar();
+        else closeSidebar();
       });
-      menu.classList.toggle('hidden');
-    }
+      closeBtn?.addEventListener("click", closeSidebar);
+      sidebarBackdrop?.addEventListener("click", closeSidebar);
 
-    // Checkboxes
-    const checkAll = document.getElementById('check-all');
-    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    const btnDeleteBulk = document.getElementById('btn-delete-bulk');
-
-    checkAll?.addEventListener('change', () => {
-      rowCheckboxes.forEach(cb => cb.checked = checkAll.checked);
-      updateDeleteButton();
-    });
-
-    rowCheckboxes.forEach(cb => cb.addEventListener('change', updateDeleteButton));
-
-    function updateDeleteButton() {
-      const anyChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
-      btnDeleteBulk.disabled = !anyChecked;
-    }
-
-    // Modals
-    const formModal = document.getElementById('form-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const inputName = document.getElementById('input-name');
-    const inputLicense = document.getElementById('input-license');
-    const inputLicNum = document.getElementById('input-lic-num');
-    const inputPhone = document.getElementById('input-phone');
-    const inputStatus = document.getElementById('input-status');
-
-    function openAddModal() {
-      modalTitle.innerText = "Tambah Driver Baru";
-      inputName.value = "";
-      inputLicNum.value = "";
-      inputPhone.value = "";
-      formModal.classList.remove('hidden');
-    }
-
-    function openEditModal(name, lic, licNum, phone, status) {
-      modalTitle.innerText = "Edit Data Driver";
-      inputName.value = name;
-      inputLicense.value = lic;
-      inputLicNum.value = licNum;
-      inputPhone.value = phone;
-      inputStatus.value = status;
-      formModal.classList.remove('hidden');
-    }
-
-    function closeFormModal() {
-      formModal.classList.add('hidden');
-    }
-
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      alert(`Data driver "${inputName.value}" berhasil disimpan!`);
-      closeFormModal();
-    }
-
-    // Detail Modal
-    const detailModal = document.getElementById('detail-modal');
-    function openDetailModal(name, lic, licNum, phone, status, join) {
-      document.getElementById('detail-name').innerText = name;
-      document.getElementById('detail-license').innerText = lic;
-      document.getElementById('detail-lic-num').innerText = licNum;
-      document.getElementById('detail-phone').innerText = phone;
-      document.getElementById('detail-status').innerText = status;
-      document.getElementById('detail-join').innerText = join;
-      detailModal.classList.remove('hidden');
-    }
-    function closeDetailModal() {
-      detailModal.classList.add('hidden');
-    }
-
-    // Delete Modal
-    const deleteModal = document.getElementById('delete-modal');
-    function openDeleteModal() {
-      deleteModal.classList.remove('hidden');
-    }
-    function closeDeleteModal() {
-      deleteModal.classList.add('hidden');
-    }
-    function confirmDelete() {
-      alert("Data driver berhasil dihapus!");
-      closeDeleteModal();
-    }
-
-    function suspendDriver(name) {
-      alert(`Status pengemudi "${name}" telah di-suspend!`);
-    }
-
-    // Search & Filter
-    const searchInput = document.getElementById('search-input');
-    const filterLicense = document.getElementById('filter-license');
-    const filterStatus = document.getElementById('filter-status');
-
-    function applyFilters() {
-      const q = searchInput.value.toLowerCase();
-      const l = filterLicense.value;
-      const s = filterStatus.value;
-      const rows = document.querySelectorAll('#table-body tr');
-
-      rows.forEach(r => {
-        const text = r.innerText.toLowerCase();
-        const matchSearch = !q || text.includes(q);
-        const matchLic = !l || text.includes(l.toLowerCase());
-        const matchStatus = !s || text.includes(s.toLowerCase());
-        r.style.display = (matchSearch && matchLic && matchStatus) ? '' : 'none';
+      // User Dropdown
+      const userMenuBtn = document.getElementById("user-menu-btn");
+      const userDropdown = document.getElementById("user-dropdown");
+      userMenuBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("hidden");
       });
-    }
+      document.addEventListener("click", () => {
+        userDropdown?.classList.add("hidden");
+        document
+          .querySelectorAll(".row-menu")
+          .forEach((m) => m.classList.add("hidden"));
+      });
 
-    searchInput?.addEventListener('input', applyFilters);
-    filterLicense?.addEventListener('change', applyFilters);
-    filterStatus?.addEventListener('change', applyFilters);
-  </script>
-</body>
+      // Row Menu Dropdown
+      function toggleRowMenu(e, btn) {
+        e.stopPropagation();
+        const menu = btn.nextElementSibling;
+        document.querySelectorAll(".row-menu").forEach((m) => {
+          if (m !== menu) m.classList.add("hidden");
+        });
+        menu.classList.toggle("hidden");
+      }
+
+      // Checkboxes
+      const checkAll = document.getElementById("check-all");
+      const rowCheckboxes = document.querySelectorAll(".row-checkbox");
+      const btnDeleteBulk = document.getElementById("btn-delete-bulk");
+
+      checkAll?.addEventListener("change", () => {
+        rowCheckboxes.forEach((cb) => (cb.checked = checkAll.checked));
+        updateDeleteButton();
+      });
+
+      rowCheckboxes.forEach((cb) =>
+        cb.addEventListener("change", updateDeleteButton),
+      );
+
+      function updateDeleteButton() {
+        const anyChecked = Array.from(rowCheckboxes).some((cb) => cb.checked);
+        btnDeleteBulk.disabled = !anyChecked;
+      }
+
+      // Modals
+      const formModal = document.getElementById("form-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const inputName = document.getElementById("input-name");
+      const inputLicense = document.getElementById("input-license");
+      const inputLicNum = document.getElementById("input-lic-num");
+      const inputPhone = document.getElementById("input-phone");
+      const inputStatus = document.getElementById("input-status");
+
+      function openAddModal() {
+        modalTitle.innerText = "Tambah Driver Baru";
+        inputName.value = "";
+        inputLicNum.value = "";
+        inputPhone.value = "";
+        formModal.classList.remove("hidden");
+      }
+
+      function openEditModal(name, lic, licNum, phone, status) {
+        modalTitle.innerText = "Edit Data Driver";
+        inputName.value = name;
+        inputLicense.value = lic;
+        inputLicNum.value = licNum;
+        inputPhone.value = phone;
+        inputStatus.value = status;
+        formModal.classList.remove("hidden");
+      }
+
+      function closeFormModal() {
+        formModal.classList.add("hidden");
+      }
+
+      function handleFormSubmit(e) {
+        e.preventDefault();
+        alert(`Data driver "${inputName.value}" berhasil disimpan!`);
+        closeFormModal();
+      }
+
+      // Detail Modal
+      const detailModal = document.getElementById("detail-modal");
+      function openDetailModal(name, lic, licNum, phone, status, join) {
+        document.getElementById("detail-name").innerText = name;
+        document.getElementById("detail-license").innerText = lic;
+        document.getElementById("detail-lic-num").innerText = licNum;
+        document.getElementById("detail-phone").innerText = phone;
+        document.getElementById("detail-status").innerText = status;
+        document.getElementById("detail-join").innerText = join;
+        detailModal.classList.remove("hidden");
+      }
+      function closeDetailModal() {
+        detailModal.classList.add("hidden");
+      }
+
+      // Delete Modal
+      const deleteModal = document.getElementById("delete-modal");
+      function openDeleteModal() {
+        deleteModal.classList.remove("hidden");
+      }
+      function closeDeleteModal() {
+        deleteModal.classList.add("hidden");
+      }
+      function confirmDelete() {
+        alert("Data driver berhasil dihapus!");
+        closeDeleteModal();
+      }
+
+      function suspendDriver(name) {
+        alert(`Status pengemudi "${name}" telah di-suspend!`);
+      }
+
+      // Search & Filter
+      const searchInput = document.getElementById("search-input");
+      const filterLicense = document.getElementById("filter-license");
+      const filterStatus = document.getElementById("filter-status");
+
+      function applyFilters() {
+        const q = searchInput.value.toLowerCase();
+        const l = filterLicense.value;
+        const s = filterStatus.value;
+        const rows = document.querySelectorAll("#table-body tr");
+
+        rows.forEach((r) => {
+          const text = r.innerText.toLowerCase();
+          const matchSearch = !q || text.includes(q);
+          const matchLic = !l || text.includes(l.toLowerCase());
+          const matchStatus = !s || text.includes(s.toLowerCase());
+          r.style.display =
+            matchSearch && matchLic && matchStatus ? "" : "none";
+        });
+      }
+
+      searchInput?.addEventListener("input", applyFilters);
+      filterLicense?.addEventListener("change", applyFilters);
+      filterStatus?.addEventListener("change", applyFilters);
+    </script>
+  </body>
 </html>
