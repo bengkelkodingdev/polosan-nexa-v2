@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biaya Pemeliharaan - FleetTrack Nexa v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d0d6e8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9aa3bf;
+      }
+    </style>
+    <link rel="stylesheet" href="assets/sidebar.css" />
+    <script src="assets/sidebar.js"></script>
+    <script src="assets/executive.js"></script>
+  </head>
+  <body
+    class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"
+    ></div>
+
+    <!-- ─── SIDEBAR (TETAP SAMA PERSIS, TIDAK DIUBAH) ─── -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0"
+    >
+      <!-- Logo -->
+      <div class="h-14 px-4 flex items-center gap-2.5">
+        <a
+          href="index.html"
+          class="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src="assets/nexa-logo.png"
+            alt="Nexa"
+            class="h-9 object-contain"
+            onerror="
+              this.src = 'https://placehold.co/72x22/222845/ffffff?text=NEXA'
+            "
+          />
+          <span
+            class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap"
+            >Fleet Management</span
+          >
+        </a>
+        <button
+          id="sidebar-close-btn"
+          class="ml-auto lg:hidden text-white/50 hover:text-white p-1"
+        >
+          <i data-lucide="x" class="size-5"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div
+        class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium"
+      >
+        <!-- Section: Ringkasan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            RINGKASAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i
+                data-lucide="layout-grid"
+                class="size-4 shrink-0"
+              ></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Monitoring Kesiapan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            MONITORING KESIAPAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-fleet.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="truck" class="size-4 shrink-0"></i>
+              <span>Kesiapan Armada</span>
+            </a>
+            <a
+              href="executive-driver.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="users" class="size-4 shrink-0"></i>
+              <span>Kesiapan Driver</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Evaluasi & Laporan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            EVALUASI & AUDIT
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-compliance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="shield-check" class="size-4 shrink-0"></i>
+              <span>Peringkat & Kepatuhan</span>
+            </a>
+            <a
+              href="executive-maintenance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20"
+            >
+              <i data-lucide="wrench" class="size-4 shrink-0 text-white"></i>
+              <span>Biaya Pemeliharaan</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="p-2.5 pt-0 border-t border-white/5">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+          <div
+            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white text-xs select-none shadow-xs"
+          >
+            EX
+          </div>
+          <div class="flex flex-col leading-tight min-w-0 flex-1">
+            <span class="text-sm font-bold text-white/90 truncate"
+              >Direktur Utama</span
+            >
+            <span class="text-[11px] text-white/50 truncate"
+              >executive@nexa.id</span
+            >
+          </div>
+          <a
+            href="index.html"
+            title="Kembali ke Beranda"
+            class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors"
+          >
+            <i data-lucide="log-out" class="size-4"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT WRAPPER ─── -->
+    <div
+      class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300"
+    >
+      <!-- Top Site Header (Sticky Minimal) -->
+      <header
+        class="h-14 bg-white border-b border-[#e4e8f0] sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between"
+      >
+        <!-- Left: Toggle & Breadcrumb -->
+        <div class="flex items-center gap-0 min-w-0 flex-1">
+          <button
+            id="sidebar-toggle-btn"
+            class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0"
+            title="Buka / Tutup Sidebar"
+          >
+            <i data-lucide="panel-left" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+          <!-- Breadcrumb -->
+          <nav
+            class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden"
+          >
+            <a
+              href="index.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >FleetTrack</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="text-[#9aa3bf]">Executive</span>
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="font-bold text-[#111827]">Biaya Pemeliharaan</span>
+          </nav>
+        </div>
+
+        <!-- Right: Actions & User Dropdown -->
+        <div class="flex items-center gap-2.5 shrink-0 pl-2">
+          <button
+            class="size-9 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all relative"
+            title="Notifikasi"
+          >
+            <i data-lucide="bell" class="size-4"></i>
+            <span
+              class="absolute top-2 right-2 size-1.5 rounded-full bg-[#FF8A0D]"
+            ></span>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mx-0.5"></div>
+
+          <!-- Role Switcher & Profile Dropdown -->
+          <div class="relative">
+            <button
+              id="user-menu-btn"
+              class="flex items-center gap-2.5 px-2 py-1 rounded-full hover:bg-[#f5f7fb] transition-colors"
+            >
+              <div
+                class="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#222845] text-xs font-bold text-white select-none ring-2 ring-white"
+              >
+                EX
+              </div>
+              <div class="hidden sm:flex flex-col text-left leading-tight">
+                <span class="text-xs font-bold text-[#111827]"
+                  >Direktur Utama</span
+                >
+                <span class="text-[10.5px] text-[#64748b]">executive@nexa.id</span>
+              </div>
+              <i
+                data-lucide="chevron-down"
+                class="size-3.5 text-[#9aa3bf] ml-0.5"
+              ></i>
+            </button>
+
+            <!-- Dropdown Popover -->
+            <div
+              id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-xl py-2 z-50 text-xs"
+            >
+              <div class="px-4 py-2.5 border-b border-gray-100">
+                <p class="text-[10.5px] font-medium text-gray-400">Masuk sebagai</p>
+                <p class="font-bold text-[#111827] truncate">
+                  executive@nexa.id
+                </p>
+              </div>
+              <div
+                class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400"
+              >
+                Beralih Tampilan Role:
+              </div>
+              <a
+                href="superadmin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Super Admin</span>
+              </a>
+              <a
+                href="executive.html"
+                class="flex items-center justify-between px-4 py-2 text-[#FF8A0D] font-bold bg-orange-50/60"
+              >
+                <span>Executive</span>
+                <i data-lucide="check" class="size-3.5 text-[#FF8A0D]"></i>
+              </a>
+              <a
+                href="admin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Admin</span>
+              </a>
+              <a
+                href="manager.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Manager</span>
+              </a>
+              <a
+                href="auditor.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Auditor</span>
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50"
+              >
+                <i data-lucide="home" class="size-3.5"></i>
+                <span>Kembali ke Beranda</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ─── MAIN: Konsep v2 §5, gaya kartu bersih (referensi), palet Nexa ─── -->
+      <main class="flex-1 p-5 sm:p-7 max-w-[1520px] w-full mx-auto space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <h1 class="text-[24px] sm:text-[28px] font-extrabold text-[#111827] tracking-[-0.6px]">Biaya Pemeliharaan</h1>
+            <p class="text-[13px] text-[#64748b] mt-1">Ringkasan biaya perawatan armada dinas. Hanya servis yang sudah diverifikasi Manager yang dihitung.</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-white border border-[#e4e8f0] text-[12px] font-medium text-[#4b5675]">
+              <i data-lucide="calendar" class="size-3.5 text-[#FF8A0D]"></i> Nov 2026 (s/d tgl 24)
+            </span>
+            <button type="button" onclick="alert('Prototipe: ekspor ringkasan biaya pemeliharaan ke PDF')" class="flex items-center gap-1.5 h-9 px-4 rounded-full bg-[#222845] text-white text-[12px] font-semibold hover:bg-[#2f3760] transition-colors">
+              <i data-lucide="download" class="size-3.5"></i> Ekspor
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="kpi">
+            <div class="flex items-start justify-between"><span class="kpi-label">Biaya Bulan Ini</span><span class="kpi-icon"><i data-lucide="wallet" class="size-4"></i></span></div>
+            <div class="kpi-value">Rp 38,4jt</div>
+            <div class="kpi-foot"><span class="chip-up"><i data-lucide="trending-down" class="size-3"></i>−6,2%</span> dibanding Oktober</div>
+          </div>
+          <div class="kpi">
+            <div class="flex items-start justify-between"><span class="kpi-label">Rata-rata per Kendaraan</span><span class="kpi-icon"><i data-lucide="truck" class="size-4"></i></span></div>
+            <div class="kpi-value">Rp 914rb</div>
+            <div class="kpi-foot">42 kendaraan aktif, bulan ini</div>
+          </div>
+          <button type="button" data-drill="pending" class="kpi">
+            <div class="flex items-start justify-between"><span class="kpi-label">Menunggu Verifikasi</span><span class="kpi-icon !text-amber-600 !bg-amber-50 !border-amber-200"><i data-lucide="hourglass" class="size-4"></i></span></div>
+            <div class="kpi-value">3</div>
+            <div class="kpi-foot">Rp 7,9jt belum dihitung</div>
+          </button>
+        </div>
+
+        <section class="card">
+          <div class="flex items-center justify-between gap-3">
+            <h2 class="card-title">Biaya Perawatan per Bulan</h2>
+            <span class="text-[11.5px] text-[#9aa3bf]">2026, dalam juta rupiah</span>
+          </div>
+          <div id="cost-chart" class="mt-2 -mx-2"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Drill-down panel -->
+    <div id="drill" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="drill-title">
+      <div data-close class="absolute inset-0 bg-[#0f172a]/40"></div>
+      <div class="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] max-w-md bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div class="px-5 py-4 border-b border-[#f1f3f9] flex items-start justify-between gap-3">
+          <div>
+            <h3 id="drill-title" class="text-[16px] font-bold text-[#111827]"></h3>
+            <p id="drill-sub" class="text-[12px] text-[#64748b] mt-0.5"></p>
+          </div>
+          <button type="button" data-close class="icon-btn" aria-label="Tutup"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <ul id="drill-list" class="flex-1 overflow-y-auto divide-y divide-[#f1f3f9]"></ul>
+        <p class="px-5 py-3 border-t border-[#f1f3f9] text-[11px] text-[#9aa3bf]">Executive hanya melihat. Tindak lanjut dilakukan oleh Manager.</p>
+      </div>
+    </div>
+
+    <style type="text/tailwindcss">
+      .card { @apply bg-white border border-[#e4e8f0] rounded-2xl p-5; }
+      .card-title { @apply text-[16px] font-bold text-[#111827] tracking-[-0.2px]; }
+      .kpi { @apply text-left bg-white border border-[#e4e8f0] rounded-2xl p-5 hover:border-[#FF8A0D]/60 hover:shadow-[0_6px_20px_rgba(34,40,69,.06)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .kpi-label { @apply text-[13px] font-medium text-[#4b5675]; }
+      .kpi-icon { @apply size-9 rounded-full border border-[#e4e8f0] bg-[#f8f9fc] text-[#222845] flex items-center justify-center shrink-0; }
+      .kpi-value { @apply text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1 leading-tight; }
+      .kpi-foot { @apply flex items-center gap-1.5 mt-2 text-[11.5px] text-[#64748b]; }
+      .chip-up { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 font-semibold; }
+      .chip-down { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 font-semibold; }
+      .icon-btn { @apply size-8 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors; }
+      .stat { @apply flex flex-col items-start rounded-xl px-2 py-1.5 hover:bg-[#f8f9fc] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .stat-n { @apply text-[18px] font-bold text-[#111827] font-mono; }
+      .stat-l { @apply flex items-center gap-1.5 text-[11px] text-[#64748b]; }
+      .dot { @apply size-1.5 rounded-full inline-block; }
+      .th { @apply px-5 py-3 text-left text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] whitespace-nowrap; }
+    </style>
+
+    <script>
+      lucide.createIcons();
+
+      // Sidebar Mobile Toggle
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+      const toggleBtn = document.getElementById("sidebar-toggle-btn");
+      const closeBtn = document.getElementById("sidebar-close-btn");
+
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarBackdrop.classList.remove("hidden");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarBackdrop.classList.add("hidden");
+      }
+
+      toggleBtn?.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+
+      closeBtn?.addEventListener("click", closeSidebar);
+      sidebarBackdrop?.addEventListener("click", closeSidebar);
+
+      // User Dropdown Toggle
+      const userMenuBtn = document.getElementById("user-menu-btn");
+      const userDropdown = document.getElementById("user-dropdown");
+
+      userMenuBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", () => {
+        userDropdown?.classList.add("hidden");
+      });
+
+      window.DRILL = {
+        pending: { title: 'Menunggu Verifikasi Manager', sub: '3 catatan servis · Rp 7,9jt', items: [
+          ['B 7720 SDA', 'Rp 4,6jt', 'Perbaikan rem utama · diinput Admin 23 Nov'],
+          ['B 1023 KJA', 'Rp 1,1jt', 'Ganti oli + filter · diinput Admin 22 Nov'],
+          ['B 9014 PQR', 'Rp 2,2jt', 'Ganti spion kiri · diinput Admin 21 Nov'],
+        ] },
+      };
+
+      const fmt = v => 'Rp ' + v.toLocaleString('id-ID', { maximumFractionDigits: 1 }) + 'jt';
+
+      if (window.ApexCharts) new ApexCharts(document.getElementById('cost-chart'), {
+        series: [{ name: 'Biaya', data: [42.1, 39.8, 47.3, 44.0, 51.2, 45.6, 48.9, 43.7, 41.5, 40.9, 38.4] }],
+        chart: { type: 'bar', height: 260, toolbar: { show: false }, fontFamily: '"Plus Jakarta Sans", sans-serif' },
+        colors: ['#FF8A0D'],
+        plotOptions: { bar: { borderRadius: 6, columnWidth: '42%', colors: { backgroundBarColors: ['#f5f7fb'], backgroundBarRadius: 6 } } },
+        dataLabels: { enabled: false }, stroke: { show: false },
+        xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov'], axisBorder: { show: false }, axisTicks: { show: false },
+          labels: { style: { colors: '#9aa3bf', fontSize: '11px' } } },
+        yaxis: { min: 0, max: 60, tickAmount: 3, labels: { style: { colors: '#9aa3bf', fontSize: '11px' } } },
+        grid: { borderColor: '#f1f3f9', strokeDashArray: 4, xaxis: { lines: { show: false } } },
+        tooltip: { custom: ({ series, dataPointIndex: i, w }) => `
+          <div class="bg-[#222845] text-white px-3.5 py-2.5 rounded-xl text-[11.5px] font-sans">
+            <div class="text-white/60">${w.globals.categoryLabels[i]} 2026</div>
+            <div class="font-bold text-[13px]">${fmt(series[0][i])}</div>
+          </div>` },
+      }).render();
+
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -1,688 +1,876 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Dashboard - FleetTrack Nexa v2</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          }
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Eksekutif - FleetTrack Nexa v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
       }
-    }
-  </script>
-  <style>
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9aa3bf; }
-  </style>
-</head>
-<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans">
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d0d6e8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9aa3bf;
+      }
+    </style>
+    <link rel="stylesheet" href="assets/sidebar.css" />
+    <script src="assets/sidebar.js"></script>
+    <script src="assets/executive.js"></script>
+  </head>
+  <body
+    class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"
+    ></div>
 
-  <!-- Mobile Backdrop -->
-  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
-
-  <!-- ─── SIDEBAR ─── -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-white/85 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
-    <!-- Logo -->
-    <div class="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
-      <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-        <img src="assets/nexa-logo.png" alt="Nexa" class="h-5.5 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
-        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Track</span>
-      </a>
-      <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
-        <i data-lucide="x" class="size-5"></i>
-      </button>
-    </div>
-
-    <!-- Navigation Menu (Executive structure) -->
-    <div class="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs font-medium">
-      <!-- Section: Ringkasan -->
-      <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Ringkasan</p>
-        <div class="space-y-0.5">
-          <a href="executive.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-semibold shadow-xs">
-            <i data-lucide="layout-grid" class="size-4 shrink-0 text-blue-400"></i>
-            <span>Dashboard</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Section: Laporan -->
-      <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Laporan</p>
-        <div class="space-y-0.5">
-          <a href="executive-reports-operational.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="file-chart-column" class="size-4 shrink-0"></i>
-            <span>Laporan Operasional</span>
-          </a>
-          <a href="executive-reports-financial.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="banknote" class="size-4 shrink-0"></i>
-            <span>Laporan Keuangan</span>
-          </a>
-          <a href="executive-reports-audit.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="file-chart-column-increasing" class="size-4 shrink-0"></i>
-            <span>Laporan Audit</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sidebar User Footer -->
-    <div class="p-2.5 pt-0 border-t border-white/5">
-      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
-        <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white text-xs select-none shadow-xs">
-          EX
-        </div>
-        <div class="flex flex-col leading-tight min-w-0 flex-1">
-          <span class="text-sm font-bold text-white/90 truncate">Direktur Utama</span>
-          <span class="text-[11px] text-white/50 truncate">Executive</span>
-        </div>
-        <a href="index.html" title="Kembali ke Beranda" class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors">
-          <i data-lucide="log-out" class="size-4"></i>
+    <!-- ─── SIDEBAR (TETAP SAMA PERSIS, TIDAK DIUBAH) ─── -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0"
+    >
+      <!-- Logo -->
+      <div class="h-14 px-4 flex items-center gap-2.5">
+        <a
+          href="index.html"
+          class="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src="assets/nexa-logo.png"
+            alt="Nexa"
+            class="h-9 object-contain"
+            onerror="
+              this.src = 'https://placehold.co/72x22/222845/ffffff?text=NEXA'
+            "
+          />
+          <span
+            class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap"
+            >Fleet Management</span
+          >
         </a>
+        <button
+          id="sidebar-close-btn"
+          class="ml-auto lg:hidden text-white/50 hover:text-white p-1"
+        >
+          <i data-lucide="x" class="size-5"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div
+        class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium"
+      >
+        <!-- Section: Ringkasan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            RINGKASAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20"
+            >
+              <i
+                data-lucide="layout-grid"
+                class="size-4 shrink-0 text-white"
+              ></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Monitoring Kesiapan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            MONITORING KESIAPAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-fleet.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="truck" class="size-4 shrink-0"></i>
+              <span>Kesiapan Armada</span>
+            </a>
+            <a
+              href="executive-driver.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="users" class="size-4 shrink-0"></i>
+              <span>Kesiapan Driver</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Evaluasi & Laporan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            EVALUASI & AUDIT
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-compliance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="shield-check" class="size-4 shrink-0"></i>
+              <span>Peringkat & Kepatuhan</span>
+            </a>
+            <a
+              href="executive-maintenance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="wrench" class="size-4 shrink-0"></i>
+              <span>Biaya Pemeliharaan</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="p-2.5 pt-0 border-t border-white/5">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+          <div
+            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white text-xs select-none shadow-xs"
+          >
+            EX
+          </div>
+          <div class="flex flex-col leading-tight min-w-0 flex-1">
+            <span class="text-sm font-bold text-white/90 truncate"
+              >Direktur Utama</span
+            >
+            <span class="text-[11px] text-white/50 truncate"
+              >executive@nexa.id</span
+            >
+          </div>
+          <a
+            href="index.html"
+            title="Kembali ke Beranda"
+            class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors"
+          >
+            <i data-lucide="log-out" class="size-4"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT WRAPPER ─── -->
+    <div
+      class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300"
+    >
+      <!-- Top Site Header (Sticky Minimal) -->
+      <header
+        class="h-14 bg-white border-b border-[#e4e8f0] sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between"
+      >
+        <!-- Left: Toggle & Breadcrumb -->
+        <div class="flex items-center gap-0 min-w-0 flex-1">
+          <button
+            id="sidebar-toggle-btn"
+            class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0"
+            title="Buka / Tutup Sidebar"
+          >
+            <i data-lucide="panel-left" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+          <!-- Breadcrumb -->
+          <nav
+            class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden"
+          >
+            <a
+              href="index.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >FleetTrack</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="text-[#9aa3bf]">Executive</span>
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="font-bold text-[#111827]">Overview</span>
+          </nav>
+        </div>
+
+        <!-- Right: Actions & User Dropdown -->
+        <div class="flex items-center gap-2.5 shrink-0 pl-2">
+          <button
+            class="size-9 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all relative"
+            title="Notifikasi"
+          >
+            <i data-lucide="bell" class="size-4"></i>
+            <span
+              class="absolute top-2 right-2 size-1.5 rounded-full bg-[#FF8A0D]"
+            ></span>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mx-0.5"></div>
+
+          <!-- Role Switcher & Profile Dropdown -->
+          <div class="relative">
+            <button
+              id="user-menu-btn"
+              class="flex items-center gap-2.5 px-2 py-1 rounded-full hover:bg-[#f5f7fb] transition-colors"
+            >
+              <div
+                class="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#222845] text-xs font-bold text-white select-none ring-2 ring-white"
+              >
+                EX
+              </div>
+              <div class="hidden sm:flex flex-col text-left leading-tight">
+                <span class="text-xs font-bold text-[#111827]"
+                  >Direktur Utama</span
+                >
+                <span class="text-[10.5px] text-[#64748b]">executive@nexa.id</span>
+              </div>
+              <i
+                data-lucide="chevron-down"
+                class="size-3.5 text-[#9aa3bf] ml-0.5"
+              ></i>
+            </button>
+
+            <!-- Dropdown Popover -->
+            <div
+              id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-xl py-2 z-50 text-xs"
+            >
+              <div class="px-4 py-2.5 border-b border-gray-100">
+                <p class="text-[10.5px] font-medium text-gray-400">Masuk sebagai</p>
+                <p class="font-bold text-[#111827] truncate">
+                  executive@nexa.id
+                </p>
+              </div>
+              <div
+                class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400"
+              >
+                Beralih Tampilan Role:
+              </div>
+              <a
+                href="superadmin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Super Admin</span>
+              </a>
+              <a
+                href="executive.html"
+                class="flex items-center justify-between px-4 py-2 text-[#FF8A0D] font-bold bg-orange-50/60"
+              >
+                <span>Executive</span>
+                <i data-lucide="check" class="size-3.5 text-[#FF8A0D]"></i>
+              </a>
+              <a
+                href="admin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Admin</span>
+              </a>
+              <a
+                href="manager.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Manager</span>
+              </a>
+              <a
+                href="auditor.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Auditor</span>
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50"
+              >
+                <i data-lucide="home" class="size-3.5"></i>
+                <span>Kembali ke Beranda</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ─── MAIN: Konsep v2 §5, gaya kartu bersih (referensi), palet Nexa ─── -->
+      <main class="flex-1 p-5 sm:p-7 max-w-[1520px] w-full mx-auto space-y-5">
+        <!-- Welcome -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <h1 class="text-[24px] sm:text-[28px] font-medium text-[#111827] tracking-[-0.6px]">
+              Selamat pagi, <span class="font-extrabold">Direktur Utama!</span>
+            </h1>
+            <p class="text-[13px] text-[#64748b] mt-1">
+              Pantau kesiapan armada dan driver hari ini. Klik angka mana pun untuk melihat daftarnya.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-white border border-[#e4e8f0] text-[12px] font-medium text-[#4b5675]">
+              <i data-lucide="calendar" class="size-3.5 text-[#FF8A0D]"></i> 24 Nov 2026 · 07:30 WIB
+            </span>
+            <a href="executive-compliance.html" class="flex items-center gap-1.5 h-9 px-4 rounded-full bg-[#222845] text-white text-[12px] font-semibold hover:bg-[#2f3760] transition-colors">
+              <i data-lucide="download" class="size-3.5"></i> Ekspor
+            </a>
+          </div>
+        </div>
+
+        <!-- KPI cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <button type="button" data-drill="v-boleh" class="kpi">
+            <div class="flex items-start justify-between">
+              <span class="kpi-label">Kesiapan Armada</span>
+              <span class="kpi-icon"><i data-lucide="truck" class="size-4"></i></span>
+            </div>
+            <div class="kpi-value">88,1%</div>
+            <div class="kpi-foot"><span class="chip-up"><i data-lucide="trending-up" class="size-3"></i>+2,4%</span> 37 dari 42 boleh dipakai</div>
+          </button>
+          <button type="button" data-drill="v-blokir" class="kpi">
+            <div class="flex items-start justify-between">
+              <span class="kpi-label">Kendaraan Tidak Siap</span>
+              <span class="kpi-icon !text-rose-600 !border-rose-200 !bg-rose-50"><i data-lucide="octagon-alert" class="size-4"></i></span>
+            </div>
+            <div class="kpi-value text-rose-700">3</div>
+            <div class="kpi-foot"><span class="chip-down"><i data-lucide="trending-up" class="size-3"></i>+1</span> diblokir dari penugasan</div>
+          </button>
+          <button type="button" data-drill="d-boleh" class="kpi">
+            <div class="flex items-start justify-between">
+              <span class="kpi-label">Kesiapan Driver</span>
+              <span class="kpi-icon"><i data-lucide="users" class="size-4"></i></span>
+            </div>
+            <div class="kpi-value">89,6%</div>
+            <div class="kpi-foot"><span class="chip-up"><i data-lucide="trending-up" class="size-3"></i>+1,1%</span> 43 dari 48 boleh bertugas</div>
+          </button>
+          <button type="button" data-drill="c-temuan" class="kpi">
+            <div class="flex items-start justify-between">
+              <span class="kpi-label">Masalah Serius Belum Selesai</span>
+              <span class="kpi-icon"><i data-lucide="shield-alert" class="size-4"></i></span>
+            </div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-foot"><span class="chip-up"><i data-lucide="trending-down" class="size-3"></i>−1</span> rata-rata selesai dalam 4,1 hari</div>
+          </button>
+        </div>
+
+        <!-- Row: chart + kalender/tindak lanjut -->
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4">
+          <div class="space-y-4 min-w-0">
+            <!-- A. Komposisi status armada -->
+            <section class="card">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 class="card-title">Kesiapan Armada Harian</h2>
+                  <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Status 42 kendaraan aktif per hari</p>
+                </div>
+                <select id="range-select" data-dd aria-label="Rentang tren">
+                    <option value="14">14 hari</option>
+                    <option value="30">30 hari</option>
+                  </select>
+              </div>
+              <div class="flex flex-wrap gap-4 mt-3 text-[11.5px] text-[#4b5675]">
+                <span class="flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-emerald-500"></span>Siap jalan</span>
+                <span class="flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-amber-400"></span>Siap dengan catatan</span>
+                <span class="flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-rose-500"></span>Tidak siap jalan</span>
+                <span class="flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-slate-300"></span>Belum dinilai</span>
+              </div>
+              <div id="fleet-chart" class="mt-1 -mx-2"></div>
+            </section>
+
+            <!-- Operasional vs penuh + status driver -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <section class="card">
+                <div class="flex items-center justify-between">
+                  <h2 class="card-title">Status Armada</h2>
+                  <a href="executive-fleet.html" class="icon-btn" title="Buka Kesiapan Armada"><i data-lucide="arrow-up-right" class="size-4"></i></a>
+                </div>
+                <div class="grid grid-cols-2 gap-5 mt-5">
+                  <div>
+                    <p class="text-[12.5px] text-[#64748b]">Kesiapan operasional</p>
+                    <p class="text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1">88,1%</p>
+                    <div class="mt-3 h-8 rounded-[10px] bg-[#f5f7fb] overflow-hidden"><div class="h-full rounded-[10px] bg-[#FF8A0D]" style="width:88.1%"></div></div>
+                    <p class="text-[11.5px] text-[#64748b] mt-2">Siap + dengan catatan</p>
+                  </div>
+                  <div>
+                    <p class="text-[12.5px] text-[#64748b]">Kesiapan penuh</p>
+                    <p class="text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1">73,8%</p>
+                    <div class="mt-3 h-8 rounded-[10px] bg-[#f5f7fb] overflow-hidden"><div class="h-full rounded-[10px] bg-[#222845]" style="width:73.8%"></div></div>
+                    <p class="text-[11.5px] text-[#64748b] mt-2">Tanpa catatan apa pun</p>
+                  </div>
+                </div>
+                <div class="grid grid-cols-4 gap-2 mt-5 pt-4 border-t border-[#f1f3f9]">
+                  <button type="button" data-drill="v-siap" class="stat"><span class="stat-n">31</span><span class="stat-l"><i class="dot bg-emerald-500"></i>Siap</span></button>
+                  <button type="button" data-drill="v-catatan" class="stat"><span class="stat-n">6</span><span class="stat-l"><i class="dot bg-amber-500"></i>Catatan</span></button>
+                  <button type="button" data-drill="v-blokir" class="stat"><span class="stat-n text-rose-700">3</span><span class="stat-l"><i class="dot bg-rose-500"></i>Tidak siap</span></button>
+                  <button type="button" data-drill="v-belum" class="stat"><span class="stat-n">2</span><span class="stat-l"><i class="dot bg-slate-400"></i>Belum</span></button>
+                </div>
+              </section>
+
+              <section class="card">
+                <div class="flex items-center justify-between">
+                  <h2 class="card-title">Status Driver</h2>
+                  <a href="executive-driver.html" class="icon-btn" title="Buka Kesiapan Driver"><i data-lucide="arrow-up-right" class="size-4"></i></a>
+                </div>
+                <div class="grid grid-cols-2 gap-5 mt-5">
+                  <button type="button" data-drill="d-risiko" class="text-left rounded-xl hover:bg-[#f8f9fc] -m-2 p-2 transition-colors">
+                    <p class="text-[12.5px] text-[#64748b]">Pola mengemudi berisiko (30 hari)</p>
+                    <p class="text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1">4</p>
+                    <p class="text-[11.5px] text-[#64748b] mt-1">Skor risiko &gt; 60</p>
+                  </button>
+                  <button type="button" data-drill="d-sim" class="text-left rounded-xl hover:bg-[#f8f9fc] -m-2 p-2 transition-colors">
+                    <p class="text-[12.5px] text-[#64748b]">SIM hampir habis</p>
+                    <p class="text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1">3</p>
+                    <p class="text-[11.5px] text-[#64748b] mt-1">Kedaluwarsa ≤ 60 hari</p>
+                  </button>
+                </div>
+                <div class="mt-4 h-3 rounded-full bg-[#f5f7fb] overflow-hidden flex">
+                  <span class="bg-emerald-500" style="width:79.2%"></span><span class="bg-amber-400" style="width:10.4%"></span><span class="bg-rose-500" style="width:4.2%"></span>
+                </div>
+                <div class="grid grid-cols-4 gap-2 mt-4 pt-4 border-t border-[#f1f3f9]">
+                  <button type="button" data-drill="d-siap" class="stat"><span class="stat-n">38</span><span class="stat-l"><i class="dot bg-emerald-500"></i>Siap</span></button>
+                  <button type="button" data-drill="d-pantau" class="stat"><span class="stat-n">5</span><span class="stat-l"><i class="dot bg-amber-500"></i>Pantau</span></button>
+                  <button type="button" data-drill="d-blokir" class="stat"><span class="stat-n text-rose-700">2</span><span class="stat-l"><i class="dot bg-rose-500"></i>Tidak siap</span></button>
+                  <button type="button" data-drill="d-belum" class="stat"><span class="stat-n">3</span><span class="stat-l"><i class="dot bg-slate-400"></i>Belum</span></button>
+                </div>
+                <p class="text-[11px] text-[#9aa3bf] mt-3">Hanya agregat. Data pribadi driver tidak ditampilkan.</p>
+              </section>
+            </div>
+          </div>
+
+          <!-- Kanan: kalender + tindak lanjut -->
+          <div class="space-y-4">
+            <section class="card">
+              <div class="flex items-center justify-between">
+                <h2 class="card-title">November 2026</h2>
+                <div class="flex gap-1.5">
+                  <button type="button" class="icon-btn" aria-label="Minggu sebelumnya"><i data-lucide="chevron-left" class="size-4"></i></button>
+                  <button type="button" class="icon-btn" aria-label="Minggu berikutnya"><i data-lucide="chevron-right" class="size-4"></i></button>
+                </div>
+              </div>
+              <div id="week-strip" class="grid grid-cols-7 gap-1 mt-4 text-center"></div>
+              <p class="text-[11px] text-[#9aa3bf] mt-3 flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-rose-500"></span>Ada dokumen atau perawatan jatuh tempo</p>
+            </section>
+
+            <section class="card !px-0 !pb-2">
+              <div class="flex items-center justify-between px-5">
+                <h2 class="card-title">Perlu Tindak Lanjut</h2>
+                <span class="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">5 merah</span>
+              </div>
+              <ul id="followup-list" class="mt-3"></ul>
+              <p class="px-5 pt-2 text-[11px] text-[#9aa3bf]">Ditindaklanjuti oleh Manager. Executive hanya melihat.</p>
+            </section>
+          </div>
+        </div>
+
+        <!-- C. Kepatuhan + D. penyebab blokir -->
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4">
+          <section class="card">
+            <div class="flex items-center justify-between">
+              <h2 class="card-title">Kepatuhan &amp; Risiko</h2>
+              <a href="executive-compliance.html" class="icon-btn" title="Buka Peringkat & Kepatuhan"><i data-lucide="arrow-up-right" class="size-4"></i></a>
+            </div>
+            <div id="compliance-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4"></div>
+          </section>
+          <section class="card">
+            <h2 class="card-title">Top 5 Penyebab Blokir</h2>
+            <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Kejadian blokir kendaraan, 30 hari</p>
+            <ul id="cause-list" class="space-y-3.5 mt-4"></ul>
+          </section>
+        </div>
+
+        <!-- E. Peringkat garasi -->
+        <section class="card !p-0 overflow-hidden">
+          <div class="flex items-center justify-between px-5 pt-5 pb-3">
+            <div>
+              <h2 class="card-title">Peringkat Garasi</h2>
+              <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Urut dari kesiapan terendah</p>
+            </div>
+            <a href="executive-compliance.html" class="icon-btn" title="Lihat semua"><i data-lucide="arrow-up-right" class="size-4"></i></a>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-left text-[13px] min-w-[680px]">
+              <thead>
+                <tr class="border-y border-[#e4e8f0] bg-[#f8f9fc]">
+                  <th class="th">Garasi</th><th class="th">Kendaraan siap</th>
+                  <th class="th text-right">Masalah belum selesai</th><th class="th">Tren 7 hari</th><th class="th text-right w-20">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="unit-table" data-pager="10" class="divide-y divide-[#f1f3f9]"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Drill-down panel -->
+    <div id="drill" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="drill-title">
+      <div data-close class="absolute inset-0 bg-[#0f172a]/40"></div>
+      <div class="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] max-w-md bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div class="px-5 py-4 border-b border-[#f1f3f9] flex items-start justify-between gap-3">
+          <div>
+            <h3 id="drill-title" class="text-[16px] font-bold text-[#111827]"></h3>
+            <p id="drill-sub" class="text-[12px] text-[#64748b] mt-0.5"></p>
+          </div>
+          <button type="button" data-close class="icon-btn" aria-label="Tutup"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <ul id="drill-list" class="flex-1 overflow-y-auto divide-y divide-[#f1f3f9]"></ul>
+        <p class="px-5 py-3 border-t border-[#f1f3f9] text-[11px] text-[#9aa3bf]">Executive hanya melihat. Tindak lanjut dilakukan oleh Manager.</p>
       </div>
     </div>
-  </aside>
 
-  <!-- ─── MAIN CONTENT WRAPPER ─── -->
-  <div class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300">
-    
-    <!-- Top Site Header -->
-    <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between">
-      <!-- Left: Toggle & Breadcrumb -->
-      <div class="flex items-center gap-0 min-w-0 flex-1">
-        <button id="sidebar-toggle-btn" class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0">
-          <i data-lucide="panel-left" class="size-4"></i>
-        </button>
+    <style type="text/tailwindcss">
+      .card { @apply bg-white border border-[#e4e8f0] rounded-2xl p-5; }
+      .card-title { @apply text-[16px] font-bold text-[#111827] tracking-[-0.2px]; }
+      .kpi { @apply text-left bg-white border border-[#e4e8f0] rounded-2xl p-5 hover:border-[#FF8A0D]/60 hover:shadow-[0_6px_20px_rgba(34,40,69,.06)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .kpi-label { @apply text-[13px] font-medium text-[#4b5675]; }
+      .kpi-icon { @apply size-9 rounded-full border border-[#e4e8f0] bg-[#f8f9fc] text-[#222845] flex items-center justify-center shrink-0; }
+      .kpi-value { @apply text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1 leading-tight; }
+      .kpi-foot { @apply flex items-center gap-1.5 mt-2 text-[11.5px] text-[#64748b]; }
+      .chip-up { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 font-semibold; }
+      .chip-down { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 font-semibold; }
+      .icon-btn { @apply size-8 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors; }
+      .stat { @apply flex flex-col items-start rounded-xl px-2 py-1.5 hover:bg-[#f8f9fc] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .stat-n { @apply text-[18px] font-bold text-[#111827] font-mono; }
+      .stat-l { @apply flex items-center gap-1.5 text-[11px] text-[#64748b]; }
+      .dot { @apply size-1.5 rounded-full inline-block; }
+      .th { @apply px-5 py-3 text-left text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] whitespace-nowrap; }
+    </style>
 
-        <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+    <script>
+      lucide.createIcons();
 
-        <!-- Breadcrumb -->
-        <nav class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden">
-          <a href="index.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">FleetTrack</a>
-          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <span class="text-[#9aa3bf]">Executive</span>
-          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <span class="font-bold text-[#111827]">Dashboard</span>
-        </nav>
-      </div>
+      // Sidebar Mobile Toggle
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+      const toggleBtn = document.getElementById("sidebar-toggle-btn");
+      const closeBtn = document.getElementById("sidebar-close-btn");
 
-      <!-- Right Actions -->
-      <div class="flex items-center gap-2 shrink-0 pl-2">
-        <button class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
-          <i data-lucide="bell" class="size-4"></i>
-          <span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
-        </button>
-
-        <button title="Pengaturan" class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
-          <i data-lucide="settings" class="size-4"></i>
-        </button>
-
-        <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
-
-        <!-- Role Switcher & Profile Dropdown -->
-        <div class="relative">
-          <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
-            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#7c3aed] text-[11px] font-black text-white">
-              EX
-            </div>
-            <div class="hidden sm:flex flex-col text-left leading-tight">
-              <span class="text-[12.5px] font-bold text-[#111827]">Direktur Utama</span>
-              <span class="text-[10.5px] text-[#9aa3bf]">Executive</span>
-            </div>
-            <i data-lucide="chevron-down" class="size-3.5 text-[#9aa3bf] ml-0.5"></i>
-          </button>
-
-          <!-- Dropdown Popover -->
-          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs">
-            <div class="px-4 py-2 border-b border-gray-100">
-              <p class="text-[11px] font-medium text-gray-400">Masuk sebagai</p>
-              <p class="font-bold text-[#111827] truncate">executive@nexa.id</p>
-            </div>
-            <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-              Beralih Tampilan Role:
-            </div>
-            <a href="superadmin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Super Admin</span>
-            </a>
-            <a href="executive.html" class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60">
-              <span>Executive</span>
-              <i data-lucide="check" class="size-3.5 text-blue-600"></i>
-            </a>
-            <a href="admin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Admin</span>
-            </a>
-            <a href="manager.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Manager</span>
-            </a>
-            <a href="auditor.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Auditor</span>
-            </a>
-            <div class="border-t border-gray-100 my-1"></div>
-            <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50">
-              <i data-lucide="home" class="size-3.5"></i>
-              <span>Kembali ke Beranda</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Page Body -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
-      
-      <!-- Page Header -->
-      <div class="flex items-start justify-between gap-3 mb-5">
-        <div class="min-w-0">
-          <h1 class="text-[18px] sm:text-[21px] font-extrabold text-[#111827] tracking-[-0.4px]">
-            Dashboard Eksekutif
-          </h1>
-          <p class="text-[13px] text-[#4b5675] mt-1">
-            Ringkasan operasional & pengambilan keputusan — real-time
-          </p>
-        </div>
-
-        <!-- Tanggal -->
-        <div class="shrink-0 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.75 bg-white border border-[#e4e8f0] rounded-[7px] text-[12px] sm:text-[12.5px] text-[#4b5675] font-medium shadow-[0_1px_3px_rgba(0,0,0,.04)] whitespace-nowrap">
-          <i data-lucide="calendar" class="size-3.5 text-[#2563eb] shrink-0"></i>
-          <span id="current-date">23 Nov 2026</span>
-        </div>
-      </div>
-
-      <!-- ─── 1. KPI CARDS (Executive) ─── -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-4">
-        
-        <!-- Pendapatan Bulan Ini -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#16a34a]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Pendapatan Bulan Ini</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">Rp 487jt</p>
-            </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f0fdf4] text-[#16a34a]">
-              <i data-lucide="trending-up" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex flex-col gap-1 text-[12px]">
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">+8.2%</strong>
-              <span class="text-[#9aa3bf] truncate">dibanding bulan lalu</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#2563eb] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">35.8%</strong>
-              <span class="text-[#9aa3bf] truncate">Margin Bersih</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#06b6d4] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">Rp 174jt</strong>
-              <span class="text-[#9aa3bf] truncate">Laba Bersih</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Total Biaya Operasional -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#f97316]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Total Biaya Operasional</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">Rp 312jt</p>
-            </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fff7ed] text-[#f97316]">
-              <i data-lucide="dollar-sign" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex flex-col gap-1 text-[12px]">
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#f97316] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">Rp 187jt</strong>
-              <span class="text-[#9aa3bf] truncate">Biaya BBM</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#dc2626] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">Rp 11.1jt</strong>
-              <span class="text-[#9aa3bf] truncate">Biaya Perawatan</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#d97706] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">+12.1%</strong>
-              <span class="text-[#9aa3bf] truncate">dibanding bulan lalu</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Laba Bersih -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Laba Bersih</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">Rp 174jt</p>
-            </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]">
-              <i data-lucide="bar-chart-2" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex flex-col gap-1 text-[12px]">
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#2563eb] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">35.8%</strong>
-              <span class="text-[#9aa3bf] truncate">Margin</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">+8.2%</strong>
-              <span class="text-[#9aa3bf] truncate">dibanding bulan lalu</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Efisiensi BBM -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#dc2626]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Efisiensi BBM</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#dc2626] tracking-[-1px]">2.5 L/ton</p>
-            </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fef2f2] text-[#dc2626]">
-              <i data-lucide="zap" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex flex-col gap-1 text-[12px]">
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#dc2626] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">2.3 L/ton</strong>
-              <span class="text-[#9aa3bf] truncate">Target Standar</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#f97316] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">380L</strong>
-              <span class="text-[#9aa3bf] truncate">Total konsumsi hari ini</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="size-1.5 rounded-full bg-[#d97706] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">+8.6%</strong>
-              <span class="text-[#9aa3bf] truncate">dibanding kemarin</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ─── 2. MRR GRADIENT CARDS ─── -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-4">
-        
-        <!-- MRR 1: Indigo Gradient -->
-        <div class="relative overflow-hidden rounded-xl text-white shadow-md p-6 hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #4361ee, #3451d1);">
-          <span class="pointer-events-none absolute -top-5 -right-5 size-20 rounded-full bg-white/10"></span>
-          <span class="pointer-events-none absolute -bottom-8 right-5 size-16 rounded-full bg-white/5"></span>
-          <div class="relative z-10 flex flex-col gap-1">
-            <p class="text-[12px] font-semibold uppercase tracking-[.4px] text-white/80">Pendapatan Februari</p>
-            <p class="text-[30px] font-extrabold leading-none tracking-[-0.5px]">Rp 487jt</p>
-            <p class="mt-1 text-[12px] font-medium text-white/80">+8.2% dibanding Januari</p>
-          </div>
-        </div>
-
-        <!-- MRR 2: Blue Gradient -->
-        <div class="relative overflow-hidden rounded-xl text-white shadow-md p-6 hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #38bdf8, #0284c7);">
-          <span class="pointer-events-none absolute -top-5 -right-5 size-20 rounded-full bg-white/10"></span>
-          <span class="pointer-events-none absolute -bottom-8 right-5 size-16 rounded-full bg-white/5"></span>
-          <div class="relative z-10 flex flex-col gap-1">
-            <p class="text-[12px] font-semibold uppercase tracking-[.4px] text-white/80">Total Biaya BBM</p>
-            <p class="text-[30px] font-extrabold leading-none tracking-[-0.5px]">Rp 187jt</p>
-            <p class="mt-1 text-[12px] font-medium text-white/80">38.4% dari pendapatan</p>
-          </div>
-        </div>
-
-        <!-- MRR 3: Cyan Gradient -->
-        <div class="relative overflow-hidden rounded-xl text-white shadow-md p-6 hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
-          <span class="pointer-events-none absolute -top-5 -right-5 size-20 rounded-full bg-white/10"></span>
-          <span class="pointer-events-none absolute -bottom-8 right-5 size-16 rounded-full bg-white/5"></span>
-          <div class="relative z-10 flex flex-col gap-1">
-            <p class="text-[12px] font-semibold uppercase tracking-[.4px] text-white/80">Biaya Perawatan</p>
-            <p class="text-[30px] font-extrabold leading-none tracking-[-0.5px]">Rp 11.1jt</p>
-            <p class="mt-1 text-[12px] font-medium text-white/80">3 unit perlu servis</p>
-          </div>
-        </div>
-
-        <!-- MRR 4: Purple Gradient -->
-        <div class="relative overflow-hidden rounded-xl text-white shadow-md p-6 hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
-          <span class="pointer-events-none absolute -top-5 -right-5 size-20 rounded-full bg-white/10"></span>
-          <span class="pointer-events-none absolute -bottom-8 right-5 size-16 rounded-full bg-white/5"></span>
-          <div class="relative z-10 flex flex-col gap-1">
-            <p class="text-[12px] font-semibold uppercase tracking-[.4px] text-white/80">Tagihan Belum Dibayar</p>
-            <p class="text-[30px] font-extrabold leading-none tracking-[-0.5px]">Rp 23jt</p>
-            <p class="mt-1 text-[12px] font-medium text-white/80">3 tagihan &gt;30 hari</p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ─── 3. RINGKASAN BERDASARKAN PERAN (TABS) ─── -->
-      <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs">
-        
-        <!-- Header -->
-        <div class="mb-4">
-          <h2 class="text-[14px] font-bold text-[#111827]">Ringkasan Berdasarkan Peran</h2>
-          <p class="text-[12px] text-[#9aa3bf] mt-0.5">Snapshot operasional dan auditor</p>
-        </div>
-
-        <!-- Segmented Role Tabs -->
-        <div class="flex gap-2.5 mb-5">
-          <!-- Tab Operasional -->
-          <button id="tab-btn-ops" class="flex items-center gap-2.5 px-4 py-2.5 rounded-[7px] border-[1.5px] border-[#2563eb] bg-[#eff6ff] shadow-[0_2px_12px_rgba(37,99,235,.12)] text-left flex-1 transition-all cursor-pointer">
-            <div class="size-8 rounded-xl bg-blue-100 text-[#2563eb] flex items-center justify-center shrink-0">
-              <i data-lucide="clipboard-list" class="size-4"></i>
-            </div>
-            <div class="min-w-0">
-              <div class="text-[13px] font-bold text-[#111827]">Operasional</div>
-              <div class="text-[10.5px] text-[#9aa3bf] font-medium truncate">Trip, driver & unit fleet</div>
-            </div>
-          </button>
-
-          <!-- Tab Auditor -->
-          <button id="tab-btn-aud" class="flex items-center gap-2.5 px-4 py-2.5 rounded-[7px] border-[1.5px] border-[#e4e8f0] bg-white hover:border-[#f97316] text-left flex-1 transition-all cursor-pointer">
-            <div class="size-8 rounded-xl bg-[#fff7ed] text-[#f97316] flex items-center justify-center shrink-0">
-              <i data-lucide="search" class="size-4"></i>
-            </div>
-            <div class="min-w-0">
-              <div class="text-[13px] font-bold text-[#111827]">Auditor</div>
-              <div class="text-[10.5px] text-[#9aa3bf] font-medium truncate">Kepatuhan, Anomali & Audit</div>
-            </div>
-          </button>
-        </div>
-
-        <!-- ── TAB CONTENT: OPERASIONAL ── -->
-        <div id="content-ops" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <!-- Left: Metrik Utama -->
-          <div>
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Metrik Utama</div>
-            <div class="grid grid-cols-2 gap-2.5">
-              
-              <!-- Metric 1 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#e4e8f0] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#16a34a]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Trip Selesai</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]">+3.2%</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#111827]">487</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">target 500 per hari</div>
-              </div>
-
-              <!-- Metric 2 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#fecaca] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#ef4444]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Ketepatan Waktu</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#fef2f2] text-[#dc2626]">-3.8%</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#dc2626]">91.2%</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">target 95%</div>
-              </div>
-
-              <!-- Metric 3 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#e4e8f0] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#16a34a]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Driver Aktif</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#fff7ed] text-[#f97316]">88.5%</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#111827]">23</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">3 tidak aktif dari 26</div>
-              </div>
-
-              <!-- Metric 4 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#e4e8f0] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#16a34a]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Unit Beroperasi</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]">90%</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#111827]">18</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">2 unit sedang tidak aktif</div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Right: Progress & Target -->
-          <div>
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Progress & Target</div>
-            <div class="flex flex-col gap-3.5">
-              
-              <!-- Progress 1 -->
-              <div class="flex flex-col gap-1.25">
-                <div class="flex items-center justify-between text-[12px]">
-                  <span class="font-semibold text-[#111827]">Target Trip Harian</span>
-                  <span class="font-bold font-mono text-[#16a34a]">487/500</span>
-                </div>
-                <div class="h-2 bg-[#edf0f7] rounded-full overflow-hidden">
-                  <div class="h-full bg-[#16a34a] rounded-full transition-all duration-700" style="width: 97%;"></div>
-                </div>
-                <div class="text-[11px] text-[#9aa3bf]">97% tercapai</div>
-              </div>
-
-              <!-- Progress 2 -->
-              <div class="flex flex-col gap-1.25">
-                <div class="flex items-center justify-between text-[12px]">
-                  <span class="font-semibold text-[#111827]">Utilisasi Armada</span>
-                  <span class="font-bold font-mono text-[#2563eb]">90%</span>
-                </div>
-                <div class="h-2 bg-[#edf0f7] rounded-full overflow-hidden">
-                  <div class="h-full bg-[#2563eb] rounded-full transition-all duration-700" style="width: 90%;"></div>
-                </div>
-                <div class="text-[11px] text-[#9aa3bf]">18 dari 20 unit aktif beroperasi</div>
-              </div>
-
-              <!-- Progress 3 -->
-              <div class="flex flex-col gap-1.25">
-                <div class="flex items-center justify-between text-[12px]">
-                  <span class="font-semibold text-[#111827]">Driver Bertugas</span>
-                  <span class="font-bold font-mono text-[#f97316]">88.5%</span>
-                </div>
-                <div class="h-2 bg-[#edf0f7] rounded-full overflow-hidden">
-                  <div class="h-full bg-[#f97316] rounded-full transition-all duration-700" style="width: 88%;"></div>
-                </div>
-                <div class="text-[11px] text-[#9aa3bf]">23 dari 26 driver aktif</div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- ── TAB CONTENT: AUDITOR (hidden by default) ── -->
-        <div id="content-aud" class="hidden grid-cols-1 lg:grid-cols-2 gap-5">
-          <!-- Left: Metrik Utama -->
-          <div>
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Metrik Utama</div>
-            <div class="grid grid-cols-2 gap-2.5">
-              
-              <!-- Metric 1 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#e4e8f0] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#16a34a]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Tingkat Kepatuhan</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#f0fdf4] text-[#16a34a]">+1.2%</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#111827]">96.4%</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">dokumen armada terverifikasi</div>
-              </div>
-
-              <!-- Metric 2 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#fecaca] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#ef4444]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Anomali BBM</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#fef2f2] text-[#dc2626]">kasus</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#dc2626]">3</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">perlu investigasi segera</div>
-              </div>
-
-              <!-- Metric 3 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#e4e8f0] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#16a34a]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Pelanggaran SLA</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#fff7ed] text-[#f97316]">1.6%</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#111827]">8</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">dari 487 total trip</div>
-              </div>
-
-              <!-- Metric 4 -->
-              <div class="relative bg-[#f8f9fc] rounded-[7px] px-3.5 py-3 border border-[#fecaca] overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-[#ef4444]"></div>
-                <div class="flex items-center justify-between mb-1.5 gap-1">
-                  <span class="text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[.4px]">Audit Tertunda</span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#fef2f2] text-[#dc2626]">item</span>
-                </div>
-                <div class="text-[22px] font-extrabold font-mono text-[#dc2626]">2</div>
-                <div class="text-[11px] text-[#9aa3bf] mt-1">deadline 7 Maret</div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Right: Progress & Target -->
-          <div>
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Progress & Target</div>
-            <div class="flex flex-col gap-3.5">
-              
-              <!-- Progress 1 -->
-              <div class="flex flex-col gap-1.25">
-                <div class="flex items-center justify-between text-[12px]">
-                  <span class="font-semibold text-[#111827]">Dokumen Kepatuhan</span>
-                  <span class="font-bold font-mono text-[#16a34a]">96.4%</span>
-                </div>
-                <div class="h-2 bg-[#edf0f7] rounded-full overflow-hidden">
-                  <div class="h-full bg-[#16a34a] rounded-full transition-all duration-700" style="width: 96.4%;"></div>
-                </div>
-                <div class="text-[11px] text-[#9aa3bf]">di atas batas toleransi 95%</div>
-              </div>
-
-              <!-- Progress 2 -->
-              <div class="flex flex-col gap-1.25">
-                <div class="flex items-center justify-between text-[12px]">
-                  <span class="font-semibold text-[#111827]">Pencapaian SLA Waktu</span>
-                  <span class="font-bold font-mono text-[#2563eb]">98.4%</span>
-                </div>
-                <div class="h-2 bg-[#edf0f7] rounded-full overflow-hidden">
-                  <div class="h-full bg-[#2563eb] rounded-full transition-all duration-700" style="width: 98.4%;"></div>
-                </div>
-                <div class="text-[11px] text-[#9aa3bf]">479 dari 487 trip tepat waktu</div>
-              </div>
-
-              <!-- Progress 3 -->
-              <div class="flex flex-col gap-1.25">
-                <div class="flex items-center justify-between text-[12px]">
-                  <span class="font-semibold text-[#111827]">Penyelesaian Audit</span>
-                  <span class="font-bold font-mono text-[#f97316]">60%</span>
-                </div>
-                <div class="h-2 bg-[#edf0f7] rounded-full overflow-hidden">
-                  <div class="h-full bg-[#f97316] rounded-full transition-all duration-700" style="width: 60%;"></div>
-                </div>
-                <div class="text-[11px] text-[#9aa3bf]">2 item audit masih dalam proses</div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </main>
-  </div>
-
-  <script>
-    lucide.createIcons();
-
-    // Sidebar Mobile Toggle
-    const sidebar = document.getElementById('sidebar');
-    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
-    const toggleBtn = document.getElementById('sidebar-toggle-btn');
-    const closeBtn = document.getElementById('sidebar-close-btn');
-
-    function openSidebar() {
-      sidebar.classList.remove('-translate-x-full');
-      sidebarBackdrop.classList.remove('hidden');
-    }
-
-    function closeSidebar() {
-      sidebar.classList.add('-translate-x-full');
-      sidebarBackdrop.classList.add('hidden');
-    }
-
-    toggleBtn?.addEventListener('click', () => {
-      if (sidebar.classList.contains('-translate-x-full')) {
-        openSidebar();
-      } else {
-        closeSidebar();
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarBackdrop.classList.remove("hidden");
       }
-    });
 
-    closeBtn?.addEventListener('click', closeSidebar);
-    sidebarBackdrop?.addEventListener('click', closeSidebar);
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarBackdrop.classList.add("hidden");
+      }
 
-    // User Dropdown Toggle
-    const userMenuBtn = document.getElementById('user-menu-btn');
-    const userDropdown = document.getElementById('user-dropdown');
+      toggleBtn?.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
 
-    userMenuBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      userDropdown.classList.toggle('hidden');
-    });
+      closeBtn?.addEventListener("click", closeSidebar);
+      sidebarBackdrop?.addEventListener("click", closeSidebar);
 
-    document.addEventListener('click', () => {
-      userDropdown?.classList.add('hidden');
-    });
+      // User Dropdown Toggle
+      const userMenuBtn = document.getElementById("user-menu-btn");
+      const userDropdown = document.getElementById("user-dropdown");
 
-    // Segment Tab Switcher (Operasional vs Auditor)
-    const btnOps = document.getElementById('tab-btn-ops');
-    const btnAud = document.getElementById('tab-btn-aud');
-    const contentOps = document.getElementById('content-ops');
-    const contentAud = document.getElementById('content-aud');
+      userMenuBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("hidden");
+      });
 
-    btnOps?.addEventListener('click', () => {
-      // Set button styles
-      btnOps.className = 'flex items-center gap-2.5 px-4 py-2.5 rounded-[7px] border-[1.5px] border-[#2563eb] bg-[#eff6ff] shadow-[0_2px_12px_rgba(37,99,235,.12)] text-left flex-1 transition-all cursor-pointer';
-      btnAud.className = 'flex items-center gap-2.5 px-4 py-2.5 rounded-[7px] border-[1.5px] border-[#e4e8f0] bg-white hover:border-[#f97316] text-left flex-1 transition-all cursor-pointer';
+      document.addEventListener("click", () => {
+        userDropdown?.classList.add("hidden");
+      });
 
-      // Show/Hide Content
-      contentOps.classList.remove('hidden');
-      contentOps.classList.add('grid');
-      contentAud.classList.add('hidden');
-      contentAud.classList.remove('grid');
-    });
+    // ─── Data prototipe (nanti dari vehicle_health_snapshots / driver_risk_snapshots) ───
+    const DRILL = {
+      'v-siap': { title: 'Siap Jalan', sub: '31 kendaraan · semua dimensi normal', items: [
+        ['B 1023 KJA', 'Hiace · Garasi Utama', 'Legal, teknis, perawatan, telemetri normal'],
+        ['B 7781 TQS', 'Bus · Garasi Utama', 'Legal, teknis, perawatan, telemetri normal'],
+        ['B 2290 PLM', 'Mobil · Garasi Annex', 'Legal, teknis, perawatan, telemetri normal'],
+        ['B 6614 RRA', 'Mobil · Garasi Gedung B', 'Legal, teknis, perawatan, telemetri normal'],
+      ], more: 27 },
+      'v-catatan': { title: 'Siap Dengan Catatan', sub: '6 kendaraan · boleh jalan, masuk tindak lanjut', items: [
+        ['B 1234 XY', 'Bus · Garasi Utama', 'Lampu kabut mati (minor), KIR habis dalam 45 hari'],
+        ['B 8812 FAD', 'Hiace · Garasi Annex', 'Servis berkala jatuh tempo dalam 9 hari'],
+        ['B 3307 KLM', 'Mobil · Garasi Gedung C', 'Asuransi habis dalam 38 hari'],
+        ['B 5521 NNO', 'Hiace · Garasi Gedung B', 'Telemetri tidak ada data > 15 menit'],
+        ['B 9014 PQR', 'Mobil · Garasi Utama', 'Kerusakan ringan: spion kiri retak'],
+        ['B 4470 UVW', 'Bus · Garasi Gedung C', 'Pajak habis dalam 21 hari'],
+      ] },
+      'v-blokir': { title: 'Tidak Siap Jalan', sub: '3 kendaraan · diblokir, Manager sudah dinotifikasi', items: [
+        ['B 7720 SDA', 'Bus · Garasi Gedung C', 'Item kritis gagal: rem utama (checklist 06:12)', 'red'],
+        ['B 1190 HJK', 'Hiace · Garasi Gedung B', 'KIR kedaluwarsa sejak 18 Nov 2026', 'red'],
+        ['B 6602 TRE', 'Mobil · Garasi Annex', 'Perawatan terlambat 23 hari', 'red'],
+      ] },
+      'v-belum': { title: 'Belum Dinilai', sub: '2 kendaraan · tidak dihitung siap', items: [
+        ['B 3381 OPA', 'Mobil · Garasi Utama', 'Belum ada checklist hari ini, telemetri tidak ada data'],
+        ['B 2045 WSX', 'Hiace · Garasi Annex', 'Belum ada checklist hari ini'],
+      ] },
+      'd-siap': { title: 'Siap Bertugas', sub: '38 driver', items: [], more: 38, note: 'Daftar nama tidak ditampilkan untuk driver tanpa tindak lanjut.' },
+      'd-pantau': { title: 'Siap Dengan Pemantauan', sub: '5 driver · masuk daftar pantau', items: [
+        ['Fajar Nugroho', '', 'Jam mengemudi mendekati batas (≥ 80%)'],
+        ['Joko Susilo', '', 'SIM habis dalam 32 hari'],
+        ['Rudi Hartono', '', 'Pola mengemudi berisiko (30 hari)'],
+        ['Dedi Kurniawan', '', 'Deklarasi dengan catatan'],
+        ['Wahyu Saputra', '', 'Pola mengemudi berisiko (30 hari)'],
+      ] },
+      'd-blokir': { title: 'Tidak Siap Bertugas', sub: '2 driver · tidak bisa menerima tugas', items: [
+        ['Hendra Wijaya', '', 'SIM kedaluwarsa', 'red'],
+        ['Slamet Riyadi', '', 'Batas jam mengemudi terlampaui', 'red'],
+      ] },
+      'd-belum': { title: 'Belum Deklarasi', sub: '3 driver · belum bisa mulai tugas', items: [
+        ['Agus Setiawan', '', 'Belum mengisi deklarasi hari ini'],
+        ['Irfan Hakim', '', 'Belum mengisi deklarasi hari ini'],
+        ['Yusuf Maulana', '', 'Belum mengisi deklarasi hari ini'],
+      ] },
+      'd-risiko': { title: 'Pola Mengemudi Berisiko (30 hari)', sub: '4 driver · skor risiko > 60', items: [
+        ['Rudi Hartono', '', 'overspeed berulang'],
+        ['Wahyu Saputra', '', 'hard braking berulang'],
+        ['Slamet Riyadi', '', 'jam mengemudi panjang'],
+        ['Eko Prasetyo', '', 'overspeed berulang'],
+      ] },
+      'd-sim': { title: 'SIM Hampir Habis', sub: '3 driver · ≤ 60 hari', items: [
+        ['Joko Susilo', '', 'SIM habis 26 Des 2026'],
+        ['Budi Santoso', '', 'SIM habis 9 Jan 2027'],
+        ['Taufik Hidayat', '', 'SIM habis 17 Jan 2027'],
+      ] },
+      'c-dok-habis': { title: 'Dokumen Kedaluwarsa', sub: '1 dokumen', items: [['B 1190 HJK', 'KIR', 'Kedaluwarsa 18 Nov 2026', 'red']] },
+      'c-dok-hampir': { title: 'Dokumen Hampir Kedaluwarsa', sub: '5 dokumen · ≤ 60 hari', items: [
+        ['B 1234 XY', 'KIR', 'Habis dalam 45 hari'], ['B 3307 KLM', 'Asuransi', 'Habis dalam 38 hari'],
+        ['B 4470 UVW', 'Pajak', 'Habis dalam 21 hari'], ['B 2290 PLM', 'STNK', 'Habis dalam 57 hari'],
+        ['B 7781 TQS', 'Asuransi', 'Habis dalam 59 hari'],
+      ] },
+      'c-rawat-tempo': { title: 'Perawatan Jatuh Tempo', sub: '4 kendaraan · ≤ 14 hari atau ≤ 500 km', items: [
+        ['B 8812 FAD', 'Servis berkala', '9 hari lagi'], ['B 1023 KJA', 'Ganti oli', '320 km lagi'],
+        ['B 5521 NNO', 'Servis berkala', '12 hari lagi'], ['B 9014 PQR', 'Ganti ban', '480 km lagi'],
+      ] },
+      'c-rawat-telat': { title: 'Perawatan Terlambat', sub: '1 kendaraan', items: [['B 6602 TRE', 'Servis berkala', 'Terlambat 23 hari', 'red']] },
+      'c-temuan': { title: 'Masalah Serius Belum Selesai', sub: '2 masalah tingkat tinggi yang belum ditutup', items: [
+        ['CASE-0412', 'B 7720 SDA', 'Rem utama gagal · ditindaklanjuti Manager', 'red'],
+        ['CASE-0409', 'B 1190 HJK', 'Beroperasi dengan KIR kedaluwarsa · investigasi Auditor', 'red'],
+      ] },
+      'c-insiden': { title: 'Insiden 30 Hari', sub: '4 insiden', items: [
+        ['INC-118', 'Ringan', 'Lecet bodi saat parkir · Garasi Annex'], ['INC-121', 'Ringan', 'Ban pecah · Garasi Gedung B'],
+        ['INC-124', 'Sedang', 'Senggolan di tol · Garasi Utama'], ['INC-127', 'Ringan', 'Kaca spion patah · Garasi Gedung C'],
+      ] },
+      'c-checklist': { title: 'Kepatuhan Checklist', sub: '30 hari terakhir', items: [
+        ['Garasi Gedung C', '82%', '41 tugas tanpa checklist pasca-trip lengkap'], ['Garasi Gedung B', '90%', '19 tugas tanpa checklist lengkap'],
+        ['Garasi Annex', '95%', '9 tugas tanpa checklist lengkap'], ['Garasi Utama', '97%', '6 tugas tanpa checklist lengkap'],
+      ] },
+      'c-tutup': { title: 'Lama Penyelesaian Masalah', sub: 'Rata-rata hari sejak masalah dicatat sampai selesai', items: [
+        ['Garasi Gedung C', '6,8 hari', ''], ['Garasi Gedung B', '4,9 hari', ''], ['Garasi Annex', '3,2 hari', ''], ['Garasi Utama', '2,7 hari', ''],
+      ] },
+    };
 
-    btnAud?.addEventListener('click', () => {
-      // Set button styles
-      btnAud.className = 'flex items-center gap-2.5 px-4 py-2.5 rounded-[7px] border-[1.5px] border-[#f97316] bg-[#fff7ed] shadow-[0_2px_12px_rgba(249,115,22,.12)] text-left flex-1 transition-all cursor-pointer';
-      btnOps.className = 'flex items-center gap-2.5 px-4 py-2.5 rounded-[7px] border-[1.5px] border-[#e4e8f0] bg-white hover:border-[#2563eb] text-left flex-1 transition-all cursor-pointer';
+      DRILL['v-boleh'] = { title: 'Kendaraan Boleh Dipakai', sub: '37 dari 42 · siap jalan + dengan catatan',
+        items: DRILL['v-catatan'].items.concat(DRILL['v-siap'].items), more: 27 };
+      DRILL['d-boleh'] = { title: 'Driver Boleh Bertugas', sub: '43 dari 48 · siap + dengan pemantauan',
+        items: DRILL['d-pantau'].items, more: 38, note: 'Driver siap tanpa catatan tidak ditampilkan per nama.' };
 
-      // Show/Hide Content
-      contentAud.classList.remove('hidden');
-      contentAud.classList.add('grid');
-      contentOps.classList.add('hidden');
-      contentOps.classList.remove('grid');
-    });
-  </script>
-</body>
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      // ─── C. Kepatuhan & risiko ───
+      const TONE = {
+        red:   ['bg-rose-50/70 border-rose-200', 'text-rose-700', 'bg-rose-500'],
+        amber: ['bg-white border-[#e4e8f0]', 'text-[#111827]', 'bg-amber-500'],
+        green: ['bg-white border-[#e4e8f0]', 'text-[#111827]', 'bg-emerald-500'],
+        grey:  ['bg-white border-[#e4e8f0]', 'text-[#111827]', 'bg-slate-400'],
+      };
+      const COMPLIANCE = [
+        ['c-dok-habis', 'Dokumen kedaluwarsa', '1', 'Target 0', 'red'],
+        ['c-dok-hampir', 'Dokumen hampir habis', '5', '≤ 60 hari', 'amber'],
+        ['c-rawat-tempo', 'Perawatan jatuh tempo', '4', '≤ 14 hari / 500 km', 'amber'],
+        ['c-rawat-telat', 'Perawatan terlambat', '1', 'Lewat jadwal', 'red'],
+        ['c-temuan', 'Masalah serius belum selesai', '2', 'Rusak berat, harus segera ditangani', 'red'],
+        ['c-insiden', 'Insiden 30 hari', '4', '3 ringan · 1 sedang', 'grey'],
+        ['c-checklist', 'Kepatuhan checklist', '91%', 'Target ≥ 95%', 'amber'],
+        ['c-tutup', 'Lama penyelesaian masalah', '4,1 hari', 'Rata-rata, target ≤ 5 hari', 'green'],
+      ];
+      document.getElementById('compliance-grid').innerHTML = COMPLIANCE.map(([k, l, v, s, t]) => `
+        <button type="button" data-drill="${k}" class="text-left border rounded-xl p-3.5 hover:border-[#FF8A0D]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D] ${TONE[t][0]}">
+          <span class="flex items-center gap-1.5 text-[11.5px] font-medium text-[#4b5675]"><span class="size-1.5 rounded-full ${TONE[t][2]}"></span>${l}</span>
+          <div class="text-[22px] font-semibold tracking-[-0.5px] mt-1 ${TONE[t][1]}">${v}</div>
+          <span class="text-[11px] text-[#9aa3bf]">${s}</span>
+        </button>`).join('');
+
+      // ─── Kalender minggu ini ───
+      const WEEK = [['Sen', 23], ['Sel', 24], ['Rab', 25], ['Kam', 26], ['Jum', 27], ['Sab', 28], ['Min', 29]];
+      const DUE = { 25: 'Perawatan B 1023 KJA', 27: 'Pajak B 4470 UVW', 29: 'Servis B 8812 FAD' };
+      document.getElementById('week-strip').innerHTML = WEEK.map(([d, n]) => `
+        <div class="flex flex-col items-center gap-2" ${DUE[n] ? `title="${DUE[n]}"` : ''}>
+          <span class="text-[11px] text-[#9aa3bf]">${d}</span>
+          <span class="size-10 rounded-full flex items-center justify-center text-[14px] font-semibold ${n === 24 ? 'bg-[#FF8A0D] text-white shadow-md shadow-orange-500/25' : 'text-[#111827]'}">${n}</span>
+          <span class="size-1.5 rounded-full ${DUE[n] ? 'bg-rose-500' : 'bg-transparent'}"></span>
+        </div>`).join('');
+
+      // ─── Perlu tindak lanjut ───
+      const FOLLOW = [
+        ['v-blokir', 'Kendaraan', 'B 7720 SDA', 'Rem utama gagal · Garasi Gedung C'],
+        ['v-blokir', 'Kendaraan', 'B 1190 HJK', 'KIR kedaluwarsa · Garasi Gedung B'],
+        ['v-blokir', 'Kendaraan', 'B 6602 TRE', 'Perawatan terlambat 23 hari · Garasi Annex'],
+        ['d-blokir', 'Driver', 'Hendra Wijaya', 'SIM kedaluwarsa · Garasi Gedung B'],
+        ['d-blokir', 'Driver', 'Slamet Riyadi', 'Batas jam mengemudi terlampaui · Garasi Gedung C'],
+      ];
+      document.getElementById('followup-list').innerHTML = FOLLOW.map(([k, type, name, why], i) => `
+        <li>
+          <button type="button" data-drill="${k}" class="w-full text-left flex items-start gap-3 px-5 py-3 hover:bg-[#f8f9fc] transition-colors ${i === 0 ? 'bg-[#fff7ed]' : ''}">
+            <span class="mt-0.5 size-8 shrink-0 rounded-full flex items-center justify-center ${type === 'Driver' ? 'bg-[#eef0f8] text-[#222845]' : 'bg-rose-50 text-rose-600'}">
+              <i data-lucide="${type === 'Driver' ? 'user-x' : 'octagon-alert'}" class="size-4"></i>
+            </span>
+            <span class="min-w-0">
+              <span class="block text-[10.5px] text-[#9aa3bf]">${type} · Tidak siap</span>
+              <span class="block text-[13.5px] font-semibold text-[#111827] font-mono">${esc(name)}</span>
+              <span class="block text-[11.5px] text-[#64748b] truncate">${esc(why)}</span>
+            </span>
+          </button>
+        </li>`).join('');
+
+      // ─── Penyebab blokir ───
+      const CAUSES = [['Item kritis checklist gagal', 9], ['Dokumen kedaluwarsa', 6], ['Perawatan terlambat', 5], ['Anomali telemetri berat', 3], ['Pajak / asuransi habis', 2]];
+      document.getElementById('cause-list').innerHTML = CAUSES.map(([l, n]) => `
+        <li>
+          <div class="flex justify-between text-[12.5px]"><span class="text-[#4b5675]">${l}</span><span class="font-bold font-mono text-[#1a1f36]">${n}</span></div>
+          <div class="mt-1.5 h-2 rounded-full bg-[#f5f7fb]"><div class="h-full rounded-full bg-[#222845]" style="width:${(n / CAUSES[0][1]) * 100}%"></div></div>
+        </li>`).join('');
+
+      // ─── Garasi ───
+      const UNITS = [
+        ['Garasi Gedung C', 9, 8, 11, 9, 5, -1], ['Garasi Gedung B', 10, 9, 12, 11, 3, 1],
+        ['Garasi Annex', 10, 8, 11, 10, 2, -1], ['Garasi Utama', 13, 12, 14, 13, 1, 1],
+      ];
+      const pct = (a, b) => Math.round(a / b * 100);
+      const bar = (p, a, b) => `<div class="flex items-center gap-2.5"><div class="w-24 h-2 rounded-full bg-[#f5f7fb]"><div class="h-full rounded-full ${p < 80 ? 'bg-rose-500' : p < 90 ? 'bg-amber-400' : 'bg-emerald-500'}" style="width:${p}%"></div></div><span class="text-[12.5px] font-semibold text-[#111827]">${p}%</span><span class="text-[11px] text-[#9aa3bf]">${a}/${b}</span></div>`;
+      document.getElementById('unit-table').innerHTML = UNITS
+        .sort((a, b) => pct(a[2], a[1]) - pct(b[2], b[1]))
+        .map(([n, vt, vs, dt, ds, f, t]) => `
+          <tr class="hover:bg-[#f8f9fc] transition-colors">
+            <td class="px-5 py-3.5 text-[13px] font-semibold text-[#1a1f36]">${n}</td>
+            <td class="px-5 py-3.5">${bar(pct(vs, vt), vs, vt)}</td>
+            <td class="px-5 py-3.5 text-right text-[13px] font-mono font-bold ${f >= 3 ? 'text-rose-700' : 'text-[#111827]'}">${f}</td>
+            <td class="px-5 py-3.5 text-[12px]">${t > 0
+              ? '<span class="chip-up"><i data-lucide="trending-up" class="size-3"></i>Naik</span>'
+              : '<span class="chip-down"><i data-lucide="trending-down" class="size-3"></i>Turun</span>'}</td>
+            <td class="px-5 py-3 text-right">${Exec.actionBtn(`data-unit="${n}"`, `Lihat daftar ${n}`)}</td>
+          </tr>`).join('');
+
+      // ─── Grafik komposisi status armada (stacked, gaya track) ───
+      function series(days) {
+        let s = 7; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+        const out = { siap: [], catatan: [], blokir: [], belum: [], labels: [] };
+        for (let i = days - 1; i >= 0; i--) {
+          const blokir = Math.round(1 + r() * 4), belum = Math.round(r() * 3), catatan = Math.round(4 + r() * 5);
+          const d = new Date(2026, 10, 24 - i);
+          out.siap.push(42 - blokir - belum - catatan); out.catatan.push(catatan); out.blokir.push(blokir); out.belum.push(belum);
+          out.labels.push(d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
+        }
+        const L = days - 1; out.siap[L] = 31; out.catatan[L] = 6; out.blokir[L] = 3; out.belum[L] = 2;
+        return out;
+      }
+      let chart;
+      function renderChart(days) {
+        const d = series(days);
+        const opts = {
+          // Concept §5.5: stacked bar, 4 status colours. Segments touch (thin white seam); only the top is rounded.
+          series: [
+            { name: 'Siap jalan', data: d.siap }, { name: 'Siap dengan catatan', data: d.catatan },
+            { name: 'Tidak siap jalan', data: d.blokir }, { name: 'Belum dinilai', data: d.belum },
+          ],
+          chart: { type: 'bar', stacked: true, height: 260, toolbar: { show: false }, fontFamily: '"Plus Jakarta Sans", sans-serif', animations: { speed: 300 } },
+          colors: ['#10b981', '#fbbf24', '#f43f5e', '#cbd5e1'],
+          plotOptions: { bar: { borderRadius: 4, borderRadiusApplication: 'end', borderRadiusWhenStacked: 'last', columnWidth: days > 14 ? '62%' : '48%' } },
+          stroke: { show: true, width: 1, colors: ['#ffffff'] },
+          states: { hover: { filter: { type: 'darken', value: 0.92 } } },
+          dataLabels: { enabled: false }, legend: { show: false },
+          xaxis: { categories: d.labels, axisBorder: { show: false }, axisTicks: { show: false },
+            labels: { rotate: 0, hideOverlappingLabels: true, style: { colors: '#9aa3bf', fontSize: '11px' } } },
+          yaxis: { min: 0, max: 42, tickAmount: 3, labels: { style: { colors: '#9aa3bf', fontSize: '11px' } } },
+          grid: { borderColor: '#f1f3f9', strokeDashArray: 4, xaxis: { lines: { show: false } } },
+          tooltip: { shared: true, intersect: false, custom: ({ dataPointIndex: i }) => `
+            <div class="bg-[#222845] text-white px-3.5 py-2.5 rounded-xl text-[11.5px] font-sans">
+              <div class="text-white/60 mb-1">${d.labels[i]}</div>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-0.5">
+                <span class="text-white/70">Siap jalan</span><b class="text-emerald-300">${d.siap[i]}</b>
+                <span class="text-white/70">Catatan</span><b class="text-amber-200">${d.catatan[i]}</b>
+                <span class="text-white/70">Tidak siap</span><b class="text-rose-300">${d.blokir[i]}</b>
+                <span class="text-white/70">Belum dinilai</span><b>${d.belum[i]}</b>
+              </div>
+            </div>` },
+        };
+        if (chart) chart.destroy();
+        chart = new ApexCharts(document.getElementById('fleet-chart'), opts);
+        chart.render();
+      }
+      document.getElementById('range-select').addEventListener('change', e => renderChart(+e.target.value));
+      if (window.ApexCharts) renderChart(14);
+
+      // ─── Drill-down ───
+      const drill = document.getElementById('drill');
+      function openDrill(d) {
+        document.getElementById('drill-title').textContent = d.title;
+        document.getElementById('drill-sub').textContent = d.sub;
+        const rows = d.items.map(([a, b, c, tone]) => `
+          <li class="px-5 py-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[13px] font-bold text-[#111827] font-mono">${esc(a)}</span>
+              <span class="text-[11px] text-[#64748b]">${esc(b)}</span>
+            </div>
+            ${c ? `<p class="text-[12px] mt-0.5 ${tone === 'red' ? 'text-rose-700' : 'text-[#4b5675]'}">${esc(c)}</p>` : ''}
+          </li>`).join('');
+        const extra = d.more && d.items.length ? `<li class="px-5 py-3 text-[12px] text-[#9aa3bf]">+ lainnya</li>` : '';
+        const note = d.note ? `<li class="px-5 py-4 text-[12px] text-[#64748b]">${esc(d.note)}</li>` : '';
+        const empty = !d.items.length && !d.note ? `<li class="px-5 py-4 text-[12px] text-[#64748b]">Tidak ada yang perlu ditindaklanjuti.</li>` : '';
+        document.getElementById('drill-list').innerHTML = rows + extra + note + empty;
+        drill.classList.remove('hidden');
+        lucide.createIcons();
+        drill.querySelector('button[data-close]').focus();
+      }
+      const closeDrill = () => drill.classList.add('hidden');
+      document.addEventListener('click', e => {
+        const t = e.target.closest('[data-drill]');
+        if (t && DRILL[t.dataset.drill]) return openDrill(DRILL[t.dataset.drill]);
+        const u = e.target.closest('[data-unit]');
+        if (u) {
+          const name = u.dataset.unit, items = [];
+          ['v-blokir', 'v-catatan', 'v-belum'].forEach(k =>
+            DRILL[k].items.forEach(i => i[1].includes(name) && items.push([i[0], DRILL[k].title, i[2], i[3]])));
+          return openDrill({ title: name, sub: 'Kendaraan yang perlu ditindaklanjuti', items });
+        }
+        if (e.target.closest('[data-close]')) closeDrill();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrill(); });
+
+      lucide.createIcons();
+    </script>
+  </body>
 </html>
