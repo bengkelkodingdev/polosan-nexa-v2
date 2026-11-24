@@ -1,0 +1,143 @@
+/* Sidebar admin: mode tertutup (icon-only rail), hanya desktop (>= 1024px) */
+
+.sb-logo-icon {
+  display: none;
+}
+@media (min-width: 1024px) {
+  /* Lebar sidebar & konten */
+  html.sb-collapsed #sidebar {
+    width: 4.5rem !important;
+  }
+  html.sb-collapsed .lg\:pl-64 {
+    padding-left: 4.5rem !important;
+  }
+
+  /* Logo: ganti dengan nexa-icon */
+  html.sb-collapsed #sidebar > div:first-child {
+    justify-content: center;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  html.sb-collapsed .sb-logo-full,
+  html.sb-collapsed #sidebar-close-btn {
+    display: none !important;
+  }
+  html.sb-collapsed .sb-logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sb-logo-icon img {
+    height: 2.25rem;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Menu: hanya ikon, bulat */
+  html.sb-collapsed .sb-nav {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  html.sb-collapsed .sb-item {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 !important;
+    justify-content: center;
+    border-radius: 9999px !important;
+  }
+  html.sb-collapsed .sb-label {
+    display: none;
+  }
+
+  /* Label section jadi garis pemisah */
+  html.sb-collapsed .sb-section {
+    height: 1px !important;
+    min-height: 0;
+    padding: 0 !important;
+    margin: 0.75rem 1rem;
+    font-size: 0 !important;
+    line-height: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Footer user: hanya avatar, klik untuk pilihan logout */
+  html.sb-collapsed .sb-footer > div {
+    justify-content: center;
+    padding: 0.5rem 0;
+    background: transparent;
+  }
+  html.sb-collapsed .sb-footer .leading-tight,
+  html.sb-collapsed .sb-footer a {
+    display: none;
+  }
+  html.sb-collapsed .sb-avatar {
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+  }
+  html.sb-collapsed .sb-avatar:hover {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+  }
+
+  /* Popup pilihan logout */
+  .sb-pop {
+    position: absolute;
+    left: calc(100% + 0.5rem);
+    bottom: 0.75rem;
+    width: 13rem;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    background: #222845;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    z-index: 60;
+  }
+  .sb-pop[hidden] {
+    display: none;
+  }
+  .sb-pop-head {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.75rem 0.625rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 1.25;
+  }
+  .sb-pop-name {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .sb-pop-mail {
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .sb-pop-logout {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    transition: background-color 0.15s, color 0.15s;
+  }
+  .sb-pop-logout:hover {
+    background: #ef4444;
+    color: #fff;
+  }
+  .sb-pop-logout svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Popup tidak dipakai di mobile */
+@media (max-width: 1023px) {
+  .sb-pop {
+    display: none !important;
+  }
+}

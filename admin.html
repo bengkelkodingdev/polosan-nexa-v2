@@ -1,554 +1,895 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - FleetTrack Nexa v2</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          }
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - FleetTrack Nexa v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
       }
-    }
-  </script>
-  <style>
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9aa3bf; }
-  </style>
-</head>
-<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans">
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d0d6e8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9aa3bf;
+      }
+    </style>
+    <link rel="stylesheet" href="assets/sidebar.css" />
+    <script src="assets/sidebar.js"></script>
+  </head>
+  <body
+    class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"
+    ></div>
 
-  <!-- Mobile Backdrop -->
-  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
-
-  <!-- ─── SIDEBAR ─── -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-white/85 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
-    <!-- Logo -->
-    <div class="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
-      <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-        <img src="assets/nexa-logo.png" alt="Nexa" class="h-5.5 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
-        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Track</span>
-      </a>
-      <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
-        <i data-lucide="x" class="size-5"></i>
-      </button>
-    </div>
-
-    <!-- Navigation Menu (Admin structure) -->
-    <div class="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 text-xs font-medium">
-      <!-- Section: Ringkasan -->
-      <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Ringkasan</p>
-        <div class="space-y-0.5">
-          <a href="admin.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-white font-semibold shadow-xs">
-            <i data-lucide="layout-grid" class="size-4 shrink-0 text-blue-400"></i>
-            <span>Dashboard</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Section: Manajemen -->
-      <div>
-        <p class="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/35">Manajemen</p>
-        <div class="space-y-0.5">
-          <a href="admin-fleet-type.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="layers" class="size-4 shrink-0"></i>
-            <span>Tipe Armada</span>
-          </a>
-          <a href="admin-fleet.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="truck" class="size-4 shrink-0"></i>
-            <span>Data Armada</span>
-          </a>
-          <a href="admin-driver.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="users" class="size-4 shrink-0"></i>
-            <span>Data Driver</span>
-          </a>
-          <a href="admin-device.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="cpu" class="size-4 shrink-0"></i>
-            <span>Data Device</span>
-          </a>
-          <a href="admin-users.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors">
-            <i data-lucide="user-cog" class="size-4 shrink-0"></i>
-            <span>Manajemen Pengguna</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sidebar User Footer -->
-    <div class="p-2.5 pt-0 border-t border-white/5">
-      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
-        <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white text-xs select-none shadow-xs">
-          AD
-        </div>
-        <div class="flex flex-col leading-tight min-w-0 flex-1">
-          <span class="text-sm font-bold text-white/90 truncate">Administrator</span>
-          <span class="text-[11px] text-white/50 truncate">admin@nexa.id</span>
-        </div>
-        <a href="index.html" title="Kembali ke Beranda" class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors">
-          <i data-lucide="log-out" class="size-4"></i>
+    <!-- ─── SIDEBAR ─── -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0"
+    >
+      <!-- Logo -->
+      <div class="h-14 px-4 flex items-center gap-2.5">
+        <a
+          href="index.html"
+          class="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src="assets/nexa-logo.png"
+            alt="Nexa"
+            class="h-9 object-contain"
+            onerror="
+              this.src = 'https://placehold.co/72x22/222845/ffffff?text=NEXA'
+            "
+          />
+          <span
+            class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap"
+            >Fleet Management</span
+          >
         </a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ─── MAIN CONTENT WRAPPER ─── -->
-  <div class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300">
-    
-    <!-- Top Site Header -->
-    <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between">
-      <!-- Left: Toggle & Breadcrumb -->
-      <div class="flex items-center gap-0 min-w-0 flex-1">
-        <button id="sidebar-toggle-btn" class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0">
-          <i data-lucide="panel-left" class="size-4"></i>
+        <button
+          id="sidebar-close-btn"
+          class="ml-auto lg:hidden text-white/50 hover:text-white p-1"
+        >
+          <i data-lucide="x" class="size-5"></i>
         </button>
-
-        <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
-
-        <!-- Breadcrumb -->
-        <nav class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden">
-          <a href="index.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">FleetTrack</a>
-          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <span class="text-[#9aa3bf]">Admin</span>
-          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <span class="font-bold text-[#111827]">Dashboard</span>
-        </nav>
       </div>
 
-      <!-- Right Actions -->
-      <div class="flex items-center gap-2 shrink-0 pl-2">
-        <button class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
-          <i data-lucide="bell" class="size-4"></i>
-          <span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
-        </button>
+      <!-- Navigation Menu (Admin structure) -->
+      <div
+        class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium"
+      >
+        <!-- Section: Ringkasan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            RINGKASAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="admin.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20"
+            >
+              <i
+                data-lucide="layout-grid"
+                class="size-4 shrink-0 text-white"
+              ></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
 
-        <button title="Pengaturan" class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
-          <i data-lucide="settings" class="size-4"></i>
-        </button>
+        <!-- Section: Manajemen -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            MANAJEMEN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="admin-fleet-type.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="layers" class="size-4 shrink-0"></i>
+              <span>Tipe Armada</span>
+            </a>
+            <a
+              href="admin-fleet.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="truck" class="size-4 shrink-0"></i>
+              <span>Data Armada</span>
+            </a>
+            <a
+              href="admin-driver.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="users" class="size-4 shrink-0"></i>
+              <span>Data Driver</span>
+            </a>
+            <a
+              href="admin-device.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="cpu" class="size-4 shrink-0"></i>
+              <span>Data Device</span>
+            </a>
+            <a
+              href="admin-users.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="user-cog" class="size-4 shrink-0"></i>
+              <span>Manajemen Pengguna</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-        <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
+      <!-- Sidebar User Footer -->
+      <div class="p-2.5 pt-0 border-t border-white/5">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+          <div
+            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white text-xs select-none shadow-xs"
+          >
+            AD
+          </div>
+          <div class="flex flex-col leading-tight min-w-0 flex-1">
+            <span class="text-sm font-bold text-white/90 truncate"
+              >Administrator</span
+            >
+            <span class="text-[11px] text-white/50 truncate"
+              >admin@nexa.id</span
+            >
+          </div>
+          <a
+            href="index.html"
+            title="Kembali ke Beranda"
+            class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors"
+          >
+            <i data-lucide="log-out" class="size-4"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
 
-        <!-- Role Switcher & Profile Dropdown -->
-        <div class="relative">
-          <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
-            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white">
-              AD
-            </div>
-            <div class="hidden sm:flex flex-col text-left leading-tight">
-              <span class="text-[12.5px] font-bold text-[#111827]">Administrator</span>
-              <span class="text-[10.5px] text-[#9aa3bf]">Admin</span>
-            </div>
-            <i data-lucide="chevron-down" class="size-3.5 text-[#9aa3bf] ml-0.5"></i>
+    <!-- ─── MAIN CONTENT WRAPPER ─── -->
+    <div
+      class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300"
+    >
+      <!-- Top Site Header -->
+      <header
+        class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between"
+      >
+        <!-- Left: Toggle & Breadcrumb -->
+        <div class="flex items-center gap-0 min-w-0 flex-1">
+          <button
+            id="sidebar-toggle-btn"
+            class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0"
+          >
+            <i data-lucide="panel-left" class="size-4"></i>
           </button>
 
-          <!-- Dropdown Popover -->
-          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs">
-            <div class="px-4 py-2 border-b border-gray-100">
-              <p class="text-[11px] font-medium text-gray-400">Masuk sebagai</p>
-              <p class="font-bold text-[#111827] truncate">admin@nexa.id</p>
-            </div>
-            <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-              Beralih Tampilan Role:
-            </div>
-            <a href="superadmin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Super Admin</span>
-            </a>
-            <a href="executive.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Executive</span>
-            </a>
-            <a href="admin.html" class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60">
-              <span>Admin</span>
-              <i data-lucide="check" class="size-3.5 text-blue-600"></i>
-            </a>
-            <a href="manager.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Manager</span>
-            </a>
-            <a href="auditor.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
-              <span>Auditor</span>
-            </a>
-            <div class="border-t border-gray-100 my-1"></div>
-            <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50">
-              <i data-lucide="home" class="size-3.5"></i>
-              <span>Kembali ke Beranda</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </header>
+          <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
 
-    <!-- Page Body -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
-      
-      <!-- Page Header -->
-      <div class="flex items-start justify-between mb-5.5">
-        <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">Ringkasan Dashboard</h1>
-          <p class="text-xs sm:text-sm text-gray-500 mt-1">
-            Gambaran umum metrik operasional dan aktivitas perusahaan
-          </p>
-        </div>
-      </div>
-
-      <!-- ─── 1. KPI CARDS (Admin) ─── -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-4">
-        
-        <!-- Total User -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Total User</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">42</p>
-            </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]">
-              <i data-lucide="users" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-            <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-            <strong class="font-semibold text-[#111827]">39</strong>
-            <span class="text-[#9aa3bf] truncate">pengguna aktif</span>
-          </div>
+          <!-- Breadcrumb -->
+          <nav
+            class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden"
+          >
+            <a
+              href="index.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >FleetTrack</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="text-[#9aa3bf]">Admin</span>
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="font-bold text-[#111827]">Dashboard</span>
+          </nav>
         </div>
 
-        <!-- Total Armada -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#d97706]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Total Armada</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">28</p>
-            </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fffbeb] text-[#d97706]">
-              <i data-lucide="truck" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-            <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-            <strong class="font-semibold text-[#111827]">24</strong>
-            <span class="text-[#9aa3bf] truncate">unit terpasang GPS &amp; Sensor</span>
-          </div>
-        </div>
+        <!-- Right Actions -->
+        <div class="flex items-center gap-2 shrink-0 pl-2">
+          <button
+            class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all"
+          >
+            <i data-lucide="bell" class="size-4"></i>
+            <span
+              class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"
+            ></span>
+          </button>
 
-        <!-- Total Driver -->
-        <div class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
-          <span class="absolute inset-x-0 top-0 h-1 bg-[#7c3aed]"></span>
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0 flex-1">
-              <p class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]">Total Driver</p>
-              <p class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]">35</p>
+          <button
+            title="Pengaturan"
+            class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all"
+          >
+            <i data-lucide="settings" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
+
+          <!-- Role Switcher & Profile Dropdown -->
+          <div class="relative">
+            <button
+              id="user-menu-btn"
+              class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors"
+            >
+              <div
+                class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white"
+              >
+                AD
+              </div>
+              <div class="hidden sm:flex flex-col text-left leading-tight">
+                <span class="text-[12.5px] font-bold text-[#111827]"
+                  >Administrator</span
+                >
+                <span class="text-[10.5px] text-[#9aa3bf]">Admin</span>
+              </div>
+              <i
+                data-lucide="chevron-down"
+                class="size-3.5 text-[#9aa3bf] ml-0.5"
+              ></i>
+            </button>
+
+            <!-- Dropdown Popover -->
+            <div
+              id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs"
+            >
+              <div class="px-4 py-2 border-b border-gray-100">
+                <p class="text-[11px] font-medium text-gray-400">
+                  Masuk sebagai
+                </p>
+                <p class="font-bold text-[#111827] truncate">admin@nexa.id</p>
+              </div>
+              <div
+                class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400"
+              >
+                Beralih Tampilan Role:
+              </div>
+              <a
+                href="superadmin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Super Admin</span>
+              </a>
+              <a
+                href="executive.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Executive</span>
+              </a>
+              <a
+                href="admin.html"
+                class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60"
+              >
+                <span>Admin</span>
+                <i data-lucide="check" class="size-3.5 text-blue-600"></i>
+              </a>
+              <a
+                href="manager.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Manager</span>
+              </a>
+              <a
+                href="auditor.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Auditor</span>
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50"
+              >
+                <i data-lucide="home" class="size-3.5"></i>
+                <span>Kembali ke Beranda</span>
+              </a>
             </div>
-            <div class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f5f3ff] text-[#7c3aed]">
-              <i data-lucide="user-circle" class="size-5"></i>
-            </div>
-          </div>
-          <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-            <span class="size-1.5 rounded-full bg-[#7c3aed] shrink-0"></span>
-            <strong class="font-semibold text-[#111827]">28</strong>
-            <span class="text-[#9aa3bf] truncate">driver memiliki SIM B2 Umum aktif</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ─── 2. ROLE DISTRIBUTION DONUT CHART ─── -->
-      <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs mb-4">
-        <div class="mb-5">
-          <h2 class="text-[14px] font-bold text-[#111827]">Distribusi Role Pengguna</h2>
-          <p class="text-[12px] text-[#9aa3bf] mt-0.5">Ringkasan jumlah pengguna untuk setiap role di perusahaan</p>
-        </div>
-
-        <div class="flex flex-col md:flex-row items-center gap-6">
-          <!-- Donut Chart Container -->
-          <div class="relative w-48 h-48 shrink-0 flex items-center justify-center">
-            <div id="role-donut-chart" class="w-full h-full"></div>
-            <!-- Center Label Overlay -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px]">42</span>
-              <span class="text-[11px] font-medium text-[#9aa3bf] mt-0.5">Total User</span>
-            </div>
-          </div>
-
-          <!-- Slices Progress Breakdown List -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 w-full flex-1">
-            
-            <!-- Admin -->
-            <div>
-              <div class="flex items-center justify-between mb-1.25">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span class="size-2.5 rounded-full shrink-0 bg-[#16a34a]"></span>
-                  <span class="text-[13px] font-semibold text-[#111827]">Admin</span>
-                </div>
-                <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">4</span>
-              </div>
-              <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
-                <div class="h-full bg-[#16a34a] rounded-full" style="width: 10%;"></div>
-              </div>
-              <div class="flex items-center justify-between text-[11px]">
-                <span class="text-[#9aa3bf]">4 aktif</span>
-                <span class="font-bold text-[#16a34a]">10%</span>
-              </div>
-            </div>
-
-            <!-- Executive -->
-            <div>
-              <div class="flex items-center justify-between mb-1.25">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span class="size-2.5 rounded-full shrink-0 bg-[#f97316]"></span>
-                  <span class="text-[13px] font-semibold text-[#111827]">Executive</span>
-                </div>
-                <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">4</span>
-              </div>
-              <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
-                <div class="h-full bg-[#f97316] rounded-full" style="width: 10%;"></div>
-              </div>
-              <div class="flex items-center justify-between text-[11px]">
-                <span class="text-[#9aa3bf]">4 aktif</span>
-                <span class="font-bold text-[#f97316]">10%</span>
-              </div>
-            </div>
-
-            <!-- Auditor -->
-            <div>
-              <div class="flex items-center justify-between mb-1.25">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span class="size-2.5 rounded-full shrink-0 bg-[#2563eb]"></span>
-                  <span class="text-[13px] font-semibold text-[#111827]">Auditor</span>
-                </div>
-                <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">3</span>
-              </div>
-              <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
-                <div class="h-full bg-[#2563eb] rounded-full" style="width: 7%;"></div>
-              </div>
-              <div class="flex items-center justify-between text-[11px]">
-                <span class="text-[#9aa3bf]">3 aktif</span>
-                <span class="font-bold text-[#2563eb]">7%</span>
-              </div>
-            </div>
-
-            <!-- Manager -->
-            <div>
-              <div class="flex items-center justify-between mb-1.25">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span class="size-2.5 rounded-full shrink-0 bg-[#7c3aed]"></span>
-                  <span class="text-[13px] font-semibold text-[#111827]">Manager</span>
-                </div>
-                <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">6</span>
-              </div>
-              <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
-                <div class="h-full bg-[#7c3aed] rounded-full" style="width: 14%;"></div>
-              </div>
-              <div class="flex items-center justify-between text-[11px]">
-                <span class="text-[#9aa3bf]">6 aktif</span>
-                <span class="font-bold text-[#7c3aed]">14%</span>
-              </div>
-            </div>
-
-            <!-- Driver (col-span-2 on mobile/tablet) -->
-            <div class="sm:col-span-2">
-              <div class="flex items-center justify-between mb-1.25">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span class="size-2.5 rounded-full shrink-0 bg-[#0891b2]"></span>
-                  <span class="text-[13px] font-semibold text-[#111827]">Driver Operasional</span>
-                </div>
-                <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">25</span>
-              </div>
-              <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
-                <div class="h-full bg-[#0891b2] rounded-full" style="width: 59%;"></div>
-              </div>
-              <div class="flex items-center justify-between text-[11px]">
-                <span class="text-[#9aa3bf]">22 bertugas di lapangan</span>
-                <span class="font-bold text-[#0891b2]">59%</span>
-              </div>
-            </div>
-
           </div>
         </div>
-      </div>
+      </header>
 
-      <!-- ─── 3. ADMIN ACTIVITY LOG ─── -->
-      <div class="bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col">
-        <!-- Header -->
-        <div class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between">
+      <!-- Page Body -->
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+        <!-- Page Header -->
+        <div class="flex items-start justify-between mb-5.5">
           <div>
-            <h2 class="text-[14px] font-bold text-[#111827]">Log Aktivitas Pengguna</h2>
-            <p class="text-[12px] text-[#9aa3bf] mt-0.5">Log Aktivitas Pengguna · real-time</p>
-          </div>
-          <a href="#" class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline">
-            Lihat Semua <i data-lucide="chevron-right" class="size-3.5"></i>
-          </a>
-        </div>
-
-        <!-- Log Items -->
-        <div class="divide-y divide-[#e4e8f0]">
-          <!-- Item 1 -->
-          <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-            <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-            <div class="flex-1 min-w-0">
-              <p class="text-[12.5px] font-medium text-[#111827] leading-snug">
-                <strong>Budi Santoso</strong>
-              </p>
-              <p class="text-[12px] text-[#4b5675] mt-0.5">Menambahkan armada baru: Dump Truck Hino B 9123 KPA ke database sistem</p>
-              <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">14:22 WIB</p>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]">Admin</span>
-          </div>
-
-          <!-- Item 2 -->
-          <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-            <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-            <div class="flex-1 min-w-0">
-              <p class="text-[12.5px] font-medium text-[#111827] leading-snug">
-                <strong>Hendra Pratama</strong>
-              </p>
-              <p class="text-[12px] text-[#4b5675] mt-0.5">Menyetujui permohonan limit pengisian BBM untuk armada Scania DT-04 (150 Liter)</p>
-              <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">13:50 WIB</p>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]">Manager</span>
-          </div>
-
-          <!-- Item 3 -->
-          <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-            <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-            <div class="flex-1 min-w-0">
-              <p class="text-[12.5px] font-medium text-[#111827] leading-snug">
-                <strong>Siti Rahma</strong>
-              </p>
-              <p class="text-[12px] text-[#4b5675] mt-0.5">Membuka lembar investigasi baru: Deteksi potensi anomali konsumsi BBM rute Timur</p>
-              <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">12:15 WIB</p>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Auditor</span>
-          </div>
-
-          <!-- Item 4 -->
-          <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-            <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-            <div class="flex-1 min-w-0">
-              <p class="text-[12.5px] font-medium text-[#111827] leading-snug">
-                <strong>Bambang Wijaya</strong>
-              </p>
-              <p class="text-[12px] text-[#4b5675] mt-0.5">Mengunduh rekap Laporan Analisis Biaya Operasional periode bulanan</p>
-              <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">10:45 WIB</p>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fff7ed] text-[#92400e]">Executive</span>
-          </div>
-
-          <!-- Item 5 -->
-          <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-            <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-            <div class="flex-1 min-w-0">
-              <p class="text-[12.5px] font-medium text-[#111827] leading-snug">
-                <strong>Agus Kusuma</strong>
-              </p>
-              <p class="text-[12px] text-[#4b5675] mt-0.5">Melakukan check-in awal dan mulai sesi operasional rute Pit 1 - Jetty Tambang</p>
-              <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">09:30 WIB</p>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f0fdf4] text-[#16a34a]">Driver</span>
+            <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">
+              Ringkasan Dashboard
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1">
+              Gambaran umum metrik operasional dan aktivitas perusahaan
+            </p>
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0">
-          <i data-lucide="refresh-cw" class="size-3 text-[#9aa3bf]"></i>
-          <p class="text-[11.5px] text-[#9aa3bf]">
-            Diperbarui setiap <span class="font-semibold text-[#4b5675]">30 detik</span>
-          </p>
+        <!-- ─── 1. KPI CARDS (Admin) ─── -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-4"
+        >
+          <!-- Total User -->
+          <div
+            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
+          >
+            <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <p
+                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
+                >
+                  Total User
+                </p>
+                <p
+                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
+                >
+                  42
+                </p>
+              </div>
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]"
+              >
+                <i data-lucide="users" class="size-5"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
+              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">39</strong>
+              <span class="text-[#9aa3bf] truncate">pengguna aktif</span>
+            </div>
+          </div>
+
+          <!-- Total Armada -->
+          <div
+            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
+          >
+            <span class="absolute inset-x-0 top-0 h-1 bg-[#d97706]"></span>
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <p
+                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
+                >
+                  Total Armada
+                </p>
+                <p
+                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
+                >
+                  28
+                </p>
+              </div>
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fffbeb] text-[#d97706]"
+              >
+                <i data-lucide="truck" class="size-5"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
+              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">24</strong>
+              <span class="text-[#9aa3bf] truncate"
+                >unit terpasang GPS &amp; Sensor</span
+              >
+            </div>
+          </div>
+
+          <!-- Total Driver -->
+          <div
+            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
+          >
+            <span class="absolute inset-x-0 top-0 h-1 bg-[#7c3aed]"></span>
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <p
+                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
+                >
+                  Total Driver
+                </p>
+                <p
+                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
+                >
+                  35
+                </p>
+              </div>
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f5f3ff] text-[#7c3aed]"
+              >
+                <i data-lucide="user-circle" class="size-5"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
+              <span class="size-1.5 rounded-full bg-[#7c3aed] shrink-0"></span>
+              <strong class="font-semibold text-[#111827]">28</strong>
+              <span class="text-[#9aa3bf] truncate"
+                >driver memiliki SIM B2 Umum aktif</span
+              >
+            </div>
+          </div>
         </div>
-      </div>
 
-    </main>
-  </div>
+        <!-- ─── 2. ROLE DISTRIBUTION DONUT CHART ─── -->
+        <div
+          class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs mb-4"
+        >
+          <div class="mb-5">
+            <h2 class="text-[14px] font-bold text-[#111827]">
+              Distribusi Role Pengguna
+            </h2>
+            <p class="text-[12px] text-[#9aa3bf] mt-0.5">
+              Ringkasan jumlah pengguna untuk setiap role di perusahaan
+            </p>
+          </div>
 
-  <script>
-    lucide.createIcons();
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <!-- Donut Chart Container -->
+            <div
+              class="relative w-48 h-48 shrink-0 flex items-center justify-center"
+            >
+              <div id="role-donut-chart" class="w-full h-full"></div>
+              <!-- Center Label Overlay -->
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+              >
+                <span
+                  class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px]"
+                  >42</span
+                >
+                <span class="text-[11px] font-medium text-[#9aa3bf] mt-0.5"
+                  >Total User</span
+                >
+              </div>
+            </div>
 
-    // Sidebar Mobile Toggle
-    const sidebar = document.getElementById('sidebar');
-    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
-    const toggleBtn = document.getElementById('sidebar-toggle-btn');
-    const closeBtn = document.getElementById('sidebar-close-btn');
+            <!-- Slices Progress Breakdown List -->
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 w-full flex-1"
+            >
+              <!-- Admin -->
+              <div>
+                <div class="flex items-center justify-between mb-1.25">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="size-2.5 rounded-full shrink-0 bg-[#16a34a]"
+                    ></span>
+                    <span class="text-[13px] font-semibold text-[#111827]"
+                      >Admin</span
+                    >
+                  </div>
+                  <span
+                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
+                    >4</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
+                >
+                  <div
+                    class="h-full bg-[#16a34a] rounded-full"
+                    style="width: 10%"
+                  ></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-[#9aa3bf]">4 aktif</span>
+                  <span class="font-bold text-[#16a34a]">10%</span>
+                </div>
+              </div>
 
-    function openSidebar() {
-      sidebar.classList.remove('-translate-x-full');
-      sidebarBackdrop.classList.remove('hidden');
-    }
+              <!-- Executive -->
+              <div>
+                <div class="flex items-center justify-between mb-1.25">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="size-2.5 rounded-full shrink-0 bg-[#f97316]"
+                    ></span>
+                    <span class="text-[13px] font-semibold text-[#111827]"
+                      >Executive</span
+                    >
+                  </div>
+                  <span
+                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
+                    >4</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
+                >
+                  <div
+                    class="h-full bg-[#f97316] rounded-full"
+                    style="width: 10%"
+                  ></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-[#9aa3bf]">4 aktif</span>
+                  <span class="font-bold text-[#f97316]">10%</span>
+                </div>
+              </div>
 
-    function closeSidebar() {
-      sidebar.classList.add('-translate-x-full');
-      sidebarBackdrop.classList.add('hidden');
-    }
+              <!-- Auditor -->
+              <div>
+                <div class="flex items-center justify-between mb-1.25">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="size-2.5 rounded-full shrink-0 bg-[#2563eb]"
+                    ></span>
+                    <span class="text-[13px] font-semibold text-[#111827]"
+                      >Auditor</span
+                    >
+                  </div>
+                  <span
+                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
+                    >3</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
+                >
+                  <div
+                    class="h-full bg-[#2563eb] rounded-full"
+                    style="width: 7%"
+                  ></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-[#9aa3bf]">3 aktif</span>
+                  <span class="font-bold text-[#2563eb]">7%</span>
+                </div>
+              </div>
 
-    toggleBtn?.addEventListener('click', () => {
-      if (sidebar.classList.contains('-translate-x-full')) {
-        openSidebar();
-      } else {
-        closeSidebar();
+              <!-- Manager -->
+              <div>
+                <div class="flex items-center justify-between mb-1.25">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="size-2.5 rounded-full shrink-0 bg-[#7c3aed]"
+                    ></span>
+                    <span class="text-[13px] font-semibold text-[#111827]"
+                      >Manager</span
+                    >
+                  </div>
+                  <span
+                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
+                    >6</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
+                >
+                  <div
+                    class="h-full bg-[#7c3aed] rounded-full"
+                    style="width: 14%"
+                  ></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-[#9aa3bf]">6 aktif</span>
+                  <span class="font-bold text-[#7c3aed]">14%</span>
+                </div>
+              </div>
+
+              <!-- Driver (col-span-2 on mobile/tablet) -->
+              <div class="sm:col-span-2">
+                <div class="flex items-center justify-between mb-1.25">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="size-2.5 rounded-full shrink-0 bg-[#0891b2]"
+                    ></span>
+                    <span class="text-[13px] font-semibold text-[#111827]"
+                      >Driver Operasional</span
+                    >
+                  </div>
+                  <span
+                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
+                    >25</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
+                >
+                  <div
+                    class="h-full bg-[#0891b2] rounded-full"
+                    style="width: 59%"
+                  ></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-[#9aa3bf]">22 bertugas di lapangan</span>
+                  <span class="font-bold text-[#0891b2]">59%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── 3. ADMIN ACTIVITY LOG ─── -->
+        <div
+          class="bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col"
+        >
+          <!-- Header -->
+          <div
+            class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between"
+          >
+            <div>
+              <h2 class="text-[14px] font-bold text-[#111827]">
+                Log Aktivitas Pengguna
+              </h2>
+              <p class="text-[12px] text-[#9aa3bf] mt-0.5">
+                Log Aktivitas Pengguna · real-time
+              </p>
+            </div>
+            <a
+              href="#"
+              class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline"
+            >
+              Lihat Semua <i data-lucide="chevron-right" class="size-3.5"></i>
+            </a>
+          </div>
+
+          <!-- Log Items -->
+          <div class="divide-y divide-[#e4e8f0]">
+            <!-- Item 1 -->
+            <div
+              class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors"
+            >
+              <span
+                class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"
+              ></span>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="text-[12.5px] font-medium text-[#111827] leading-snug"
+                >
+                  <strong>Budi Santoso</strong>
+                </p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">
+                  Menambahkan armada baru: Dump Truck Hino B 9123 KPA ke
+                  database sistem
+                </p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">
+                  14:22 WIB
+                </p>
+              </div>
+              <span
+                class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]"
+                >Admin</span
+              >
+            </div>
+
+            <!-- Item 2 -->
+            <div
+              class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors"
+            >
+              <span
+                class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"
+              ></span>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="text-[12.5px] font-medium text-[#111827] leading-snug"
+                >
+                  <strong>Hendra Pratama</strong>
+                </p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">
+                  Menyetujui permohonan limit pengisian BBM untuk armada Scania
+                  DT-04 (150 Liter)
+                </p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">
+                  13:50 WIB
+                </p>
+              </div>
+              <span
+                class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]"
+                >Manager</span
+              >
+            </div>
+
+            <!-- Item 3 -->
+            <div
+              class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors"
+            >
+              <span
+                class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"
+              ></span>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="text-[12.5px] font-medium text-[#111827] leading-snug"
+                >
+                  <strong>Siti Rahma</strong>
+                </p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">
+                  Membuka lembar investigasi baru: Deteksi potensi anomali
+                  konsumsi BBM rute Timur
+                </p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">
+                  12:15 WIB
+                </p>
+              </div>
+              <span
+                class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]"
+                >Auditor</span
+              >
+            </div>
+
+            <!-- Item 4 -->
+            <div
+              class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors"
+            >
+              <span
+                class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"
+              ></span>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="text-[12.5px] font-medium text-[#111827] leading-snug"
+                >
+                  <strong>Bambang Wijaya</strong>
+                </p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">
+                  Mengunduh rekap Laporan Analisis Biaya Operasional periode
+                  bulanan
+                </p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">
+                  10:45 WIB
+                </p>
+              </div>
+              <span
+                class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fff7ed] text-[#92400e]"
+                >Executive</span
+              >
+            </div>
+
+            <!-- Item 5 -->
+            <div
+              class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors"
+            >
+              <span
+                class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"
+              ></span>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="text-[12.5px] font-medium text-[#111827] leading-snug"
+                >
+                  <strong>Agus Kusuma</strong>
+                </p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">
+                  Melakukan check-in awal dan mulai sesi operasional rute Pit 1
+                  - Jetty Tambang
+                </p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">
+                  09:30 WIB
+                </p>
+              </div>
+              <span
+                class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f0fdf4] text-[#16a34a]"
+                >Driver</span
+              >
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div
+            class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0"
+          >
+            <i data-lucide="refresh-cw" class="size-3 text-[#9aa3bf]"></i>
+            <p class="text-[11.5px] text-[#9aa3bf]">
+              Diperbarui setiap
+              <span class="font-semibold text-[#4b5675]">30 detik</span>
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      // Sidebar Mobile Toggle
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+      const toggleBtn = document.getElementById("sidebar-toggle-btn");
+      const closeBtn = document.getElementById("sidebar-close-btn");
+
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarBackdrop.classList.remove("hidden");
       }
-    });
 
-    closeBtn?.addEventListener('click', closeSidebar);
-    sidebarBackdrop?.addEventListener('click', closeSidebar);
-
-    // User Dropdown Toggle
-    const userMenuBtn = document.getElementById('user-menu-btn');
-    const userDropdown = document.getElementById('user-dropdown');
-
-    userMenuBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      userDropdown.classList.toggle('hidden');
-    });
-
-    document.addEventListener('click', () => {
-      userDropdown?.classList.add('hidden');
-    });
-
-    // Render Apex Donut Chart for User Roles
-    const donutOptions = {
-      series: [4, 4, 3, 6, 25],
-      labels: ['Admin', 'Executive', 'Auditor', 'Manager', 'Driver'],
-      colors: ['#16a34a', '#f97316', '#2563eb', '#7c3aed', '#0891b2'],
-      chart: {
-        type: 'donut',
-        height: 190,
-        sparkline: { enabled: true }
-      },
-      stroke: {
-        width: 3,
-        colors: ['#ffffff']
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '72%'
-          }
-        }
-      },
-      dataLabels: { enabled: false },
-      tooltip: {
-        theme: 'dark',
-        y: {
-          formatter: function (val) {
-            return val + " user (" + Math.round((val / 42) * 100) + "%)";
-          }
-        }
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarBackdrop.classList.add("hidden");
       }
-    };
 
-    const donutChart = new ApexCharts(document.querySelector("#role-donut-chart"), donutOptions);
-    donutChart.render();
-  </script>
-</body>
+      toggleBtn?.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+
+      closeBtn?.addEventListener("click", closeSidebar);
+      sidebarBackdrop?.addEventListener("click", closeSidebar);
+
+      // User Dropdown Toggle
+      const userMenuBtn = document.getElementById("user-menu-btn");
+      const userDropdown = document.getElementById("user-dropdown");
+
+      userMenuBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", () => {
+        userDropdown?.classList.add("hidden");
+      });
+
+      // Render Apex Donut Chart for User Roles
+      const donutOptions = {
+        series: [4, 4, 3, 6, 25],
+        labels: ["Admin", "Executive", "Auditor", "Manager", "Driver"],
+        colors: ["#16a34a", "#f97316", "#2563eb", "#7c3aed", "#0891b2"],
+        chart: {
+          type: "donut",
+          height: 190,
+          sparkline: { enabled: true },
+        },
+        stroke: {
+          width: 3,
+          colors: ["#ffffff"],
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: "72%",
+            },
+          },
+        },
+        dataLabels: { enabled: false },
+        tooltip: {
+          theme: "dark",
+          y: {
+            formatter: function (val) {
+              return val + " user (" + Math.round((val / 42) * 100) + "%)";
+            },
+          },
+        },
+      };
+
+      const donutChart = new ApexCharts(
+        document.querySelector("#role-donut-chart"),
+        donutOptions,
+      );
+      donutChart.render();
+    </script>
+  </body>
 </html>
