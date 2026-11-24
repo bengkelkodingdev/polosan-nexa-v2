@@ -378,7 +378,7 @@
           </button>
           <button type="button" data-drill="c-temuan" class="kpi">
             <div class="flex items-start justify-between">
-              <span class="kpi-label">Masalah Serius Belum Selesai</span>
+              <span class="kpi-label">Masalah Serius Terbuka</span>
               <span class="kpi-icon"><i data-lucide="shield-alert" class="size-4"></i></span>
             </div>
             <div class="kpi-value">2</div>
@@ -719,14 +719,14 @@
         ['c-dok-hampir', 'Dokumen hampir habis', '5', '≤ 60 hari', 'amber'],
         ['c-rawat-tempo', 'Perawatan jatuh tempo', '4', '≤ 14 hari / 500 km', 'amber'],
         ['c-rawat-telat', 'Perawatan terlambat', '1', 'Lewat jadwal', 'red'],
-        ['c-temuan', 'Masalah serius belum selesai', '2', 'Rusak berat, harus segera ditangani', 'red'],
+        ['c-temuan', 'Masalah serius', '2', 'Belum selesai', 'red'],
         ['c-insiden', 'Insiden 30 hari', '4', '3 ringan · 1 sedang', 'grey'],
         ['c-checklist', 'Kepatuhan checklist', '91%', 'Target ≥ 95%', 'amber'],
-        ['c-tutup', 'Lama penyelesaian masalah', '4,1 hari', 'Rata-rata, target ≤ 5 hari', 'green'],
+        ['c-tutup', 'Lama penyelesaian', '4,1 hari', 'Rata-rata · target ≤ 5 hari', 'green'],
       ];
       document.getElementById('compliance-grid').innerHTML = COMPLIANCE.map(([k, l, v, s, t]) => `
         <button type="button" data-drill="${k}" class="text-left border rounded-xl p-3.5 hover:border-[#FF8A0D]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D] ${TONE[t][0]}">
-          <span class="flex items-center gap-1.5 text-[11.5px] font-medium text-[#4b5675]"><span class="size-1.5 rounded-full ${TONE[t][2]}"></span>${l}</span>
+          <span class="flex items-center gap-1.5 text-[11.5px] font-medium text-[#4b5675] min-w-0" title="${l}"><span class="size-1.5 shrink-0 rounded-full ${TONE[t][2]}"></span><span class="truncate">${l}</span></span>
           <div class="text-[22px] font-semibold tracking-[-0.5px] mt-1 ${TONE[t][1]}">${v}</div>
           <span class="text-[11px] text-[#9aa3bf]">${s}</span>
         </button>`).join('');
