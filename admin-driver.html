@@ -226,7 +226,9 @@
               data-lucide="chevron-right"
               class="size-3 text-[#d0d6e8] stroke-[2.5]"
             ></i>
-            <span class="font-bold text-[#111827]">Data Driver</span>
+            <span id="crumb-driver" class="font-bold text-[#111827]">Data Driver</span>
+            <i id="crumb-sep" data-lucide="chevron-right" class="hidden size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+            <span id="crumb-id" class="hidden font-bold text-[#111827]"></span>
           </nav>
         </div>
 
@@ -332,7 +334,8 @@
       </header>
 
       <!-- Page Body -->
-      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+      <main id="main-scroll" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+        <div id="list-view">
         <!-- Page Header -->
         <div class="mb-5.5">
           <h1 class="text-2xl font-bold text-[#1a1f36]">Master Data Driver</h1>
@@ -1069,201 +1072,119 @@
             </div>
           </div>
         </div>
+        </div>
+
+        <!-- ─── DETAIL DRIVER (halaman) ─── -->
+        <div id="detail-view" class="hidden">
+          <div class="mb-5.5">
+            <h1 class="text-2xl font-bold text-[#1a1f36]">Detail Driver</h1>
+            <p class="text-sm text-[#52607a] mt-1">Informasi lengkap driver</p>
+          </div>
+
+          <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
+            <div class="flex flex-col md:flex-row">
+              <!-- Kiri: profil -->
+              <aside class="md:w-72 shrink-0 p-6 border-b md:border-b-0 md:border-r border-[#e4e8f0] flex flex-col items-center">
+                <img id="d-photo" alt="Foto driver" class="size-32 rounded-full object-cover border-4 border-white shadow-md ring-1 ring-[#e4e8f0]">
+                <h2 id="d-name" class="mt-4 text-lg font-bold text-[#111827] text-center">-</h2>
+                <p id="d-code" class="mt-1 font-mono text-[12px] text-[#9aa3bf]">DRV-000</p>
+                <span id="d-status" class="mt-3 inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1 rounded-full">-</span>
+                <div class="w-full mt-5 pt-5 border-t border-[#e4e8f0] space-y-3">
+                  <div class="rounded-lg border border-[#e4e8f0] p-3">
+                    <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Kendaraan</p>
+                    <p class="mt-1.5 flex items-center gap-2 text-[13px] font-semibold text-[#2563eb]"><i data-lucide="truck" class="size-4 shrink-0"></i><span id="d-vehicle" class="truncate">-</span></p>
+                  </div>
+                  <div class="rounded-lg border border-[#e4e8f0] p-3">
+                    <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Jumlah Insiden</p>
+                    <p id="d-incidents" class="mt-1.5 flex items-center gap-2 text-[14px] font-bold text-[#dc2626]"></p>
+                  </div>
+                </div>
+              </aside>
+
+              <!-- Kanan: detail -->
+              <div class="flex-1 min-w-0 divide-y divide-[#e4e8f0]">
+                <section class="p-6">
+                  <h3 class="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[#8a94b0]"><i data-lucide="id-card" class="size-4"></i>Informasi SIM</h3>
+                  <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">Nomor SIM</p><p id="d-lic-num" class="mt-1 font-mono text-[15px] font-semibold text-[#111827]">-</p></div>
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">Tipe SIM</p><p id="d-license" class="mt-1 text-[15px] font-semibold text-[#111827]">-</p></div>
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">Tanggal Bergabung</p><p id="d-join" class="mt-1 text-[15px] font-semibold text-[#111827]">-</p></div>
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">Tanggal Kedaluwarsa</p><p id="d-exp" class="mt-1 text-[15px] font-semibold text-[#111827]">-</p></div>
+                  </div>
+                </section>
+
+                <section class="p-6">
+                  <h3 class="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[#8a94b0]"><i data-lucide="phone" class="size-4"></i>Informasi Kontak</h3>
+                  <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                    <div class="flex items-start gap-3"><span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f6fb] text-[#52607a]"><i data-lucide="phone" class="size-4"></i></span><div class="min-w-0"><p class="text-[12px] text-[#9aa3bf]">Nomor Telepon</p><p id="d-phone" class="text-[15px] font-semibold text-[#111827]">-</p></div></div>
+                    <div class="flex items-start gap-3"><span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f6fb] text-[#52607a]"><i data-lucide="mail" class="size-4"></i></span><div class="min-w-0"><p class="text-[12px] text-[#9aa3bf]">Email</p><p id="d-email" class="text-[15px] font-semibold text-[#111827] truncate">-</p></div></div>
+                    <div class="sm:col-span-2 flex items-start gap-3"><span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f6fb] text-[#52607a]"><i data-lucide="map-pin" class="size-4"></i></span><div class="min-w-0"><p class="text-[12px] text-[#9aa3bf]">Alamat</p><p id="d-address" class="text-[15px] font-semibold text-[#111827]">-</p></div></div>
+                  </div>
+                </section>
+
+                <section class="p-6">
+                  <h3 class="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[#8a94b0]"><i data-lucide="bar-chart-3" class="size-4"></i>Performa &amp; Keamanan</h3>
+                  <p class="mt-3 text-[13px] text-[#9aa3bf]">Belum ada data performa untuk driver ini.</p>
+                </section>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 px-6 py-4 border-t border-[#e4e8f0]">
+              <button onclick="closeDetailModal()" class="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-lg text-xs font-semibold text-[#52607a] hover:bg-[#f5f6fa]"><i data-lucide="arrow-left" class="size-3.5"></i>Kembali</button>
+              <div class="flex items-center gap-2">
+                <button onclick="editFromDetail()" class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-[#e4e8f0] bg-white text-xs font-semibold text-[#374151] hover:bg-[#f5f6fa]"><i data-lucide="pencil" class="size-3.5"></i>Edit</button>
+                <button onclick="openDeleteModal()" class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-[#dc2626] hover:bg-[#b91c1c] text-xs font-semibold text-white"><i data-lucide="trash-2" class="size-3.5"></i>Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
 
     <!-- ─── MODAL: TAMBAH / EDIT DRIVER ─── -->
-    <div
-      id="form-modal"
-      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
-    >
-      <div
-        class="fixed inset-0 bg-black/50 backdrop-blur-2xs"
-        onclick="closeFormModal()"
-      ></div>
-      <div
-        class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 animate-fade-in"
-      >
-        <div
-          class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4"
-        >
-          <h3 id="modal-title" class="text-base font-bold text-[#111827]">
-            Tambah Driver Baru
-          </h3>
-          <button
-            onclick="closeFormModal()"
-            class="text-gray-400 hover:text-gray-600 p-1"
-          >
-            <i data-lucide="x" class="size-5"></i>
-          </button>
+    <div id="form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeFormModal()"></div>
+      <div class="relative w-full max-w-xl max-h-[92vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] z-10 animate-fade-in overflow-hidden">
+        <div class="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#e4e8f0] shrink-0">
+          <div>
+            <h3 id="modal-title" class="text-lg font-bold text-[#111827]">Tambah Driver</h3>
+            <p id="modal-sub" class="text-[13px] text-[#9aa3bf] mt-1">Tambah driver baru ke sistem</p>
+          </div>
+          <button onclick="closeFormModal()" class="text-[#52607a] hover:text-[#111827] p-1"><i data-lucide="x" class="size-5"></i></button>
         </div>
-        <form onsubmit="handleFormSubmit(event)">
-          <div class="space-y-3.5">
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5"
-                >Nama Lengkap *</label
-              >
-              <input
-                type="text"
-                id="input-name"
-                required
-                placeholder="Nama pengemudi"
-                class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
-              />
+        <form onsubmit="handleFormSubmit(event)" class="flex flex-col min-h-0 flex-1">
+          <div class="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+            <div class="flex justify-center">
+              <button type="button" id="avatar-box" onclick="pickPhoto()" title="Klik untuk unggah foto"
+                class="relative size-24 rounded-full border-2 border-dashed border-[#c9d0e4] bg-[#f8f9fc] hover:border-[#2563eb] text-[#9aa3bf] flex flex-col items-center justify-center text-[12px] font-medium overflow-hidden transition-colors">
+                <i data-lucide="camera" class="size-5 mb-0.5"></i><span>Upload</span>
+              </button>
             </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
-                  >Tipe SIM *</label
-                >
-                <select
-                  id="input-license"
-                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"
-                >
-                  <option value="SIM B2">SIM B2</option>
-                  <option value="SIM B1">SIM B1</option>
-                  <option value="SIM A">SIM A</option>
-                  <option value="SIM C">SIM C</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
-                  >No. SIM *</label
-                >
-                <input
-                  type="text"
-                  id="input-lic-num"
-                  required
-                  placeholder="Nomor lisensi"
-                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
-                />
-              </div>
+            <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Nama Lengkap<span class="text-red-500 ml-1">*</span></label><input type="text" id="input-name" placeholder="Masukkan nama lengkap" required class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Username<span class="text-red-500 ml-1">*</span></label><input type="text" id="input-username" placeholder="e.g. john.doe" required class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Password<span id="pwd-req" class="text-red-500 ml-1">*</span></label><input type="password" id="input-password" placeholder="Min. 8 characters" minlength="8" class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
             </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
-                  >Nomor Telepon / HP *</label
-                >
-                <input
-                  type="tel"
-                  id="input-phone"
-                  required
-                  placeholder="08xxxxxxxxxx"
-                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
-                />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-[#374151] mb-1.5"
-                  >Status Akun</label
-                >
-                <select
-                  id="input-status"
-                  class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"
-                >
-                  <option value="Active">Active</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Suspended">Suspended</option>
-                  <option value="On Leave">On Leave</option>
-                </select>
-              </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Nomor SIM<span class="text-red-500 ml-1">*</span></label><input type="text" id="input-lic-num" placeholder="Format: XXXX-XXXX-XXXXXX" required class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Tipe SIM<span class="text-red-500 ml-1">*</span></label><select id="input-license" class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"><option value="" disabled selected>Pilih tipe SIM</option><option value="SIM A">SIM A</option><option value="SIM B1">SIM B1</option><option value="SIM B2">SIM B2</option><option value="SIM C">SIM C</option></select></div>
+            </div>
+            <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Masa Berlaku SIM<span class="text-red-500 ml-1">*</span></label><input type="date" id="input-sim-exp" placeholder="Pilih tanggal" required class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Nomor Telepon<span class="text-red-500 ml-1">*</span></label><input type="tel" id="input-phone" placeholder="Format 08XX or +628XX" required class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Email</label><input type="email" id="input-email" placeholder="driver@example.com"  class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+            </div>
+            <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Alamat</label><textarea id="input-address" rows="3" placeholder="Masukkan alamat lengkap" class="w-full px-3.5 py-3 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb] resize-y"></textarea></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Tanggal Bergabung<span class="text-red-500 ml-1">*</span></label><input type="date" id="input-join" placeholder="Pilih tanggal" required class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"></div>
+              <div><label class="block text-[13px] font-semibold text-[#4b5675] mb-2">Status<span class="text-red-500 ml-1">*</span></label><select id="input-status" class="w-full h-11 px-3.5 text-[14px] border border-[#e4e8f0] rounded-lg text-[#111827] placeholder-[#a8b0c6] bg-white focus:outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]"><option value="Active">Active</option><option value="Under Review">Under Review</option><option value="Suspended">Suspended</option><option value="On Leave">On Leave</option></select></div>
             </div>
           </div>
-
-          <div
-            class="mt-6 flex justify-end gap-2.5 pt-4 border-t border-gray-100"
-          >
-            <button
-              type="button"
-              onclick="closeFormModal()"
-              class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg shadow-xs"
-            >
-              Simpan Data
-            </button>
+          <div class="grid grid-cols-2 gap-4 px-6 py-4 border-t border-[#e4e8f0] shrink-0">
+            <button type="button" onclick="closeFormModal()" class="h-11 rounded-lg bg-[#f1f3f9] hover:bg-[#e6e9f2] text-[14px] font-semibold text-[#52607a] transition-colors">Cancel</button>
+            <button type="submit" class="h-11 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-[14px] font-semibold text-white transition-colors">Save Driver</button>
           </div>
         </form>
-      </div>
-    </div>
-
-    <!-- ─── MODAL: DETAIL DRIVER ─── -->
-    <div
-      id="detail-modal"
-      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
-    >
-      <div
-        class="fixed inset-0 bg-black/50 backdrop-blur-2xs"
-        onclick="closeDetailModal()"
-      ></div>
-      <div
-        class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 animate-fade-in"
-      >
-        <div
-          class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4"
-        >
-          <div>
-            <h3 class="text-base font-bold text-[#111827]" id="detail-name">
-              Supardi Ardiansyah
-            </h3>
-            <p class="text-xs text-[#9aa3bf]">
-              Profil &amp; Sertifikasi Pengemudi
-            </p>
-          </div>
-          <button
-            onclick="closeDetailModal()"
-            class="text-gray-400 hover:text-gray-600 p-1"
-          >
-            <i data-lucide="x" class="size-5"></i>
-          </button>
-        </div>
-
-        <div class="space-y-3 text-xs">
-          <div class="flex justify-between py-1.5 border-b border-gray-50">
-            <span class="text-gray-400">Tipe Lisensi:</span>
-            <span class="font-bold text-[#111827]" id="detail-license"
-              >SIM B2</span
-            >
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-gray-50">
-            <span class="text-gray-400">Nomor SIM:</span>
-            <span class="font-mono font-bold text-[#111827]" id="detail-lic-num"
-              >SIM-B2-990123</span
-            >
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-gray-50">
-            <span class="text-gray-400">Kontak HP:</span>
-            <span class="font-bold text-[#111827]" id="detail-phone"
-              >081122334455</span
-            >
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-gray-50">
-            <span class="text-gray-400">Tanggal Bergabung:</span>
-            <span class="font-bold text-[#111827]" id="detail-join"
-              >12 Jan 2022</span
-            >
-          </div>
-          <div class="flex justify-between py-1.5">
-            <span class="text-gray-400">Status Akun:</span>
-            <span class="font-bold text-[#16a34a]" id="detail-status"
-              >Active</span
-            >
-          </div>
-        </div>
-
-        <div class="mt-6 flex justify-end pt-4 border-t border-gray-100">
-          <button
-            onclick="closeDetailModal()"
-            class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] rounded-lg"
-          >
-            Tutup
-          </button>
-        </div>
       </div>
     </div>
 
@@ -1382,21 +1303,82 @@
       const inputPhone = document.getElementById("input-phone");
       const inputStatus = document.getElementById("input-status");
 
+      // ---- Data tambahan driver (contoh) ----
+      const DRIVERS = {
+        "Supardi Ardiansyah": { id: "DRV-001", user: "supardi", email: "supardi.a@nexa.test", addr: "Jl. Pandanaran No. 12, Semarang Tengah, Kota Semarang, Jawa Tengah 50134", exp: "2027-03-12", vehicle: "B 1234 XY - Bus Medium", inc: 0 },
+        "Budi Setiadi": { id: "DRV-002", user: "budi.s", email: "budi.setiadi@nexa.test", addr: "Jl. Gajah Raya No. 45, Gayamsari, Kota Semarang, Jawa Tengah 50166", exp: "2026-09-04", vehicle: "B 5678 CD - Hiace Commuter", inc: 1 },
+        "Ahmad Fauzi": { id: "DRV-003", user: "ahmad.f", email: "ahmad.fauzi@nexa.test", addr: "Jl. Imam Bonjol No. 207, Pendrikan Kidul, Kec. Semarang Tengah, Kota Semarang, Jawa Tengah 50131", exp: "2027-01-20", vehicle: "-", inc: 0 },
+        "Dedi Wahyu": { id: "DRV-004", user: "dedi.w", email: "dedi.wahyu@nexa.test", addr: "Jl. Setiabudi No. 88, Banyumanik, Kota Semarang, Jawa Tengah 50263", exp: "2026-03-14", vehicle: "D 3456 GH - Bus Besar", inc: 3 },
+        "Gita Rahayu": { id: "DRV-005", user: "gita.r", email: "gita.rahayu@nexa.test", addr: "Jl. Pemuda No. 3, Semarang Tengah, Kota Semarang, Jawa Tengah 50139", exp: "2028-06-30", vehicle: "B 9012 EF - Innova Dinas", inc: 0 },
+      };
+      const MONTHS = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+      const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${+d} ${MONTHS[+m - 1]} ${y}`; };
+      const MON_IDX = { Jan: "01", Feb: "02", Mar: "03", Apr: "04", Mei: "05", Jun: "06", Jul: "07", Agu: "08", Sep: "09", Okt: "10", Nov: "11", Des: "12" };
+      const joinToIso = (t) => { const m = (t || "").match(/(\d+)\s+(\w+)\s+(\d{4})/); return m && MON_IDX[m[2]] ? `${m[3]}-${MON_IDX[m[2]]}-${m[1].padStart(2, "0")}` : ""; };
+
+      // ---- Foto dummy ----
+      const AV_BG = ["#2563eb", "#7c3aed", "#0891b2", "#16a34a", "#f97316", "#db2777"];
+      function dummyPhoto(seed) {
+        let h = 0; for (const ch of seed || "x") h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+        const bg = AV_BG[h % AV_BG.length];
+        const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="' + bg + '"/><circle cx="50" cy="38" r="17" fill="#fff" opacity=".92"/><path d="M16 100c0-22 15-36 34-36s34 14 34 36z" fill="#fff" opacity=".92"/></svg>';
+        return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+      }
+      let photoN = 0;
+      const avatarBox = document.getElementById("avatar-box");
+      function setAvatar(src) {
+        avatarBox.innerHTML = `<img src="${src}" alt="Foto" class="w-full h-full object-cover">`;
+        avatarBox.classList.remove("border-dashed", "border-[#c9d0e4]");
+        avatarBox.classList.add("border-solid", "border-emerald-400");
+      }
+      function resetAvatar() {
+        avatarBox.innerHTML = '<i data-lucide="camera" class="size-5 mb-0.5"></i><span>Upload</span>';
+        avatarBox.classList.add("border-dashed", "border-[#c9d0e4]");
+        avatarBox.classList.remove("border-solid", "border-emerald-400");
+        lucide.createIcons();
+      }
+      function pickPhoto() { setAvatar(dummyPhoto("foto-" + photoN++)); }
+
+      // ---- Form Tambah / Edit ----
+      const inputUser = document.getElementById("input-username");
+      const inputPwd = document.getElementById("input-password");
+      const inputExp = document.getElementById("input-sim-exp");
+      const inputEmail = document.getElementById("input-email");
+      const inputAddr = document.getElementById("input-address");
+      const inputJoin = document.getElementById("input-join");
+      const modalSub = document.getElementById("modal-sub");
+      const pwdReq = document.getElementById("pwd-req");
+
       function openAddModal() {
-        modalTitle.innerText = "Tambah Driver Baru";
-        inputName.value = "";
-        inputLicNum.value = "";
-        inputPhone.value = "";
+        modalTitle.innerText = "Tambah Driver";
+        modalSub.innerText = "Tambah driver baru ke sistem";
+        [inputName, inputUser, inputPwd, inputLicNum, inputExp, inputPhone, inputEmail, inputAddr, inputJoin].forEach((i) => (i.value = ""));
+        inputLicense.selectedIndex = 0;
+        inputStatus.value = "Active";
+        inputPwd.required = true;
+        pwdReq.style.display = "inline";
+        resetAvatar();
         formModal.classList.remove("hidden");
       }
 
-      function openEditModal(name, lic, licNum, phone, status) {
-        modalTitle.innerText = "Edit Data Driver";
+      function openEditModal(name, lic, licNum, phone, status, join) {
+        const x = DRIVERS[name] || {};
+        modalTitle.innerText = "Edit Driver";
+        modalSub.innerText = "Perbarui data driver";
         inputName.value = name;
+        inputUser.value = x.user || "";
+        inputPwd.value = "";
+        inputPwd.required = false;
+        pwdReq.style.display = "none";
         inputLicense.value = lic;
         inputLicNum.value = licNum;
+        inputExp.value = x.exp || "";
         inputPhone.value = phone;
+        inputEmail.value = x.email || "";
+        inputAddr.value = x.addr || "";
+        inputJoin.value = joinToIso(join);
         inputStatus.value = status;
+        setAvatar(dummyPhoto(name));
         formModal.classList.remove("hidden");
       }
 
@@ -1410,19 +1392,74 @@
         closeFormModal();
       }
 
-      // Detail Modal
-      const detailModal = document.getElementById("detail-modal");
+      // ---- Detail (halaman) ----
+      const listView = document.getElementById("list-view");
+      const detailView = document.getElementById("detail-view");
+      const crumbDriver = document.getElementById("crumb-driver");
+      const STATUS_CHIP = {
+        Active: ["bg-[#f0fdf4] text-[#16a34a]", "#16a34a"],
+        "Under Review": ["bg-[#fffbeb] text-[#d97706]", "#d97706"],
+        Suspended: ["bg-[#fef2f2] text-[#dc2626]", "#dc2626"],
+        "On Leave": ["bg-[#f1f5f9] text-[#52607a]", "#52607a"],
+      };
+      let current = null;
+
       function openDetailModal(name, lic, licNum, phone, status, join) {
-        document.getElementById("detail-name").innerText = name;
-        document.getElementById("detail-license").innerText = lic;
-        document.getElementById("detail-lic-num").innerText = licNum;
-        document.getElementById("detail-phone").innerText = phone;
-        document.getElementById("detail-status").innerText = status;
-        document.getElementById("detail-join").innerText = join;
-        detailModal.classList.remove("hidden");
+        const x = DRIVERS[name] || { id: "DRV-000", email: "-", addr: "-", exp: "", vehicle: "-", inc: 0 };
+        current = { name, lic, licNum, phone, status, join };
+        const set = (id, v) => (document.getElementById(id).innerText = v);
+        set("d-name", name);
+        set("d-code", x.id);
+        set("d-license", lic);
+        set("d-lic-num", licNum);
+        set("d-phone", phone);
+        set("d-email", x.email);
+        set("d-address", x.addr);
+        set("d-join", join);
+        set("d-vehicle", x.vehicle);
+        document.getElementById("d-photo").src = dummyPhoto(name);
+
+        const expEl = document.getElementById("d-exp");
+        if (x.exp) {
+          expEl.innerText = fmtDate(x.exp);
+          const expired = new Date(x.exp) < new Date();
+          expEl.className = "mt-1 text-[15px] font-semibold " + (expired ? "text-[#dc2626]" : "text-[#111827]");
+          expEl.title = expired ? "SIM sudah kedaluwarsa" : "";
+        } else expEl.innerText = "-";
+
+        const chip = STATUS_CHIP[status] || STATUS_CHIP["On Leave"];
+        const st = document.getElementById("d-status");
+        st.className = "mt-3 inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1 rounded-full " + chip[0];
+        st.innerHTML = `<span class="size-1.5 rounded-full" style="background:${chip[1]}"></span>${status}`;
+
+        const inc = document.getElementById("d-incidents");
+        inc.className = "mt-1.5 flex items-center gap-2 text-[14px] font-bold " + (x.inc ? "text-[#dc2626]" : "text-[#16a34a]");
+        inc.innerHTML = `<i data-lucide="${x.inc ? "alert-triangle" : "shield-check"}" class="size-4"></i>${x.inc} incidents`;
+
+        listView.classList.add("hidden");
+        detailView.classList.remove("hidden");
+        crumbDriver.className = "text-[#9aa3bf] hover:text-[#2563eb] cursor-pointer transition-colors";
+        crumbDriver.onclick = closeDetailModal;
+        document.getElementById("crumb-sep").classList.remove("hidden");
+        const cid = document.getElementById("crumb-id");
+        cid.innerText = x.id;
+        cid.classList.remove("hidden");
+        document.getElementById("main-scroll").scrollTo(0, 0);
+        window.scrollTo(0, 0);
+        lucide.createIcons();
       }
       function closeDetailModal() {
-        detailModal.classList.add("hidden");
+        detailView.classList.add("hidden");
+        listView.classList.remove("hidden");
+        crumbDriver.className = "font-bold text-[#111827]";
+        crumbDriver.onclick = null;
+        document.getElementById("crumb-sep").classList.add("hidden");
+        document.getElementById("crumb-id").classList.add("hidden");
+      }
+      function editFromDetail() {
+        if (!current) return;
+        const c = current;
+        openEditModal(c.name, c.lic, c.licNum, c.phone, c.status, c.join);
       }
 
       // Delete Modal
