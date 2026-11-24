@@ -400,9 +400,10 @@
           </div>
         </div>
 
-        <!-- ─── 2. ROLE DISTRIBUTION DONUT CHART ─── -->
+        <!-- ─── 2. ROLE DISTRIBUTION + MODUL OPERASIONAL ─── -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
         <div
-          class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs mb-4"
+          class="xl:col-span-2 bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs"
         >
           <div class="mb-5">
             <h2 class="text-[14px] font-bold text-[#111827]">
@@ -589,6 +590,33 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs flex flex-col">
+          <div class="mb-4">
+            <h2 class="text-[14px] font-bold text-[#111827]">Modul Operasional</h2>
+            <p class="text-[12px] text-[#9aa3bf] mt-0.5">Ringkasan fitur baru</p>
+          </div>
+          <div class="flex-1 flex flex-col divide-y divide-[#e4e8f0]">
+            <a href="admin-work-units.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#ecfeff"><i data-lucide="building-2" class="size-4" style="color:#0891b2"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Unit Kerja</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">5 unit · 5 PIC</span></span>
+              
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+            <a href="admin-maintenance.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#fffbeb"><i data-lucide="wrench" class="size-4" style="color:#d97706"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Perawatan</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">1 menunggu verifikasi</span></span>
+              <span class="rounded-full bg-[#fffbeb] px-2 py-0.5 text-[10.5px] font-bold text-[#d97706]">1</span>
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+            <a href="admin-templates.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#f5f3ff"><i data-lucide="clipboard-check" class="size-4" style="color:#7c3aed"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Template Checklist</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">15 item kritis · 3 minor</span></span>
+              
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+          </div>
+        </div>
         </div>
 
         <!-- ─── 3. ADMIN ACTIVITY LOG ─── -->
