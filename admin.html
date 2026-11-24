@@ -16,7 +16,7 @@
     <script>
       tailwind.config = {
         theme: {
-          extend: {
+          extend: { spacing: { '1.25': '0.3125rem', '1.75': '0.4375rem', '3.25': '0.8125rem', '4.5': '1.125rem', '5.5': '1.375rem', '7.5': '1.875rem', '8.5': '2.125rem' },
             fontFamily: {
               sans: ['"Plus Jakarta Sans"', "sans-serif"],
               mono: ['"JetBrains Mono"', "monospace"],
@@ -146,6 +146,22 @@
               <i data-lucide="cpu" class="size-4 shrink-0"></i>
               <span>Data Device</span>
             </a>
+            <a href="admin-work-units.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="building-2" class="size-4 shrink-0"></i>
+            <span>Unit Kerja</span>
+          </a>
+            <a href="admin-maintenance.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="wrench" class="size-4 shrink-0"></i>
+            <span>Perawatan</span>
+          </a>
+            <a href="admin-templates.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="clipboard-check" class="size-4 shrink-0"></i>
+            <span>Template Checklist</span>
+          </a>
+            <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="smartphone" class="size-4 shrink-0"></i>
+            <span>Simulasi Driver</span>
+          </a>
             <a
               href="admin-users.html"
               class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
@@ -252,7 +268,7 @@
               class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors"
             >
               <div
-                class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white"
+                class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white"
               >
                 AD
               </div>
@@ -343,110 +359,51 @@
         </div>
 
         <!-- ─── 1. KPI CARDS (Admin) ─── -->
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-4"
-        >
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <!-- Total User -->
-          <div
-            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
-          >
-            <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <p
-                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
-                >
-                  Total User
-                </p>
-                <p
-                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
-                >
-                  42
-                </p>
-              </div>
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]"
-              >
-                <i data-lucide="users" class="size-5"></i>
-              </div>
+          <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">User Aktif</p>
+              <i data-lucide="users" class="size-4 text-[#2563eb]"></i>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">39</strong>
-              <span class="text-[#9aa3bf] truncate">pengguna aktif</span>
+            <div class="mt-3 flex items-end gap-2">
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">39</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">pengguna</p>
             </div>
+            <p class="mt-3 text-xs text-[#52607a] truncate">dari <b class="text-[#111827]">42</b> total user</p>
           </div>
 
           <!-- Total Armada -->
-          <div
-            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
-          >
-            <span class="absolute inset-x-0 top-0 h-1 bg-[#d97706]"></span>
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <p
-                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
-                >
-                  Total Armada
-                </p>
-                <p
-                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
-                >
-                  28
-                </p>
-              </div>
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fffbeb] text-[#d97706]"
-              >
-                <i data-lucide="truck" class="size-5"></i>
-              </div>
+          <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Armada Terpasang</p>
+              <i data-lucide="truck" class="size-4 text-[#d97706]"></i>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">24</strong>
-              <span class="text-[#9aa3bf] truncate"
-                >unit terpasang GPS &amp; Sensor</span
-              >
+            <div class="mt-3 flex items-end gap-2">
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">24</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">unit</p>
             </div>
+            <p class="mt-3 text-xs text-[#52607a] truncate">GPS &amp; Sensor, dari <b class="text-[#111827]">28</b> total armada</p>
           </div>
 
           <!-- Total Driver -->
-          <div
-            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
-          >
-            <span class="absolute inset-x-0 top-0 h-1 bg-[#7c3aed]"></span>
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <p
-                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
-                >
-                  Total Driver
-                </p>
-                <p
-                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
-                >
-                  35
-                </p>
-              </div>
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f5f3ff] text-[#7c3aed]"
-              >
-                <i data-lucide="user-circle" class="size-5"></i>
-              </div>
+          <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Driver SIM Aktif</p>
+              <i data-lucide="user-circle" class="size-4 text-[#7c3aed]"></i>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-              <span class="size-1.5 rounded-full bg-[#7c3aed] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">28</strong>
-              <span class="text-[#9aa3bf] truncate"
-                >driver memiliki SIM B2 Umum aktif</span
-              >
+            <div class="mt-3 flex items-end gap-2">
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">28</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">driver</p>
             </div>
+            <p class="mt-3 text-xs text-[#52607a] truncate">SIM B2 Umum, dari <b class="text-[#111827]">35</b> total driver</p>
           </div>
         </div>
 
-        <!-- ─── 2. ROLE DISTRIBUTION DONUT CHART ─── -->
+        <!-- ─── 2. ROLE DISTRIBUTION + MODUL OPERASIONAL ─── -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
         <div
-          class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs mb-4"
+          class="xl:col-span-2 bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs"
         >
           <div class="mb-5">
             <h2 class="text-[14px] font-bold text-[#111827]">
@@ -468,10 +425,11 @@
                 class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
               >
                 <span
-                  class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px]"
+                  id="donut-center-value"
+                  class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px] transition-colors duration-200"
                   >42</span
                 >
-                <span class="text-[11px] font-medium text-[#9aa3bf] mt-0.5"
+                <span id="donut-center-label" class="text-[11px] font-medium text-[#9aa3bf] mt-0.5 max-w-[5.5rem] text-center leading-tight"
                   >Total User</span
                 >
               </div>
@@ -482,7 +440,7 @@
               class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 w-full flex-1"
             >
               <!-- Admin -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="0">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -512,7 +470,7 @@
               </div>
 
               <!-- Executive -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="1">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -542,7 +500,7 @@
               </div>
 
               <!-- Auditor -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="2">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -572,7 +530,7 @@
               </div>
 
               <!-- Manager -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="3">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -602,7 +560,7 @@
               </div>
 
               <!-- Driver (col-span-2 on mobile/tablet) -->
-              <div class="sm:col-span-2">
+              <div class="role-item cursor-default rounded-lg transition-all duration-200 sm:col-span-2" data-idx="4">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -632,6 +590,33 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs flex flex-col">
+          <div class="mb-4">
+            <h2 class="text-[14px] font-bold text-[#111827]">Modul Operasional</h2>
+            <p class="text-[12px] text-[#9aa3bf] mt-0.5">Ringkasan fitur baru</p>
+          </div>
+          <div class="flex-1 flex flex-col divide-y divide-[#e4e8f0]">
+            <a href="admin-work-units.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#ecfeff"><i data-lucide="building-2" class="size-4" style="color:#0891b2"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Unit Kerja</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">5 unit · 5 PIC</span></span>
+              
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+            <a href="admin-maintenance.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#fffbeb"><i data-lucide="wrench" class="size-4" style="color:#d97706"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Perawatan</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">1 menunggu verifikasi</span></span>
+              <span class="rounded-full bg-[#fffbeb] px-2 py-0.5 text-[10.5px] font-bold text-[#d97706]">1</span>
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+            <a href="admin-templates.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#f5f3ff"><i data-lucide="clipboard-check" class="size-4" style="color:#7c3aed"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Template Checklist</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">15 item kritis · 3 minor</span></span>
+              
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+          </div>
+        </div>
         </div>
 
         <!-- ─── 3. ADMIN ACTIVITY LOG ─── -->
@@ -862,6 +847,21 @@
           type: "donut",
           height: 190,
           sparkline: { enabled: true },
+          animations: {
+            enabled: true,
+            easing: "easeinout",
+            speed: 700,
+            animateGradually: { enabled: true, delay: 120 },
+            dynamicAnimation: { enabled: true, speed: 250 },
+          },
+          events: {
+            dataPointMouseEnter: (e, ctx, cfg) => focusRole(cfg.dataPointIndex),
+            dataPointMouseLeave: () => resetRole(),
+          },
+        },
+        states: {
+          hover: { filter: { type: "none" } },
+          active: { filter: { type: "none" } },
         },
         stroke: {
           width: 3,
@@ -884,6 +884,54 @@
           },
         },
       };
+
+      // Hover donut <-> daftar role
+      const ROLES = [
+        { n: "Admin", v: 4, c: "#16a34a" },
+        { n: "Executive", v: 4, c: "#f97316" },
+        { n: "Auditor", v: 3, c: "#2563eb" },
+        { n: "Manager", v: 6, c: "#7c3aed" },
+        { n: "Driver Operasional", v: 25, c: "#0891b2" },
+      ];
+      const cVal = document.getElementById("donut-center-value");
+      const cLbl = document.getElementById("donut-center-label");
+      const roleItems = document.querySelectorAll(".role-item");
+      const slices = () => document.querySelectorAll("#role-donut-chart .apexcharts-pie-area");
+      function focusRole(i) {
+        const r = ROLES[i];
+        if (!r) return;
+        cVal.textContent = r.v;
+        cVal.style.color = r.c;
+        cLbl.textContent = r.n;
+        slices().forEach((el, k) => {
+          el.style.transition = "opacity .2s, transform .25s";
+          el.style.opacity = k === i ? "1" : "0.3";
+          el.style.transformOrigin = "50% 50%";
+          el.style.transformBox = "view-box";
+          el.style.transform = k === i ? "scale(1.06)" : "scale(1)";
+        });
+        roleItems.forEach((el, k) => {
+          el.style.opacity = k === i ? "1" : "0.4";
+          el.style.transform = k === i ? "translateX(3px)" : "none";
+        });
+      }
+      function resetRole() {
+        cVal.textContent = "42";
+        cVal.style.color = "";
+        cLbl.textContent = "Total User";
+        slices().forEach((el) => {
+          el.style.opacity = "1";
+          el.style.transform = "scale(1)";
+        });
+        roleItems.forEach((el) => {
+          el.style.opacity = "1";
+          el.style.transform = "none";
+        });
+      }
+      roleItems.forEach((el) => {
+        el.addEventListener("mouseenter", () => focusRole(+el.dataset.idx));
+        el.addEventListener("mouseleave", resetRole);
+      });
 
       const donutChart = new ApexCharts(
         document.querySelector("#role-donut-chart"),

@@ -12,7 +12,7 @@
   <script>
     tailwind.config = {
       theme: {
-        extend: {
+        extend: { spacing: { '1.25': '0.3125rem', '1.75': '0.4375rem', '3.25': '0.8125rem', '4.5': '1.125rem', '5.5': '1.375rem', '7.5': '1.875rem', '8.5': '2.125rem' },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
@@ -82,6 +82,22 @@
             <i data-lucide="cpu" class="size-4 shrink-0"></i>
             <span>Data Device</span>
           </a>
+          <a href="admin-work-units.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="building-2" class="size-4 shrink-0"></i>
+            <span>Unit Kerja</span>
+          </a>
+          <a href="admin-maintenance.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="wrench" class="size-4 shrink-0"></i>
+            <span>Perawatan</span>
+          </a>
+          <a href="admin-templates.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="clipboard-check" class="size-4 shrink-0"></i>
+            <span>Template Checklist</span>
+          </a>
+          <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+            <i data-lucide="smartphone" class="size-4 shrink-0"></i>
+            <span>Simulasi Driver</span>
+          </a>
           <a href="admin-users.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
             <i data-lucide="user-cog" class="size-4 shrink-0"></i>
             <span>Manajemen Pengguna</span>
@@ -145,7 +161,7 @@
         <!-- Profile Dropdown -->
         <div class="relative">
           <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
-            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white">
+            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white">
               AD
             </div>
             <div class="hidden sm:flex flex-col text-left leading-tight">

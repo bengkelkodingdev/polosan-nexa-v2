@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi Driver Mobile - FleetTrack Nexa v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] } } }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
+    .screen { display: none; }
+    .screen.active { display: flex; }
+    .seg input:checked + span { background: #222845; color: #fff; }
+    .seg-bad input:checked + span { background: #e11d48; color: #fff; }
+    .opt input:checked + div { border-color: #2563eb; background: #eff6ff; }
+  </style>
+</head>
+<body class="bg-[#f5f7fb] text-[#111827] min-h-screen antialiased font-sans flex flex-col items-center justify-center gap-4 p-4">
+
+  <!-- Bar atas (di luar frame) -->
+  <div class="w-full max-w-[390px] flex items-center justify-between text-xs">
+    <a href="admin.html" class="inline-flex items-center gap-1.5 font-semibold text-[#52607a] hover:text-[#111827]"><i data-lucide="arrow-left" class="size-4"></i> Kembali ke Admin</a>
+    <button onclick="resetSim()" class="inline-flex items-center gap-1.5 font-semibold text-[#2563eb] hover:text-[#1d4ed8]"><i data-lucide="rotate-ccw" class="size-4"></i> Ulangi simulasi</button>
+  </div>
+
+  <!-- Smartphone frame -->
+  <div class="relative w-[390px] max-w-full h-[780px] max-h-[calc(100vh-90px)] rounded-[44px] border-[10px] border-[#1a1f36] bg-white shadow-2xl overflow-hidden flex flex-col">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-[#1a1f36] rounded-b-2xl z-20"></div>
+
+    <!-- Status bar -->
+    <div class="h-9 shrink-0 flex items-end justify-between px-6 pb-1 text-[11px] font-semibold text-[#1a1f36]" id="statusbar">
+      <span>07:42</span>
+      <span class="flex items-center gap-1"><i data-lucide="signal" class="size-3"></i><i data-lucide="wifi" class="size-3"></i><i data-lucide="battery-full" class="size-3.5"></i></span>
+    </div>
+
+    <!-- ================= Layar 1: Deklarasi Fit-to-Drive ================= -->
+    <section id="s1" class="screen active flex-1 flex-col min-h-0">
+      <div class="px-5 pt-3 pb-4 bg-[#222845] text-white">
+        <p class="text-[10px] font-bold uppercase tracking-[1.5px] text-white/50">Pra-Trip · Langkah 1 dari 2</p>
+        <h1 class="text-lg font-bold mt-0.5">Deklarasi Fit-to-Drive</h1>
+        <div class="mt-3 flex items-center gap-3 rounded-xl bg-white/10 px-3 py-2.5">
+          <div class="size-9 rounded-full bg-emerald-600 flex items-center justify-center text-xs font-bold">BS</div>
+          <div class="leading-tight"><p class="text-[13px] font-bold">Budi Santoso</p><p class="text-[11px] text-white/60">Hiace B 5678 CD · Pool Kantor Pusat</p></div>
+        </div>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+        <div>
+          <div class="flex items-center justify-between mb-2"><label class="text-[13px] font-bold">Jam tidur semalam</label><span class="font-mono text-sm font-bold text-[#2563eb]"><span id="sleep-val">7</span> jam</span></div>
+          <input type="range" id="sleep" min="0" max="12" step="0.5" value="7" class="w-full accent-[#FF8A0D]" oninput="document.getElementById('sleep-val').textContent = this.value">
+          <div class="flex justify-between text-[10px] text-[#9aa3bf] mt-1"><span>0</span><span>6</span><span>12</span></div>
+        </div>
+        <div>
+          <p class="text-[13px] font-bold mb-2">Kondisi badan hari ini</p>
+          <div class="space-y-2">
+            <label class="opt block cursor-pointer"><input type="radio" name="body" value="prima" class="hidden" checked><div class="rounded-xl border-2 border-[#e4e8f0] px-3.5 py-3 flex items-center gap-3"><i data-lucide="smile" class="size-5 text-emerald-600"></i><div><p class="text-[13px] font-semibold">Prima</p><p class="text-[11px] text-[#9aa3bf]">Tidak ada keluhan</p></div></div></label>
+            <label class="opt block cursor-pointer"><input type="radio" name="body" value="ringan" class="hidden"><div class="rounded-xl border-2 border-[#e4e8f0] px-3.5 py-3 flex items-center gap-3"><i data-lucide="meh" class="size-5 text-amber-500"></i><div><p class="text-[13px] font-semibold">Ada keluhan ringan</p><p class="text-[11px] text-[#9aa3bf]">Pusing ringan, pegal, kurang fokus</p></div></div></label>
+            <label class="opt block cursor-pointer"><input type="radio" name="body" value="tidak" class="hidden"><div class="rounded-xl border-2 border-[#e4e8f0] px-3.5 py-3 flex items-center gap-3"><i data-lucide="frown" class="size-5 text-rose-500"></i><div><p class="text-[13px] font-semibold">Tidak fit</p><p class="text-[11px] text-[#9aa3bf]">Sakit, mengantuk berat, atau terganggu obat</p></div></div></label>
+          </div>
+        </div>
+        <label class="flex items-start gap-2.5 rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3 cursor-pointer">
+          <input type="checkbox" id="consent" class="mt-0.5 size-4 rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0" onchange="document.getElementById('btn-s1').disabled = !this.checked">
+          <span class="text-[11.5px] leading-relaxed text-[#52607a]">Saya menyatakan jawaban di atas benar dan menyetujui data kesehatan saya diproses untuk keperluan keselamatan operasional sesuai kebijakan privasi.</span>
+        </label>
+      </div>
+      <div class="p-4 border-t border-[#e4e8f0]">
+        <button id="btn-s1" disabled onclick="submitDeclaration()" class="w-full h-11 rounded-xl bg-[#FF8A0D] text-white text-sm font-bold shadow-md shadow-orange-500/20 disabled:opacity-40 disabled:shadow-none transition">Kirim Deklarasi</button>
+      </div>
+    </section>
+
+    <!-- ================= Layar 2: Checklist Pra-Trip ================= -->
+    <section id="s2" class="screen flex-1 flex-col min-h-0">
+      <div class="px-5 pt-3 pb-4 bg-[#222845] text-white">
+        <p class="text-[10px] font-bold uppercase tracking-[1.5px] text-white/50">Pra-Trip · Langkah 2 dari 2</p>
+        <h1 class="text-lg font-bold mt-0.5">Checklist Pra-Trip</h1>
+        <p id="driver-status" class="mt-2 inline-block text-[10.5px] font-bold px-2 py-1 rounded-md border"></p>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5" id="checklist"></div>
+      <div class="p-4 border-t border-[#e4e8f0]">
+        <p id="s2-error" class="hidden text-xs font-semibold text-rose-600 mb-2"></p>
+        <button onclick="submitChecklist()" class="w-full h-11 rounded-xl bg-[#FF8A0D] text-white text-sm font-bold shadow-md shadow-orange-500/20 transition">Kirim Checklist</button>
+      </div>
+    </section>
+
+    <!-- ================= Layar 3: Diblokir ================= -->
+    <section id="s3" class="screen flex-1 flex-col min-h-0 bg-rose-600 text-white items-center justify-center text-center px-7">
+      <div class="size-20 rounded-full bg-white/15 flex items-center justify-center mb-5"><i data-lucide="octagon-x" class="size-11"></i></div>
+      <p class="text-[11px] font-bold uppercase tracking-[2px] text-white/70 mb-2" id="block-label">Hard Fail</p>
+      <h2 class="text-xl font-extrabold leading-snug" id="block-title">KENDARAAN TIDAK SIAP JALAN - TUGAS DIBLOKIR.</h2>
+      <p class="mt-3 text-sm font-semibold text-white/90">Silakan lapor ke Manager.</p>
+      <div class="mt-5 w-full rounded-xl bg-white/15 px-4 py-3 text-left text-[12.5px]">
+        <p class="text-white/70 text-[11px]">Penyebab</p>
+        <p class="font-bold" id="block-reason">-</p>
+      </div>
+      <button onclick="reportManager()" id="btn-report" class="mt-6 w-full h-11 rounded-xl bg-white text-rose-600 text-sm font-bold flex items-center justify-center gap-2"><i data-lucide="phone-call" class="size-4"></i> Lapor ke Manager</button>
+      <button onclick="resetSim()" class="mt-3 text-xs font-semibold text-white/80 underline">Ulangi simulasi</button>
+    </section>
+
+    <!-- ================= Layar 4: Siap ================= -->
+    <section id="s4" class="screen flex-1 flex-col min-h-0 items-center justify-center text-center px-7 bg-emerald-50">
+      <div class="size-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5"><i data-lucide="badge-check" class="size-11"></i></div>
+      <span class="text-[11px] font-bold px-2.5 py-1 rounded-md border bg-emerald-50 text-emerald-700 border-emerald-200" id="ready-badge">SIAP JALAN</span>
+      <h2 class="text-xl font-extrabold text-[#1a1f36] mt-3">Anda boleh berangkat</h2>
+      <p class="mt-2 text-[13px] text-[#52607a] leading-relaxed" id="ready-text">Checklist terkirim dan kendaraan dinyatakan siap.</p>
+      <button onclick="startTrip()" class="mt-6 w-full h-11 rounded-xl bg-[#FF8A0D] text-white text-sm font-bold shadow-md shadow-orange-500/20 flex items-center justify-center gap-2"><i data-lucide="navigation" class="size-4"></i> Mulai Perjalanan</button>
+      <button onclick="resetSim()" class="mt-3 text-xs font-semibold text-[#52607a] underline">Ulangi simulasi</button>
+    </section>
+
+    <!-- ================= Layar 5: Dalam Perjalanan ================= -->
+    <section id="s5" class="screen flex-1 flex-col min-h-0">
+      <div class="px-5 pt-3 pb-4 bg-[#222845] text-white">
+        <p class="text-[10px] font-bold uppercase tracking-[1.5px] text-white/50">Perjalanan</p>
+        <h1 class="text-lg font-bold mt-0.5">Sedang Bertugas</h1>
+        <p class="mt-1 text-[11.5px] text-white/60">Hiace B 5678 CD · Pool Kantor Pusat</p>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 py-6 flex flex-col items-center text-center">
+        <div class="relative size-36 rounded-full border-[6px] border-[#e4e8f0] flex items-center justify-center">
+          <span class="absolute inset-[-6px] rounded-full border-[6px] border-[#FF8A0D] border-t-transparent animate-spin" style="animation-duration:3s"></span>
+          <div><p class="font-mono text-2xl font-bold text-[#1a1f36]" id="trip-timer">00:00</p><p class="text-[10.5px] font-semibold uppercase tracking-wide text-[#9aa3bf] mt-0.5">Waktu berjalan</p></div>
+        </div>
+        <div class="mt-6 w-full grid grid-cols-2 gap-3 text-left">
+          <div class="rounded-xl border border-[#e4e8f0] p-3"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Odometer awal</p><p class="mt-1 font-mono text-[15px] font-bold" id="trip-start-odo">-</p></div>
+          <div class="rounded-xl border border-[#e4e8f0] p-3"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Status</p><p class="mt-1 text-[13px] font-bold text-emerald-600 flex items-center gap-1.5"><span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>Berjalan</p></div>
+        </div>
+        <p class="mt-5 text-[12px] leading-relaxed text-[#52607a]">Setelah tiba dan kendaraan diparkir, tekan <b>Selesai Perjalanan</b> untuk mengisi checklist pasca-trip.</p>
+      </div>
+      <div class="p-4 border-t border-[#e4e8f0]">
+        <button onclick="endTrip()" class="w-full h-11 rounded-xl bg-[#222845] text-white text-sm font-bold flex items-center justify-center gap-2"><i data-lucide="flag" class="size-4"></i> Selesai Perjalanan</button>
+      </div>
+    </section>
+
+    <!-- ================= Layar 6: Checklist Pasca-Trip ================= -->
+    <section id="s6" class="screen flex-1 flex-col min-h-0">
+      <div class="px-5 pt-3 pb-4 bg-[#222845] text-white">
+        <p class="text-[10px] font-bold uppercase tracking-[1.5px] text-white/50">Pasca-Trip</p>
+        <h1 class="text-lg font-bold mt-0.5">Checklist Setelah Perjalanan</h1>
+        <p class="mt-1 text-[11.5px] text-white/60">Periksa kendaraan sebelum diserahkan kembali</p>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5" id="post-checklist"></div>
+      <div class="p-4 border-t border-[#e4e8f0]">
+        <p id="s6-error" class="hidden text-xs font-semibold text-rose-600 mb-2"></p>
+        <button onclick="submitPostTrip()" class="w-full h-11 rounded-xl bg-[#FF8A0D] text-white text-sm font-bold shadow-md shadow-orange-500/20 transition">Kirim Laporan Pasca-Trip</button>
+      </div>
+    </section>
+
+    <!-- ================= Layar 7: Perjalanan Selesai ================= -->
+    <section id="s7" class="screen flex-1 flex-col min-h-0">
+      <div class="flex-1 overflow-y-auto px-6 py-6 flex flex-col items-center text-center">
+        <div id="done-icon" class="size-20 rounded-full flex items-center justify-center mb-4"></div>
+        <span id="done-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-md border"></span>
+        <h2 class="text-xl font-extrabold text-[#1a1f36] mt-3">Perjalanan selesai</h2>
+        <p class="mt-2 text-[13px] text-[#52607a] leading-relaxed" id="done-text"></p>
+        <div class="mt-5 w-full rounded-xl border border-[#e4e8f0] divide-y divide-[#e4e8f0] text-left text-[13px]" id="done-summary"></div>
+      </div>
+      <div class="p-4 border-t border-[#e4e8f0]">
+        <button onclick="resetSim()" class="w-full h-11 rounded-xl bg-[#222845] text-white text-sm font-bold">Selesai</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const CHECKLIST = [
+      { group: 'Kendali', items: [
+        { id: 'rem', name: 'Rem utama', critical: true, bad: 'Rem blong' },
+        { id: 'parkir', name: 'Rem parkir', critical: true, bad: 'Tidak menahan' },
+        { id: 'kemudi', name: 'Kemudi', critical: true, bad: 'Oblak / berat' } ] },
+      { group: 'Roda', items: [
+        { id: 'ban', name: 'Kondisi & tekanan ban', critical: true, bad: 'Gundul / bocor' },
+        { id: 'mur', name: 'Mur roda', critical: true, bad: 'Longgar' } ] },
+      { group: 'Visibilitas', items: [
+        { id: 'lampu', name: 'Lampu utama & sein', critical: true, bad: 'Mati' },
+        { id: 'wiper', name: 'Wiper & spion', critical: true, bad: 'Rusak' } ] },
+      { group: 'Keselamatan Umum', items: [
+        { id: 'sabuk', name: 'Sabuk pengaman', critical: true, bad: 'Tidak berfungsi' },
+        { id: 'apar', name: 'APAR & P3K', critical: true, bad: 'Tidak ada / kedaluwarsa' },
+        { id: 'darurat', name: 'Pintu darurat & palu kaca', critical: true, bad: 'Tidak ada / macet' } ] },
+      { group: 'Eksterior & Kenyamanan', items: [
+        { id: 'ac', name: 'AC', critical: false, bad: 'Tidak dingin' },
+        { id: 'body', name: 'Body baret', critical: false, bad: 'Ada baret' } ] },
+    ];
+    let driverLevel = 'SIAP BERTUGAS';
+    const $ = (id) => document.getElementById(id);
+
+    const CLOCK = { s1: '07:42', s2: '07:46', s3: '07:46', s4: '07:50', s5: '07:55', s6: '16:20', s7: '16:32' };
+    function show(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      $('statusbar').firstElementChild.textContent = CLOCK[id] || '07:42';
+      $(id).classList.add('active');
+      const red = id === 's3';
+      $('statusbar').className = 'h-9 shrink-0 flex items-end justify-between px-6 pb-1 text-[11px] font-semibold ' + (red ? 'bg-rose-600 text-white' : 'text-[#1a1f36]');
+      lucide.createIcons();
+    }
+
+    function renderChecklist() {
+      $('checklist').innerHTML = CHECKLIST.map(g => `
+        <div>
+          <p class="text-[10.5px] font-bold uppercase tracking-[1px] text-[#9aa3bf] mb-2">${g.group}</p>
+          <div class="space-y-2">
+            ${g.items.map(it => `
+              <div class="rounded-xl border border-[#e4e8f0] px-3.5 py-3">
+                <div class="flex items-center gap-2 mb-2.5">
+                  <span class="text-[13px] font-semibold flex-1">${it.name}</span>
+                  ${it.critical ? '<span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">KRITIS</span>' : '<span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">MINOR</span>'}
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-[12px] font-semibold">
+                  <label class="seg cursor-pointer"><input type="radio" name="c-${it.id}" value="ok" class="hidden" checked><span class="block text-center py-1.5 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">Baik</span></label>
+                  <label class="seg seg-bad cursor-pointer"><input type="radio" name="c-${it.id}" value="bad" class="hidden" onchange="onProblem('${it.id}')"><span class="block text-center py-1.5 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">${it.bad}</span></label>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`).join('') + `
+        <div>
+          <p class="text-[10.5px] font-bold uppercase tracking-[1px] text-[#9aa3bf] mb-2">Odometer & Foto</p>
+          <div class="rounded-xl border border-[#e4e8f0] p-3.5 space-y-3">
+            <div><label class="block text-[12px] font-semibold mb-1.5">Odometer saat ini (km) *</label>
+              <input id="odo" type="number" inputmode="numeric" placeholder="61200" class="w-full h-10 px-3 text-[13px] font-mono border border-[#d0d6e8] rounded-lg focus:outline-none focus:border-[#2563eb]"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div id="ph-odo-box" role="button" tabindex="0" onclick="autoPhoto('ph-odo','Foto Odometer')" class="relative cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2 overflow-hidden bg-cover bg-center"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span id="ph-odo-name">Foto Odometer</span></div>
+              <div id="ph-unit-box" role="button" tabindex="0" onclick="autoPhoto('ph-unit','Foto Kendaraan')" class="relative cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2 overflow-hidden bg-cover bg-center"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span id="ph-unit-name">Foto Kendaraan</span></div>
+            </div>
+          </div>
+        </div>`;
+      lucide.createIcons();
+    }
+
+    // Simulasi foto: sekali tekan langsung terisi foto contoh
+    function autoPhoto(key, label) {
+      const box = $(key + '-box');
+      if (box.dataset.filled) return;
+      const svg = key.indexOf('odo') > -1
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="200" height="120" fill="#1a1f36"/><rect x="25" y="38" width="150" height="44" rx="6" fill="#0b0e1c" stroke="#52607a"/><text x="100" y="70" font-family="monospace" font-size="26" fill="#16a34a" text-anchor="middle">061200</text></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="200" height="120" fill="#d9dee9"/><rect y="85" width="200" height="35" fill="#b8c0d1"/><rect x="25" y="42" width="150" height="38" rx="10" fill="#52607a"/><rect x="45" y="26" width="80" height="22" rx="7" fill="#6b7a99"/><circle cx="58" cy="84" r="12" fill="#1a1f36"/><circle cx="142" cy="84" r="12" fill="#1a1f36"/></svg>';
+      box.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '")';
+      box.dataset.filled = '1';
+      box.classList.remove('border-dashed', 'border-[#d0d6e8]', 'bg-[#f8f9fc]');
+      box.classList.add('border-solid', 'border-emerald-400');
+      box.innerHTML = '<span class="absolute inset-x-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white truncate">' + label.toLowerCase().replace(/ /g, '-') + '.jpg</span>';
+    }
+
+    // Item kritis bermasalah => langsung diblokir
+    function onProblem(id) {
+      const item = CHECKLIST.flatMap(g => g.items).find(i => i.id === id);
+      if (!item || !item.critical) return;
+      block('Item kritis gagal', item.name + ' - ' + item.bad);
+    }
+
+    function block(label, reason) {
+      $('block-label').textContent = label;
+      $('block-reason').textContent = reason;
+      if (label === 'Deklarasi') $('block-title').textContent = 'TIDAK SIAP BERTUGAS - TUGAS DIBLOKIR.';
+      else $('block-title').textContent = 'KENDARAAN TIDAK SIAP JALAN - TUGAS DIBLOKIR.';
+      show('s3');
+    }
+
+    function submitDeclaration() {
+      const sleep = parseFloat($('sleep').value);
+      const body = document.querySelector('input[name="body"]:checked').value;
+      if (body === 'tidak' || sleep < 4) {
+        block('Deklarasi', body === 'tidak' ? 'Driver menyatakan tidak fit' : 'Jam tidur ' + sleep + ' jam (di bawah batas minimum 4 jam)');
+        $('block-title').textContent = 'TIDAK SIAP BERTUGAS - TUGAS DIBLOKIR.';
+        return;
+      }
+      driverLevel = (body === 'ringan' || sleep < 6) ? 'SIAP DENGAN PEMANTAUAN' : 'SIAP BERTUGAS';
+      const chip = $('driver-status');
+      chip.textContent = driverLevel;
+      chip.className = 'mt-2 inline-block text-[10.5px] font-bold px-2 py-1 rounded-md border ' +
+        (driverLevel === 'SIAP BERTUGAS' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200');
+      renderChecklist();
+      show('s2');
+    }
+
+    function submitChecklist() {
+      if (!$('odo').value) {
+        $('s2-error').textContent = 'Isi odometer terlebih dahulu.';
+        $('s2-error').classList.remove('hidden');
+        return;
+      }
+      $('s2-error').classList.add('hidden');
+      const minors = CHECKLIST.flatMap(g => g.items).filter(i => !i.critical && document.querySelector('input[name="c-' + i.id + '"]:checked').value === 'bad');
+      const badge = $('ready-badge');
+      if (minors.length) {
+        badge.textContent = 'SIAP DENGAN CATATAN';
+        badge.className = 'text-[11px] font-bold px-2.5 py-1 rounded-md border bg-amber-50 text-amber-700 border-amber-200';
+        $('ready-text').textContent = 'Temuan minor dicatat: ' + minors.map(m => m.name).join(', ') + '. Boleh jalan dengan tindak lanjut.';
+      } else {
+        badge.textContent = 'SIAP JALAN';
+        badge.className = 'text-[11px] font-bold px-2.5 py-1 rounded-md border bg-emerald-50 text-emerald-700 border-emerald-200';
+        $('ready-text').textContent = 'Checklist terkirim dan seluruh item kritis dalam kondisi baik.';
+      }
+      show('s4');
+    }
+
+
+    // ================= Alur perjalanan & pasca-trip =================
+    const POST_ITEMS = [
+      { id: 'p-body', name: 'Body & kaca', bad: 'Ada kerusakan baru' },
+      { id: 'p-ban', name: 'Ban', bad: 'Aus / bocor' },
+      { id: 'p-lampu', name: 'Lampu & kelistrikan', bad: 'Bermasalah' },
+      { id: 'p-mesin', name: 'Suara / getaran mesin', bad: 'Tidak normal' },
+      { id: 'p-bersih', name: 'Kebersihan kabin', bad: 'Kotor' },
+      { id: 'p-barang', name: 'Barang tertinggal', bad: 'Ada barang' },
+    ];
+    let startOdo = 0, timerId = null, tripSec = 0;
+
+    function startTrip() {
+      startOdo = parseInt($('odo').value, 10) || 0;
+      $('trip-start-odo').textContent = startOdo ? startOdo.toLocaleString('id-ID') + ' km' : '-';
+      tripSec = 0; $('trip-timer').textContent = '00:00';
+      clearInterval(timerId);
+      timerId = setInterval(() => {
+        tripSec++;
+        const m = String(Math.floor(tripSec / 60)).padStart(2, '0'), sc = String(tripSec % 60).padStart(2, '0');
+        $('trip-timer').textContent = m + ':' + sc;
+      }, 1000);
+      show('s5');
+    }
+
+    function endTrip() {
+      clearInterval(timerId);
+      renderPostChecklist();
+      show('s6');
+    }
+
+    function renderPostChecklist() {
+      $('post-checklist').innerHTML = `
+        <div>
+          <p class="text-[10.5px] font-bold uppercase tracking-[1px] text-[#9aa3bf] mb-2">Kondisi kendaraan</p>
+          <div class="space-y-2">
+            ${POST_ITEMS.map(it => `
+              <div class="rounded-xl border border-[#e4e8f0] px-3.5 py-3">
+                <span class="block text-[13px] font-semibold mb-2.5">${it.name}</span>
+                <div class="grid grid-cols-2 gap-2 text-[12px] font-semibold">
+                  <label class="seg cursor-pointer"><input type="radio" name="${it.id}" value="ok" class="hidden" checked><span class="block text-center py-1.5 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">Baik</span></label>
+                  <label class="seg seg-bad cursor-pointer"><input type="radio" name="${it.id}" value="bad" class="hidden"><span class="block text-center py-1.5 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">${it.bad}</span></label>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div>
+          <p class="text-[10.5px] font-bold uppercase tracking-[1px] text-[#9aa3bf] mb-2">Sisa BBM</p>
+          <div class="grid grid-cols-4 gap-2 text-[12px] font-semibold">
+            ${[['Penuh', 'full'], ['3/4', '75'], ['1/2', '50'], ['1/4', '25']].map(([l, v], i) => `
+              <label class="seg cursor-pointer"><input type="radio" name="p-fuel" value="${v}" class="hidden" ${i === 1 ? 'checked' : ''}><span class="block text-center py-2 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">${l}</span></label>`).join('')}
+          </div>
+        </div>
+        <div>
+          <p class="text-[10.5px] font-bold uppercase tracking-[1px] text-[#9aa3bf] mb-2">Insiden selama perjalanan</p>
+          <div class="grid grid-cols-2 gap-2 text-[12px] font-semibold">
+            <label class="seg cursor-pointer"><input type="radio" name="p-incident" value="no" class="hidden" checked><span class="block text-center py-2 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">Tidak ada</span></label>
+            <label class="seg seg-bad cursor-pointer"><input type="radio" name="p-incident" value="yes" class="hidden"><span class="block text-center py-2 rounded-lg bg-[#f5f7fb] text-[#52607a] transition">Ada insiden</span></label>
+          </div>
+        </div>
+        <div>
+          <p class="text-[10.5px] font-bold uppercase tracking-[1px] text-[#9aa3bf] mb-2">Odometer akhir & foto</p>
+          <div class="rounded-xl border border-[#e4e8f0] p-3.5 space-y-3">
+            <div><label class="block text-[12px] font-semibold mb-1.5">Odometer akhir (km) *</label>
+              <input id="odo-end" type="number" inputmode="numeric" placeholder="${startOdo ? startOdo + 120 : 61320}" class="w-full h-10 px-3 text-[13px] font-mono border border-[#d0d6e8] rounded-lg focus:outline-none focus:border-[#2563eb]"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div id="pt-odo-box" role="button" tabindex="0" onclick="autoPhoto('pt-odo','Foto Odometer Akhir')" class="relative cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2 overflow-hidden bg-cover bg-center"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span>Foto Odometer</span></div>
+              <div id="pt-unit-box" role="button" tabindex="0" onclick="autoPhoto('pt-unit','Foto Kendaraan Akhir')" class="relative cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2 overflow-hidden bg-cover bg-center"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span>Foto Kendaraan</span></div>
+            </div>
+            <div><label class="block text-[12px] font-semibold mb-1.5">Catatan (opsional)</label>
+              <textarea id="p-note" rows="2" placeholder="Mis. ada bunyi di roda belakang" class="w-full px-3 py-2 text-[13px] border border-[#d0d6e8] rounded-lg focus:outline-none focus:border-[#2563eb] resize-none"></textarea></div>
+          </div>
+        </div>`;
+      lucide.createIcons();
+    }
+
+    function submitPostTrip() {
+      const err = $('s6-error');
+      const end = parseInt($('odo-end').value, 10);
+      if (!end) { err.textContent = 'Isi odometer akhir terlebih dahulu.'; err.classList.remove('hidden'); return; }
+      if (startOdo && end < startOdo) { err.textContent = 'Odometer akhir tidak boleh lebih kecil dari odometer awal (' + startOdo.toLocaleString('id-ID') + ' km).'; err.classList.remove('hidden'); return; }
+      err.classList.add('hidden');
+
+      const val = (n) => document.querySelector('input[name="' + n + '"]:checked').value;
+      const findings = POST_ITEMS.filter(i => val(i.id) === 'bad').map(i => i.name + ': ' + i.bad);
+      const incident = val('p-incident') === 'yes';
+      const fuel = val('p-fuel');
+      const lowFuel = fuel === '25';
+      const dist = startOdo ? end - startOdo : null;
+      const fuelLabel = { full: 'Penuh', 75: '3/4', 50: '1/2', 25: '1/4' }[fuel];
+
+      const needAction = findings.length > 0 || incident;
+      $('done-icon').className = 'size-20 rounded-full flex items-center justify-center mb-4 ' + (needAction ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600');
+      $('done-icon').innerHTML = '<i data-lucide="' + (needAction ? 'clipboard-list' : 'badge-check') + '" class="size-11"></i>';
+      const b = $('done-badge');
+      b.textContent = incident ? 'INSIDEN DILAPORKAN' : (findings.length ? 'PERLU TINDAK LANJUT' : 'KENDARAAN AMAN');
+      b.className = 'text-[11px] font-bold px-2.5 py-1 rounded-md border ' + (incident ? 'bg-rose-50 text-rose-700 border-rose-200' : needAction ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200');
+      $('done-text').textContent = incident
+        ? 'Laporan insiden dikirim ke Manager. Jangan menggunakan kendaraan sebelum ada arahan.'
+        : findings.length
+          ? 'Temuan dicatat dan dikirim ke Manager untuk dijadwalkan perawatan.'
+          : 'Laporan pasca-trip terkirim. Kendaraan dalam kondisi baik dan siap diserahkan.';
+
+      const row = (l, v, cls = '') => '<div class="flex items-start justify-between gap-3 px-3.5 py-2.5"><span class="text-[#9aa3bf]">' + l + '</span><span class="font-semibold text-right ' + cls + '">' + v + '</span></div>';
+      $('done-summary').innerHTML =
+        row('Jarak tempuh', dist !== null ? dist.toLocaleString('id-ID') + ' km' : '-', 'font-mono') +
+        row('Odometer akhir', end.toLocaleString('id-ID') + ' km', 'font-mono') +
+        row('Sisa BBM', fuelLabel + (lowFuel ? ' · segera isi' : ''), lowFuel ? 'text-amber-600' : '') +
+        row('Insiden', incident ? 'Ada' : 'Tidak ada', incident ? 'text-rose-600' : 'text-emerald-600') +
+        row('Temuan', findings.length ? findings.join('<br>') : 'Tidak ada', findings.length ? 'text-amber-700' : 'text-emerald-600');
+      show('s7');
+    }
+
+    function reportManager() {
+      const b = $('btn-report');
+      b.innerHTML = '<i data-lucide="check" class="size-4"></i> Laporan terkirim ke Manager';
+      b.disabled = true; b.classList.add('opacity-80');
+      lucide.createIcons();
+    }
+
+    function resetSim() {
+      clearInterval(timerId);
+      $('sleep').value = 7; $('sleep-val').textContent = '7';
+      document.querySelector('input[name="body"][value="prima"]').checked = true;
+      $('consent').checked = false; $('btn-s1').disabled = true;
+      const b = $('btn-report');
+      b.disabled = false; b.classList.remove('opacity-80');
+      b.innerHTML = '<i data-lucide="phone-call" class="size-4"></i> Lapor ke Manager';
+      show('s1');
+    }
+  </script>
+</body>
+</html>
