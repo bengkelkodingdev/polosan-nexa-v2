@@ -251,26 +251,28 @@
               <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Servis Berikutnya (tanggal)</label><input id="f-next-date" type="date" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]" /></div>
             </div>
             <div class="col-span-full grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-              
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Foto Nota Bengkel *</label>
-              <label for="f-nota" class="flex flex-col items-center justify-center gap-1.5 h-32 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] hover:border-[#2563eb] hover:bg-blue-50/40 cursor-pointer transition-colors text-center px-3 overflow-hidden" id="f-nota-zone">
-                <i data-lucide="receipt" class="size-6 text-[#9aa3bf]" id="f-nota-icon"></i>
-                <span class="text-xs font-semibold text-[#4b5675]" id="f-nota-name">Klik untuk unggah foto</span>
-                <span class="text-[10.5px] text-[#9aa3bf]">JPG / PNG, maks. 5 MB</span>
-              </label>
-              <input type="file" id="f-nota" accept="image/*" class="hidden" />
-            </div>
-              
-            <div>
-              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Foto Pengerjaan Fisik *</label>
-              <label for="f-work" class="flex flex-col items-center justify-center gap-1.5 h-32 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] hover:border-[#2563eb] hover:bg-blue-50/40 cursor-pointer transition-colors text-center px-3 overflow-hidden" id="f-work-zone">
-                <i data-lucide="camera" class="size-6 text-[#9aa3bf]" id="f-work-icon"></i>
-                <span class="text-xs font-semibold text-[#4b5675]" id="f-work-name">Klik untuk unggah foto</span>
-                <span class="text-[10.5px] text-[#9aa3bf]">JPG / PNG, maks. 5 MB</span>
-              </label>
-              <input type="file" id="f-work" accept="image/*" class="hidden" />
-            </div>
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5">Foto Nota Bengkel *</label>
+                <div id="up-nota" role="button" tabindex="0" onclick="pickDoc('nota')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickDoc('nota')}"
+                  class="relative flex flex-col items-center justify-center gap-1.5 h-32 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] hover:border-[#2563eb] hover:bg-blue-50/40 cursor-pointer transition-colors text-center px-3 overflow-hidden bg-cover bg-center">
+                  <i data-lucide="receipt" class="size-6 text-[#9aa3bf]" data-idle></i>
+                  <span class="text-xs font-semibold text-[#4b5675]" data-idle>Klik untuk unggah foto</span>
+                  <span class="text-[10.5px] text-[#9aa3bf]" data-idle>JPG / PNG, maks. 5 MB</span>
+                  <span class="hidden absolute left-2 bottom-2 items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[10.5px] font-semibold text-white" data-done><i data-lucide="check-circle-2" class="size-3 text-emerald-400"></i><span data-name></span></span>
+                  <button type="button" class="hidden absolute right-2 top-2 size-6 items-center justify-center rounded-full bg-black/60 text-white hover:bg-rose-600" data-done onclick="event.stopPropagation(); clearDoc('nota')" title="Hapus foto"><i data-lucide="x" class="size-3.5"></i></button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5">Foto Pengerjaan Fisik *</label>
+                <div id="up-work" role="button" tabindex="0" onclick="pickDoc('work')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickDoc('work')}"
+                  class="relative flex flex-col items-center justify-center gap-1.5 h-32 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] hover:border-[#2563eb] hover:bg-blue-50/40 cursor-pointer transition-colors text-center px-3 overflow-hidden bg-cover bg-center">
+                  <i data-lucide="camera" class="size-6 text-[#9aa3bf]" data-idle></i>
+                  <span class="text-xs font-semibold text-[#4b5675]" data-idle>Klik untuk unggah foto</span>
+                  <span class="text-[10.5px] text-[#9aa3bf]" data-idle>JPG / PNG, maks. 5 MB</span>
+                  <span class="hidden absolute left-2 bottom-2 items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[10.5px] font-semibold text-white" data-done><i data-lucide="check-circle-2" class="size-3 text-emerald-400"></i><span data-name></span></span>
+                  <button type="button" class="hidden absolute right-2 top-2 size-6 items-center justify-center rounded-full bg-black/60 text-white hover:bg-rose-600" data-done onclick="event.stopPropagation(); clearDoc('work')" title="Hapus foto"><i data-lucide="x" class="size-3.5"></i></button>
+                </div>
+              </div>
             </div>
             <p id="form-error" class="hidden col-span-full text-xs font-semibold text-rose-600 flex items-center gap-1.5"><i data-lucide="alert-circle" class="size-3.5"></i><span></span></p>
           </div>
@@ -381,36 +383,39 @@
       lucide.createIcons();
     }
 
-    // Upload preview
-    ['f-nota', 'f-work'].forEach(id => {
-      el(id).addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        const zone = el(id + '-zone');
-        if (!file) return;
-        el(id + '-name').textContent = file.name;
-        zone.classList.remove('border-[#d0d6e8]'); zone.classList.add('border-emerald-400', 'bg-emerald-50/50');
-        el(id + '-icon').setAttribute('data-lucide', 'check-circle-2');
-        lucide.createIcons();
-        zone.querySelector('svg')?.classList.add('text-emerald-500');
-        el('form-error').classList.add('hidden');
-      });
-    });
-
-    function resetForm() {
-      setTimeout(() => {
-        ['f-nota', 'f-work'].forEach((id, i) => {
-          el(id + '-name').textContent = 'Klik untuk unggah foto';
-          const zone = el(id + '-zone');
-          zone.classList.remove('border-emerald-400', 'bg-emerald-50/50'); zone.classList.add('border-[#d0d6e8]');
-          zone.querySelector('svg')?.setAttribute('class', 'size-6 text-[#9aa3bf]');
-        });
-        el('form-error').classList.add('hidden');
-      }, 0);
+    // Simulasi unggah: klik langsung mengisi foto contoh
+    const docs = { nota: null, work: null };
+    const svgImg = (k) => 'data:image/svg+xml;utf8,' + encodeURIComponent(k === 'nota'
+      ? `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="#e9edf5"/><rect x="95" y="12" width="130" height="176" rx="4" fill="#fff" stroke="#cfd6e6"/><rect x="108" y="26" width="70" height="8" rx="2" fill="#1a1f36"/><g fill="#cfd6e6"><rect x="108" y="48" width="104" height="5"/><rect x="108" y="60" width="90" height="5"/><rect x="108" y="72" width="100" height="5"/><rect x="108" y="84" width="80" height="5"/><rect x="108" y="96" width="96" height="5"/></g><rect x="150" y="150" width="62" height="14" rx="2" fill="#2563eb" opacity=".85"/></svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="#d9dee9"/><rect y="140" width="320" height="60" fill="#b8c0d1"/><rect x="40" y="70" width="240" height="60" rx="14" fill="#52607a"/><rect x="70" y="48" width="130" height="36" rx="10" fill="#6b7a99"/><circle cx="95" cy="138" r="20" fill="#1a1f36"/><circle cx="225" cy="138" r="20" fill="#1a1f36"/><circle cx="95" cy="138" r="8" fill="#9aa3bf"/><circle cx="225" cy="138" r="8" fill="#9aa3bf"/></svg>`);
+    function pickDoc(k) {
+      if (docs[k]) return;
+      const now = new Date(), pad = n => String(n).padStart(2, '0');
+      const name = (k === 'nota' ? 'nota-bengkel-' : 'pengerjaan-') + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate()) + '.jpg';
+      docs[k] = name;
+      const z = el('up-' + k);
+      z.style.backgroundImage = `url("${svgImg(k)}")`;
+      z.classList.remove('border-dashed', 'border-[#d0d6e8]', 'bg-[#f8f9fc]', 'hover:bg-blue-50/40');
+      z.classList.add('border-solid', 'border-emerald-400');
+      z.querySelectorAll('[data-idle]').forEach(n => n.classList.add('hidden'));
+      z.querySelectorAll('[data-done]').forEach(n => { n.classList.remove('hidden'); n.classList.add('flex'); });
+      z.querySelector('[data-name]').textContent = name;
+      el('form-error').classList.add('hidden');
     }
+    function clearDoc(k) {
+      docs[k] = null;
+      const z = el('up-' + k);
+      z.style.backgroundImage = '';
+      z.classList.add('border-dashed', 'border-[#d0d6e8]', 'bg-[#f8f9fc]', 'hover:bg-blue-50/40');
+      z.classList.remove('border-solid', 'border-emerald-400');
+      z.querySelectorAll('[data-idle]').forEach(n => n.classList.remove('hidden'));
+      z.querySelectorAll('[data-done]').forEach(n => { n.classList.add('hidden'); n.classList.remove('flex'); });
+    }
+    function resetForm() { clearDoc('nota'); clearDoc('work'); el('form-error').classList.add('hidden'); }
 
     function submitService(e) {
       e.preventDefault();
-      if (!el('f-nota').files[0] || !el('f-work').files[0]) {
+      if (!docs.nota || !docs.work) {
         el('form-error').querySelector('span').textContent = 'Foto nota bengkel dan foto pengerjaan fisik wajib diunggah.';
         el('form-error').classList.remove('hidden');
         return;

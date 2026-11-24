@@ -171,22 +171,26 @@
             <div><label class="block text-[12px] font-semibold mb-1.5">Odometer saat ini (km) *</label>
               <input id="odo" type="number" inputmode="numeric" placeholder="61200" class="w-full h-10 px-3 text-[13px] font-mono border border-[#d0d6e8] rounded-lg focus:outline-none focus:border-[#2563eb]"></div>
             <div class="grid grid-cols-2 gap-2">
-              <label class="cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2" id="ph-odo-box"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span id="ph-odo-name">Foto Odometer</span>
-                <input type="file" accept="image/*" capture="environment" class="hidden" onchange="photoPicked(this, 'ph-odo')"></label>
-              <label class="cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2" id="ph-unit-box"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span id="ph-unit-name">Foto Kendaraan</span>
-                <input type="file" accept="image/*" capture="environment" class="hidden" onchange="photoPicked(this, 'ph-unit')"></label>
+              <div id="ph-odo-box" role="button" tabindex="0" onclick="autoPhoto('ph-odo','Foto Odometer')" class="relative cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2 overflow-hidden bg-cover bg-center"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span id="ph-odo-name">Foto Odometer</span></div>
+              <div id="ph-unit-box" role="button" tabindex="0" onclick="autoPhoto('ph-unit','Foto Kendaraan')" class="relative cursor-pointer flex flex-col items-center justify-center gap-1 h-20 rounded-lg border-2 border-dashed border-[#d0d6e8] bg-[#f8f9fc] text-[11px] font-semibold text-[#52607a] text-center px-2 overflow-hidden bg-cover bg-center"><i data-lucide="camera" class="size-5 text-[#9aa3bf]"></i><span id="ph-unit-name">Foto Kendaraan</span></div>
             </div>
           </div>
         </div>`;
       lucide.createIcons();
     }
 
-    function photoPicked(input, key) {
-      const f = input.files[0];
-      if (!f) return;
-      $(key + '-name').textContent = f.name.length > 18 ? f.name.slice(0, 15) + '...' : f.name;
+    // Simulasi foto: sekali tekan langsung terisi foto contoh
+    function autoPhoto(key, label) {
       const box = $(key + '-box');
-      box.classList.remove('border-[#d0d6e8]'); box.classList.add('border-emerald-400', 'bg-emerald-50');
+      if (box.dataset.filled) return;
+      const svg = key === 'ph-odo'
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="200" height="120" fill="#1a1f36"/><rect x="25" y="38" width="150" height="44" rx="6" fill="#0b0e1c" stroke="#52607a"/><text x="100" y="70" font-family="monospace" font-size="26" fill="#16a34a" text-anchor="middle">061200</text></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="200" height="120" fill="#d9dee9"/><rect y="85" width="200" height="35" fill="#b8c0d1"/><rect x="25" y="42" width="150" height="38" rx="10" fill="#52607a"/><rect x="45" y="26" width="80" height="22" rx="7" fill="#6b7a99"/><circle cx="58" cy="84" r="12" fill="#1a1f36"/><circle cx="142" cy="84" r="12" fill="#1a1f36"/></svg>';
+      box.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '")';
+      box.dataset.filled = '1';
+      box.classList.remove('border-dashed', 'border-[#d0d6e8]', 'bg-[#f8f9fc]');
+      box.classList.add('border-solid', 'border-emerald-400');
+      box.innerHTML = '<span class="absolute inset-x-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white truncate">' + label.toLowerCase().replace(/ /g, '-') + '.jpg</span>';
     }
 
     // Item kritis bermasalah => langsung diblokir
