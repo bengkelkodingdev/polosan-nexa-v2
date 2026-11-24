@@ -268,7 +268,7 @@
               class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors"
             >
               <div
-                class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white"
+                class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white"
               >
                 AD
               </div>
@@ -359,104 +359,44 @@
         </div>
 
         <!-- ─── 1. KPI CARDS (Admin) ─── -->
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-4"
-        >
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <!-- Total User -->
-          <div
-            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
-          >
-            <span class="absolute inset-x-0 top-0 h-1 bg-[#2563eb]"></span>
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <p
-                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
-                >
-                  Total User
-                </p>
-                <p
-                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
-                >
-                  42
-                </p>
-              </div>
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#eff6ff] text-[#2563eb]"
-              >
-                <i data-lucide="users" class="size-5"></i>
-              </div>
+          <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">User Aktif</p>
+              <i data-lucide="users" class="size-4 text-[#2563eb]"></i>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">39</strong>
-              <span class="text-[#9aa3bf] truncate">pengguna aktif</span>
+            <div class="mt-3 flex items-end gap-2">
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">39</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">pengguna</p>
             </div>
+            <p class="mt-3 text-xs text-[#52607a] truncate">dari <b class="text-[#111827]">42</b> total user</p>
           </div>
 
           <!-- Total Armada -->
-          <div
-            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
-          >
-            <span class="absolute inset-x-0 top-0 h-1 bg-[#d97706]"></span>
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <p
-                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
-                >
-                  Total Armada
-                </p>
-                <p
-                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
-                >
-                  28
-                </p>
-              </div>
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#fffbeb] text-[#d97706]"
-              >
-                <i data-lucide="truck" class="size-5"></i>
-              </div>
+          <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Armada Terpasang</p>
+              <i data-lucide="truck" class="size-4 text-[#d97706]"></i>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-              <span class="size-1.5 rounded-full bg-[#16a34a] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">24</strong>
-              <span class="text-[#9aa3bf] truncate"
-                >unit terpasang GPS &amp; Sensor</span
-              >
+            <div class="mt-3 flex items-end gap-2">
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">24</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">unit</p>
             </div>
+            <p class="mt-3 text-xs text-[#52607a] truncate">GPS &amp; Sensor, dari <b class="text-[#111827]">28</b> total armada</p>
           </div>
 
           <!-- Total Driver -->
-          <div
-            class="relative overflow-hidden bg-white rounded-xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200"
-          >
-            <span class="absolute inset-x-0 top-0 h-1 bg-[#7c3aed]"></span>
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <p
-                  class="text-[11.5px] font-semibold uppercase tracking-[.5px] text-[#9aa3bf]"
-                >
-                  Total Driver
-                </p>
-                <p
-                  class="mt-1 pb-0.5 text-[28px] font-extrabold leading-none text-[#111827] tracking-[-1px]"
-                >
-                  35
-                </p>
-              </div>
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f5f3ff] text-[#7c3aed]"
-              >
-                <i data-lucide="user-circle" class="size-5"></i>
-              </div>
+          <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Driver SIM Aktif</p>
+              <i data-lucide="user-circle" class="size-4 text-[#7c3aed]"></i>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[12px]">
-              <span class="size-1.5 rounded-full bg-[#7c3aed] shrink-0"></span>
-              <strong class="font-semibold text-[#111827]">28</strong>
-              <span class="text-[#9aa3bf] truncate"
-                >driver memiliki SIM B2 Umum aktif</span
-              >
+            <div class="mt-3 flex items-end gap-2">
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">28</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">driver</p>
             </div>
+            <p class="mt-3 text-xs text-[#52607a] truncate">SIM B2 Umum, dari <b class="text-[#111827]">35</b> total driver</p>
           </div>
         </div>
 
