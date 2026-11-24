@@ -12,7 +12,7 @@
   <script>
     tailwind.config = {
       theme: {
-        extend: {
+        extend: { spacing: { '1.25': '0.3125rem', '1.75': '0.4375rem', '3.25': '0.8125rem', '4.5': '1.125rem', '5.5': '1.375rem', '7.5': '1.875rem', '8.5': '2.125rem' },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
@@ -301,7 +301,7 @@
 
     const TYPES = { bus: 'Bus', hiace: 'Hiace', car: 'Mobil Biasa' };
     const base = () => ([
-      { name: 'Kendali', icon: 'steering-wheel', items: [['Rem utama', 1], ['Rem parkir', 1], ['Kemudi', 1]] },
+      { name: 'Kendali', icon: 'gauge', items: [['Rem utama', 1], ['Rem parkir', 1], ['Kemudi', 1]] },
       { name: 'Roda', icon: 'circle-dot', items: [['Kondisi ban', 1], ['Tekanan ban', 1], ['Mur roda', 1]] },
       { name: 'Visibilitas', icon: 'lightbulb', items: [['Lampu utama', 1], ['Lampu sein', 1], ['Wiper', 1], ['Spion', 1]] },
       { name: 'Keselamatan Umum', icon: 'shield-check', items: [['Sabuk pengaman', 1], ['APAR', 1], ['Kotak P3K', 1]] },
