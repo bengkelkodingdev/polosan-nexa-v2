@@ -424,10 +424,11 @@
                 class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
               >
                 <span
-                  class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px]"
+                  id="donut-center-value"
+                  class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px] transition-colors duration-200"
                   >42</span
                 >
-                <span class="text-[11px] font-medium text-[#9aa3bf] mt-0.5"
+                <span id="donut-center-label" class="text-[11px] font-medium text-[#9aa3bf] mt-0.5 max-w-[5.5rem] text-center leading-tight"
                   >Total User</span
                 >
               </div>
@@ -438,7 +439,7 @@
               class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 w-full flex-1"
             >
               <!-- Admin -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="0">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -468,7 +469,7 @@
               </div>
 
               <!-- Executive -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="1">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -498,7 +499,7 @@
               </div>
 
               <!-- Auditor -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="2">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -528,7 +529,7 @@
               </div>
 
               <!-- Manager -->
-              <div>
+              <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="3">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -558,7 +559,7 @@
               </div>
 
               <!-- Driver (col-span-2 on mobile/tablet) -->
-              <div class="sm:col-span-2">
+              <div class="role-item cursor-default rounded-lg transition-all duration-200 sm:col-span-2" data-idx="4">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
                     <span
@@ -818,6 +819,21 @@
           type: "donut",
           height: 190,
           sparkline: { enabled: true },
+          animations: {
+            enabled: true,
+            easing: "easeinout",
+            speed: 700,
+            animateGradually: { enabled: true, delay: 120 },
+            dynamicAnimation: { enabled: true, speed: 250 },
+          },
+          events: {
+            dataPointMouseEnter: (e, ctx, cfg) => focusRole(cfg.dataPointIndex),
+            dataPointMouseLeave: () => resetRole(),
+          },
+        },
+        states: {
+          hover: { filter: { type: "none" } },
+          active: { filter: { type: "none" } },
         },
         stroke: {
           width: 3,
@@ -840,6 +856,54 @@
           },
         },
       };
+
+      // Hover donut <-> daftar role
+      const ROLES = [
+        { n: "Admin", v: 4, c: "#16a34a" },
+        { n: "Executive", v: 4, c: "#f97316" },
+        { n: "Auditor", v: 3, c: "#2563eb" },
+        { n: "Manager", v: 6, c: "#7c3aed" },
+        { n: "Driver Operasional", v: 25, c: "#0891b2" },
+      ];
+      const cVal = document.getElementById("donut-center-value");
+      const cLbl = document.getElementById("donut-center-label");
+      const roleItems = document.querySelectorAll(".role-item");
+      const slices = () => document.querySelectorAll("#role-donut-chart .apexcharts-pie-area");
+      function focusRole(i) {
+        const r = ROLES[i];
+        if (!r) return;
+        cVal.textContent = r.v;
+        cVal.style.color = r.c;
+        cLbl.textContent = r.n;
+        slices().forEach((el, k) => {
+          el.style.transition = "opacity .2s, transform .25s";
+          el.style.opacity = k === i ? "1" : "0.3";
+          el.style.transformOrigin = "50% 50%";
+          el.style.transformBox = "view-box";
+          el.style.transform = k === i ? "scale(1.06)" : "scale(1)";
+        });
+        roleItems.forEach((el, k) => {
+          el.style.opacity = k === i ? "1" : "0.4";
+          el.style.transform = k === i ? "translateX(3px)" : "none";
+        });
+      }
+      function resetRole() {
+        cVal.textContent = "42";
+        cVal.style.color = "";
+        cLbl.textContent = "Total User";
+        slices().forEach((el) => {
+          el.style.opacity = "1";
+          el.style.transform = "scale(1)";
+        });
+        roleItems.forEach((el) => {
+          el.style.opacity = "1";
+          el.style.transform = "none";
+        });
+      }
+      roleItems.forEach((el) => {
+        el.addEventListener("mouseenter", () => focusRole(+el.dataset.idx));
+        el.addEventListener("mouseleave", resetRole);
+      });
 
       const donutChart = new ApexCharts(
         document.querySelector("#role-donut-chart"),
