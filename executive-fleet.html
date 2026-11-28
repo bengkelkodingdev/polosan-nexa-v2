@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kesiapan Armada - FleetTrack Nexa v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d0d6e8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9aa3bf;
+      }
+    </style>
+    <link rel="stylesheet" href="assets/sidebar.css" />
+    <script src="assets/sidebar.js"></script>
+    <script src="assets/executive.js"></script>
+  </head>
+  <body
+    class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"
+    ></div>
+
+    <!-- ─── SIDEBAR (TETAP SAMA PERSIS, TIDAK DIUBAH) ─── -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0"
+    >
+      <!-- Logo -->
+      <div class="h-14 px-4 flex items-center gap-2.5">
+        <a
+          href="index.html"
+          class="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src="assets/nexa-logo.png"
+            alt="Nexa"
+            class="h-9 object-contain"
+            onerror="
+              this.src = 'https://placehold.co/72x22/222845/ffffff?text=NEXA'
+            "
+          />
+          <span
+            class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap"
+            >Fleet Management</span
+          >
+        </a>
+        <button
+          id="sidebar-close-btn"
+          class="ml-auto lg:hidden text-white/50 hover:text-white p-1"
+        >
+          <i data-lucide="x" class="size-5"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div
+        class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium"
+      >
+        <!-- Section: Ringkasan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            RINGKASAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i
+                data-lucide="layout-grid"
+                class="size-4 shrink-0"
+              ></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Monitoring Kesiapan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            MONITORING KESIAPAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-fleet.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20"
+            >
+              <i data-lucide="truck" class="size-4 shrink-0 text-white"></i>
+              <span>Kesiapan Armada</span>
+            </a>
+            <a
+              href="executive-driver.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="users" class="size-4 shrink-0"></i>
+              <span>Kesiapan Driver</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Evaluasi & Laporan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            EVALUASI & AUDIT
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-compliance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="shield-check" class="size-4 shrink-0"></i>
+              <span>Peringkat & Kepatuhan</span>
+            </a>
+            <a
+              href="executive-maintenance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="wrench" class="size-4 shrink-0"></i>
+              <span>Biaya Pemeliharaan</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="p-2.5 pt-0 border-t border-white/5">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+          <div
+            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white text-xs select-none shadow-xs"
+          >
+            EX
+          </div>
+          <div class="flex flex-col leading-tight min-w-0 flex-1">
+            <span class="text-sm font-bold text-white/90 truncate"
+              >Direktur Utama</span
+            >
+            <span class="text-[11px] text-white/50 truncate"
+              >executive@nexa.id</span
+            >
+          </div>
+          <a
+            href="index.html"
+            title="Kembali ke Beranda"
+            class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors"
+          >
+            <i data-lucide="log-out" class="size-4"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT WRAPPER ─── -->
+    <div
+      class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300"
+    >
+      <!-- Top Site Header (Sticky Minimal) -->
+      <header
+        class="h-14 bg-white border-b border-[#e4e8f0] sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between"
+      >
+        <!-- Left: Toggle & Breadcrumb -->
+        <div class="flex items-center gap-0 min-w-0 flex-1">
+          <button
+            id="sidebar-toggle-btn"
+            class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0"
+            title="Buka / Tutup Sidebar"
+          >
+            <i data-lucide="panel-left" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+          <!-- Breadcrumb -->
+          <nav
+            class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden"
+          >
+            <a
+              href="index.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >FleetTrack</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="text-[#9aa3bf]">Executive</span>
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="font-bold text-[#111827]">Kesiapan Armada</span>
+          </nav>
+        </div>
+
+        <!-- Right: Actions & User Dropdown -->
+        <div class="flex items-center gap-2.5 shrink-0 pl-2">
+          <button
+            class="size-9 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all relative"
+            title="Notifikasi"
+          >
+            <i data-lucide="bell" class="size-4"></i>
+            <span
+              class="absolute top-2 right-2 size-1.5 rounded-full bg-[#FF8A0D]"
+            ></span>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mx-0.5"></div>
+
+          <!-- Role Switcher & Profile Dropdown -->
+          <div class="relative">
+            <button
+              id="user-menu-btn"
+              class="flex items-center gap-2.5 px-2 py-1 rounded-full hover:bg-[#f5f7fb] transition-colors"
+            >
+              <div
+                class="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#222845] text-xs font-bold text-white select-none ring-2 ring-white"
+              >
+                EX
+              </div>
+              <div class="hidden sm:flex flex-col text-left leading-tight">
+                <span class="text-xs font-bold text-[#111827]"
+                  >Direktur Utama</span
+                >
+                <span class="text-[10.5px] text-[#64748b]">executive@nexa.id</span>
+              </div>
+              <i
+                data-lucide="chevron-down"
+                class="size-3.5 text-[#9aa3bf] ml-0.5"
+              ></i>
+            </button>
+
+            <!-- Dropdown Popover -->
+            <div
+              id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-xl py-2 z-50 text-xs"
+            >
+              <div class="px-4 py-2.5 border-b border-gray-100">
+                <p class="text-[10.5px] font-medium text-gray-400">Masuk sebagai</p>
+                <p class="font-bold text-[#111827] truncate">
+                  executive@nexa.id
+                </p>
+              </div>
+              <div
+                class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400"
+              >
+                Beralih Tampilan Role:
+              </div>
+              <a
+                href="superadmin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Super Admin</span>
+              </a>
+              <a
+                href="executive.html"
+                class="flex items-center justify-between px-4 py-2 text-[#FF8A0D] font-bold bg-orange-50/60"
+              >
+                <span>Executive</span>
+                <i data-lucide="check" class="size-3.5 text-[#FF8A0D]"></i>
+              </a>
+              <a
+                href="admin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Admin</span>
+              </a>
+              <a
+                href="manager.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Manager</span>
+              </a>
+              <a
+                href="auditor.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Auditor</span>
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50"
+              >
+                <i data-lucide="home" class="size-3.5"></i>
+                <span>Kembali ke Beranda</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ─── MAIN: Konsep v2 §5, gaya kartu bersih (referensi), palet Nexa ─── -->
+      <main class="flex-1 p-5 sm:p-7 max-w-[1520px] w-full mx-auto space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <h1 class="text-[24px] sm:text-[28px] font-extrabold text-[#111827] tracking-[-0.6px]">Kesiapan Armada</h1>
+            <p class="text-[13px] text-[#64748b] mt-1">Boleh dipakai hari ini atau tidak, dan kalau tidak, kenapa. Status dihitung dari 4 dimensi: legal, teknis, perawatan, telemetri.</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-white border border-[#e4e8f0] text-[12px] font-medium text-[#4b5675]">
+              <i data-lucide="calendar" class="size-3.5 text-[#FF8A0D]"></i> 24 Nov 2026 · 07:30 WIB
+            </span>
+            <button type="button" onclick="alert('Prototipe: ekspor daftar kesiapan armada ke PDF')" class="flex items-center gap-1.5 h-9 px-4 rounded-full bg-[#222845] text-white text-[12px] font-semibold hover:bg-[#2f3760] transition-colors">
+              <i data-lucide="download" class="size-3.5"></i> Ekspor
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 status (klik = filter) -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+          <button type="button" data-filter="SIAP JALAN" class="kpi filter-card">
+            <div class="flex items-start justify-between"><span class="kpi-label">Siap Jalan</span><span class="kpi-icon !text-emerald-600 !bg-emerald-50 !border-emerald-200"><i data-lucide="circle-check" class="size-4"></i></span></div>
+            <div class="kpi-value">31</div>
+            <div class="kpi-foot">73,8% · semua dimensi normal</div>
+          </button>
+          <button type="button" data-filter="SIAP DENGAN CATATAN" class="kpi filter-card">
+            <div class="flex items-start justify-between"><span class="kpi-label">Siap Dengan Catatan</span><span class="kpi-icon !text-amber-600 !bg-amber-50 !border-amber-200"><i data-lucide="circle-alert" class="size-4"></i></span></div>
+            <div class="kpi-value">6</div>
+            <div class="kpi-foot">14,3% · boleh jalan, ada tindak lanjut</div>
+          </button>
+          <button type="button" data-filter="TIDAK SIAP JALAN" class="kpi filter-card">
+            <div class="flex items-start justify-between"><span class="kpi-label">Tidak Siap Jalan</span><span class="kpi-icon !text-rose-600 !bg-rose-50 !border-rose-200"><i data-lucide="octagon-alert" class="size-4"></i></span></div>
+            <div class="kpi-value text-rose-700">3</div>
+            <div class="kpi-foot">7,1% · diblokir dari penugasan</div>
+          </button>
+          <button type="button" data-filter="BELUM DINILAI" class="kpi filter-card">
+            <div class="flex items-start justify-between"><span class="kpi-label">Belum Dinilai</span><span class="kpi-icon"><i data-lucide="circle-dashed" class="size-4"></i></span></div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-foot">4,8% · belum ada checklist hari ini</div>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4">
+          <section class="card">
+            <h2 class="card-title">Kesiapan Operasional vs Penuh</h2>
+            <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Sengaja dua angka. Kalau digabung, unit yang jalan dengan catatan ikut terlihat bersih.</p>
+            <div class="grid sm:grid-cols-2 gap-6 mt-5">
+              <div>
+                <p class="text-[12.5px] text-[#64748b]">Kesiapan operasional</p>
+                <p class="text-[30px] font-semibold tracking-[-1px] mt-1">88,1%</p>
+                <div class="mt-3 h-8 rounded-[10px] bg-[#f5f7fb] overflow-hidden"><div class="h-full rounded-[10px] bg-[#FF8A0D]" style="width:88.1%"></div></div>
+                <p class="text-[11.5px] text-[#64748b] mt-2">37 dari 42 boleh dipakai</p>
+              </div>
+              <div>
+                <p class="text-[12.5px] text-[#64748b]">Kesiapan penuh</p>
+                <p class="text-[30px] font-semibold tracking-[-1px] mt-1">73,8%</p>
+                <div class="mt-3 h-8 rounded-[10px] bg-[#f5f7fb] overflow-hidden"><div class="h-full rounded-[10px] bg-[#222845]" style="width:73.8%"></div></div>
+                <p class="text-[11.5px] text-[#64748b] mt-2">31 dari 42 tanpa catatan</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2 class="card-title">Kondisi per Dimensi</h2>
+            <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Jumlah kendaraan dengan kondisi merah / kuning</p>
+            <ul id="dim-list" class="mt-4 space-y-3"></ul>
+          </section>
+        </div>
+
+        <!-- Tabel kendaraan -->
+        <section class="card !p-0 overflow-hidden">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 px-5 pt-5 pb-4">
+            <div>
+              <h2 class="card-title">Daftar Kendaraan</h2>
+              <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Urut dari yang paling perlu perhatian. Klik baris untuk melihat alasannya.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5">
+              <div class="relative">
+                <i data-lucide="search" class="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9aa3bf] pointer-events-none"></i>
+                <input id="q" type="search" placeholder="Cari plat nomor atau tipe" class="h-10 w-64 pl-10 pr-3 rounded-lg border border-[#e4e8f0] bg-white text-[13px] text-[#1a1f36] placeholder-[#9aa3bf] focus:outline-none focus:border-[#FF8A0D] focus:ring-2 focus:ring-[#FF8A0D]/20 transition-colors" />
+              </div>
+              <select id="f-garasi" data-dd aria-label="Garasi">
+                <option value="">Semua Garasi</option>
+              </select>
+              <select id="f-status" data-dd aria-label="Status">
+                <option value="">Semua Status</option>
+                <option>TIDAK SIAP JALAN</option><option>SIAP DENGAN CATATAN</option><option>BELUM DINILAI</option><option>SIAP JALAN</option>
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-left text-[13px] min-w-[640px]">
+              <thead>
+                <tr class="border-y border-[#e4e8f0] bg-[#f8f9fc]">
+                  <th class="th">Plat Nomor</th><th class="th">Tipe</th><th class="th">Garasi</th><th class="th">Status</th><th class="th text-right w-20">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="v-table" data-pager="10" class="divide-y divide-[#f1f3f9]"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Drill-down panel -->
+    <div id="drill" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="drill-title">
+      <div data-close class="absolute inset-0 bg-[#0f172a]/40"></div>
+      <div class="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] max-w-md bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div class="px-5 py-4 border-b border-[#f1f3f9] flex items-start justify-between gap-3">
+          <div>
+            <h3 id="drill-title" class="text-[16px] font-bold text-[#111827]"></h3>
+            <p id="drill-sub" class="text-[12px] text-[#64748b] mt-0.5"></p>
+          </div>
+          <button type="button" data-close class="icon-btn" aria-label="Tutup"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <ul id="drill-list" class="flex-1 overflow-y-auto divide-y divide-[#f1f3f9]"></ul>
+        <p class="px-5 py-3 border-t border-[#f1f3f9] text-[11px] text-[#9aa3bf]">Executive hanya melihat. Tindak lanjut dilakukan oleh Manager.</p>
+      </div>
+    </div>
+
+    <style type="text/tailwindcss">
+      .card { @apply bg-white border border-[#e4e8f0] rounded-2xl p-5; }
+      .card-title { @apply text-[16px] font-bold text-[#111827] tracking-[-0.2px]; }
+      .kpi { @apply text-left bg-white border border-[#e4e8f0] rounded-2xl p-5 hover:border-[#FF8A0D]/60 hover:shadow-[0_6px_20px_rgba(34,40,69,.06)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .kpi-label { @apply text-[13px] font-medium text-[#4b5675]; }
+      .kpi-icon { @apply size-9 rounded-full border border-[#e4e8f0] bg-[#f8f9fc] text-[#222845] flex items-center justify-center shrink-0; }
+      .kpi-value { @apply text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1 leading-tight; }
+      .kpi-foot { @apply flex items-center gap-1.5 mt-2 text-[11.5px] text-[#64748b]; }
+      .chip-up { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 font-semibold; }
+      .chip-down { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 font-semibold; }
+      .icon-btn { @apply size-8 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors; }
+      .stat { @apply flex flex-col items-start rounded-xl px-2 py-1.5 hover:bg-[#f8f9fc] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .stat-n { @apply text-[18px] font-bold text-[#111827] font-mono; }
+      .stat-l { @apply flex items-center gap-1.5 text-[11px] text-[#64748b]; }
+      .dot { @apply size-1.5 rounded-full inline-block; }
+      .th { @apply px-5 py-3 text-left text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] whitespace-nowrap; }
+    </style>
+
+    <script>
+      lucide.createIcons();
+
+      // Sidebar Mobile Toggle
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+      const toggleBtn = document.getElementById("sidebar-toggle-btn");
+      const closeBtn = document.getElementById("sidebar-close-btn");
+
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarBackdrop.classList.remove("hidden");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarBackdrop.classList.add("hidden");
+      }
+
+      toggleBtn?.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+
+      closeBtn?.addEventListener("click", closeSidebar);
+      sidebarBackdrop?.addEventListener("click", closeSidebar);
+
+      // User Dropdown Toggle
+      const userMenuBtn = document.getElementById("user-menu-btn");
+      const userDropdown = document.getElementById("user-dropdown");
+
+      userMenuBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", () => {
+        userDropdown?.classList.add("hidden");
+      });
+
+      // [plat, tipe, garasi, [legal], [teknis], [perawatan], [telemetri], status, alasan]
+      const V = [
+        ['B 7720 SDA', 'Bus', 'Garasi Gedung C', ['g', 'KIR s/d Mar 2027'], ['r', 'Rem utama gagal'], ['g', 'Terkendali'], ['g', 'Normal'], 'TIDAK SIAP JALAN', 'Item kritis gagal: rem utama (checklist 06:12). Diblokir, Manager sudah dinotifikasi.'],
+        ['B 1190 HJK', 'Hiace', 'Garasi Gedung B', ['r', 'KIR habis 18 Nov'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'TIDAK SIAP JALAN', 'Dokumen kedaluwarsa: KIR habis sejak 18 Nov 2026.'],
+        ['B 6602 TRE', 'Mobil', 'Garasi Annex', ['g', 'Lengkap'], ['g', 'Lulus'], ['r', 'Terlambat 23 hari'], ['g', 'Normal'], 'TIDAK SIAP JALAN', 'Perawatan terlambat 23 hari dari jadwal servis berkala.'],
+        ['B 1234 XY', 'Bus', 'Garasi Utama', ['y', 'KIR habis 45 hari'], ['y', 'Lampu kabut mati'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP DENGAN CATATAN', 'Lampu kabut mati (minor), KIR habis dalam 45 hari. Boleh jalan, jadwalkan perbaikan.'],
+        ['B 8812 FAD', 'Hiace', 'Garasi Annex', ['g', 'Lengkap'], ['g', 'Lulus'], ['y', 'Jatuh tempo 9 hari'], ['g', 'Normal'], 'SIAP DENGAN CATATAN', 'Servis berkala jatuh tempo dalam 9 hari.'],
+        ['B 3307 KLM', 'Mobil', 'Garasi Gedung C', ['y', 'Asuransi 38 hari'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP DENGAN CATATAN', 'Asuransi habis dalam 38 hari.'],
+        ['B 5521 NNO', 'Hiace', 'Garasi Gedung B', ['g', 'Lengkap'], ['g', 'Lulus'], ['g', 'Terkendali'], ['y', 'Tidak ada data'], 'SIAP DENGAN CATATAN', 'Telemetri tidak mengirim data lebih dari 15 menit.'],
+        ['B 9014 PQR', 'Mobil', 'Garasi Utama', ['g', 'Lengkap'], ['y', 'Spion kiri retak'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP DENGAN CATATAN', 'Kerusakan ringan: spion kiri retak.'],
+        ['B 4470 UVW', 'Bus', 'Garasi Gedung C', ['y', 'Pajak 21 hari'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP DENGAN CATATAN', 'Pajak habis dalam 21 hari.'],
+        ['B 3381 OPA', 'Mobil', 'Garasi Utama', ['g', 'Lengkap'], ['n', 'Belum diperiksa'], ['g', 'Terkendali'], ['y', 'Tidak ada data'], 'BELUM DINILAI', 'Belum ada checklist hari ini dan telemetri tidak ada data.'],
+        ['B 2045 WSX', 'Hiace', 'Garasi Annex', ['g', 'Lengkap'], ['n', 'Belum diperiksa'], ['g', 'Terkendali'], ['g', 'Normal'], 'BELUM DINILAI', 'Belum ada checklist pra-trip hari ini.'],
+        ['B 1023 KJA', 'Hiace', 'Garasi Utama', ['g', 'Lengkap'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP JALAN', 'Semua dimensi normal.'],
+        ['B 7781 TQS', 'Bus', 'Garasi Utama', ['g', 'Lengkap'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP JALAN', 'Semua dimensi normal.'],
+        ['B 2290 PLM', 'Mobil', 'Garasi Annex', ['g', 'Lengkap'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP JALAN', 'Semua dimensi normal.'],
+        ['B 6614 RRA', 'Mobil', 'Garasi Gedung B', ['g', 'Lengkap'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP JALAN', 'Semua dimensi normal.'],
+        ['B 5108 GTA', 'Bus', 'Garasi Gedung C', ['g', 'Lengkap'], ['g', 'Lulus'], ['g', 'Terkendali'], ['g', 'Normal'], 'SIAP JALAN', 'Semua dimensi normal.'],
+      ];
+      const TONE_OF = { 'SIAP JALAN': 'g', 'SIAP DENGAN CATATAN': 'y', 'TIDAK SIAP JALAN': 'r', 'BELUM DINILAI': 'n' };
+      const ORDER = { r: 0, y: 1, n: 2, g: 3 };
+
+      // Kondisi per dimensi
+      const DIMS = [['Legal', 3, 'KIR, STNK, pajak, asuransi', 1, 3], ['Teknis', 4, 'Checklist pra/pasca trip', 1, 2], ['Perawatan', 5, 'Servis terjadwal', 1, 1], ['Telemetri', 6, 'Suhu, aki, DTC', 0, 2]];
+      document.getElementById('dim-list').innerHTML = DIMS.map(([n, , d, r, y]) => `
+        <li class="flex items-center justify-between gap-3">
+          <div class="min-w-0"><p class="text-[13px] font-semibold text-[#1a1f36]">${n}</p><p class="text-[11px] text-[#9aa3bf]">${d}</p></div>
+          <div class="flex gap-1.5 shrink-0">
+            <span class="min-w-[44px] text-center px-2 py-1 rounded-md text-[11.5px] font-bold border ${r ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-slate-50 text-slate-400 border-slate-200'}">${r} merah</span>
+            <span class="min-w-[44px] text-center px-2 py-1 rounded-md text-[11.5px] font-bold border ${y ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-slate-50 text-slate-400 border-slate-200'}">${y} kuning</span>
+          </div>
+        </li>`).join('');
+
+      // Filter garasi
+      [...new Set(V.map(v => v[2]))].sort().forEach(g => document.getElementById('f-garasi').insertAdjacentHTML('beforeend', `<option>${g}</option>`));
+
+      function render() {
+        const q = document.getElementById('q').value.toLowerCase();
+        const g = document.getElementById('f-garasi').value;
+        const s = document.getElementById('f-status').value;
+        const rows = V.filter(v => (!q || (v[0] + ' ' + v[1]).toLowerCase().includes(q)) && (!g || v[2] === g) && (!s || v[7] === s))
+          .sort((a, b) => ORDER[TONE_OF[a[7]]] - ORDER[TONE_OF[b[7]]]);
+        document.getElementById('v-table').innerHTML = rows.map((v, i) => `
+          <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" data-row="${V.indexOf(v)}" tabindex="0">
+            <td class="px-5 py-3.5 text-[12.5px] font-bold font-mono text-[#1a1f36] whitespace-nowrap">${v[0]}</td>
+            <td class="px-5 py-3.5 text-[12.5px] text-[#4b5675] whitespace-nowrap">${v[1]}</td>
+            <td class="px-5 py-3.5 text-[12.5px] text-[#4b5675] whitespace-nowrap">${v[2]}</td>
+            <td class="px-5 py-3.5">${Exec.badge(TONE_OF[v[7]], v[7])}</td>
+            <td class="px-5 py-3 text-right">${Exec.actionBtn('data-row-btn tabindex="-1"')}</td>
+          </tr>`).join('') || `<tr><td colspan="5" class="px-5 py-8 text-center text-[12.5px] text-[#9aa3bf]">Tidak ada kendaraan yang cocok.</td></tr>`;
+        document.querySelectorAll('.filter-card').forEach(c => c.classList.toggle('!border-[#FF8A0D]', c.dataset.filter === s));
+      }
+      ['q', 'f-garasi', 'f-status'].forEach(id => document.getElementById(id).addEventListener('input', render));
+      document.querySelectorAll('.filter-card').forEach(c => c.addEventListener('click', () => {
+        const f = document.getElementById('f-status');
+        f.value = f.value === c.dataset.filter ? '' : c.dataset.filter;
+        render();
+      }));
+      const openRow = el => {
+        const v = V[+el.dataset.row];
+        Exec.openDrill({ title: v[0], sub: `${v[1]} · ${v[2]} · ${v[7]}`, items: [
+          ['Kesimpulan', v[7], v[8], TONE_OF[v[7]] === 'r' ? 'red' : ''],
+          ['Legal', v[3][1], '', v[3][0] === 'r' ? 'red' : ''],
+          ['Teknis', v[4][1], '', v[4][0] === 'r' ? 'red' : ''],
+          ['Perawatan', v[5][1], '', v[5][0] === 'r' ? 'red' : ''],
+          ['Telemetri', v[6][1], '', v[6][0] === 'r' ? 'red' : ''],
+        ] });
+      };
+      document.getElementById('v-table').addEventListener('click', e => { const r = e.target.closest('[data-row]'); if (r) openRow(r); });
+      document.getElementById('v-table').addEventListener('keydown', e => { const r = e.target.closest('[data-row]'); if (r && e.key === 'Enter') openRow(r); });
+      render();
+
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

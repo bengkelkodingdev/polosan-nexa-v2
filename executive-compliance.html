@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peringkat & Kepatuhan - FleetTrack Nexa v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d0d6e8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9aa3bf;
+      }
+    </style>
+    <link rel="stylesheet" href="assets/sidebar.css" />
+    <script src="assets/sidebar.js"></script>
+    <script src="assets/executive.js"></script>
+  </head>
+  <body
+    class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"
+    ></div>
+
+    <!-- ─── SIDEBAR (TETAP SAMA PERSIS, TIDAK DIUBAH) ─── -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0"
+    >
+      <!-- Logo -->
+      <div class="h-14 px-4 flex items-center gap-2.5">
+        <a
+          href="index.html"
+          class="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src="assets/nexa-logo.png"
+            alt="Nexa"
+            class="h-9 object-contain"
+            onerror="
+              this.src = 'https://placehold.co/72x22/222845/ffffff?text=NEXA'
+            "
+          />
+          <span
+            class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap"
+            >Fleet Management</span
+          >
+        </a>
+        <button
+          id="sidebar-close-btn"
+          class="ml-auto lg:hidden text-white/50 hover:text-white p-1"
+        >
+          <i data-lucide="x" class="size-5"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div
+        class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium"
+      >
+        <!-- Section: Ringkasan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            RINGKASAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i
+                data-lucide="layout-grid"
+                class="size-4 shrink-0"
+              ></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Monitoring Kesiapan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            MONITORING KESIAPAN
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-fleet.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="truck" class="size-4 shrink-0"></i>
+              <span>Kesiapan Armada</span>
+            </a>
+            <a
+              href="executive-driver.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="users" class="size-4 shrink-0"></i>
+              <span>Kesiapan Driver</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Evaluasi & Laporan -->
+        <div>
+          <p
+            class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap"
+          >
+            EVALUASI & AUDIT
+          </p>
+          <div class="space-y-1.5">
+            <a
+              href="executive-compliance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20"
+            >
+              <i data-lucide="shield-check" class="size-4 shrink-0 text-white"></i>
+              <span>Peringkat & Kepatuhan</span>
+            </a>
+            <a
+              href="executive-maintenance.html"
+              class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <i data-lucide="wrench" class="size-4 shrink-0"></i>
+              <span>Biaya Pemeliharaan</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="p-2.5 pt-0 border-t border-white/5">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+          <div
+            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white text-xs select-none shadow-xs"
+          >
+            EX
+          </div>
+          <div class="flex flex-col leading-tight min-w-0 flex-1">
+            <span class="text-sm font-bold text-white/90 truncate"
+              >Direktur Utama</span
+            >
+            <span class="text-[11px] text-white/50 truncate"
+              >executive@nexa.id</span
+            >
+          </div>
+          <a
+            href="index.html"
+            title="Kembali ke Beranda"
+            class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors"
+          >
+            <i data-lucide="log-out" class="size-4"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT WRAPPER ─── -->
+    <div
+      class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300"
+    >
+      <!-- Top Site Header (Sticky Minimal) -->
+      <header
+        class="h-14 bg-white border-b border-[#e4e8f0] sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between"
+      >
+        <!-- Left: Toggle & Breadcrumb -->
+        <div class="flex items-center gap-0 min-w-0 flex-1">
+          <button
+            id="sidebar-toggle-btn"
+            class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0"
+            title="Buka / Tutup Sidebar"
+          >
+            <i data-lucide="panel-left" class="size-4"></i>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+          <!-- Breadcrumb -->
+          <nav
+            class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden"
+          >
+            <a
+              href="index.html"
+              class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors"
+              >FleetTrack</a
+            >
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="text-[#9aa3bf]">Executive</span>
+            <i
+              data-lucide="chevron-right"
+              class="size-3 text-[#d0d6e8] stroke-[2.5]"
+            ></i>
+            <span class="font-bold text-[#111827]">Peringkat &amp; Kepatuhan</span>
+          </nav>
+        </div>
+
+        <!-- Right: Actions & User Dropdown -->
+        <div class="flex items-center gap-2.5 shrink-0 pl-2">
+          <button
+            class="size-9 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all relative"
+            title="Notifikasi"
+          >
+            <i data-lucide="bell" class="size-4"></i>
+            <span
+              class="absolute top-2 right-2 size-1.5 rounded-full bg-[#FF8A0D]"
+            ></span>
+          </button>
+
+          <div class="w-px h-5 bg-[#e4e8f0] mx-0.5"></div>
+
+          <!-- Role Switcher & Profile Dropdown -->
+          <div class="relative">
+            <button
+              id="user-menu-btn"
+              class="flex items-center gap-2.5 px-2 py-1 rounded-full hover:bg-[#f5f7fb] transition-colors"
+            >
+              <div
+                class="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#222845] text-xs font-bold text-white select-none ring-2 ring-white"
+              >
+                EX
+              </div>
+              <div class="hidden sm:flex flex-col text-left leading-tight">
+                <span class="text-xs font-bold text-[#111827]"
+                  >Direktur Utama</span
+                >
+                <span class="text-[10.5px] text-[#64748b]">executive@nexa.id</span>
+              </div>
+              <i
+                data-lucide="chevron-down"
+                class="size-3.5 text-[#9aa3bf] ml-0.5"
+              ></i>
+            </button>
+
+            <!-- Dropdown Popover -->
+            <div
+              id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-xl py-2 z-50 text-xs"
+            >
+              <div class="px-4 py-2.5 border-b border-gray-100">
+                <p class="text-[10.5px] font-medium text-gray-400">Masuk sebagai</p>
+                <p class="font-bold text-[#111827] truncate">
+                  executive@nexa.id
+                </p>
+              </div>
+              <div
+                class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400"
+              >
+                Beralih Tampilan Role:
+              </div>
+              <a
+                href="superadmin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Super Admin</span>
+              </a>
+              <a
+                href="executive.html"
+                class="flex items-center justify-between px-4 py-2 text-[#FF8A0D] font-bold bg-orange-50/60"
+              >
+                <span>Executive</span>
+                <i data-lucide="check" class="size-3.5 text-[#FF8A0D]"></i>
+              </a>
+              <a
+                href="admin.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Admin</span>
+              </a>
+              <a
+                href="manager.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Manager</span>
+              </a>
+              <a
+                href="auditor.html"
+                class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                <span>Auditor</span>
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50"
+              >
+                <i data-lucide="home" class="size-3.5"></i>
+                <span>Kembali ke Beranda</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ─── MAIN: Konsep v2 §5, gaya kartu bersih (referensi), palet Nexa ─── -->
+      <main class="flex-1 p-5 sm:p-7 max-w-[1520px] w-full mx-auto space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <h1 class="text-[24px] sm:text-[28px] font-extrabold text-[#111827] tracking-[-0.6px]">Peringkat &amp; Kepatuhan</h1>
+            <p class="text-[13px] text-[#64748b] mt-1">Garasi mana yang paling perlu perhatian, seberapa patuh checklist dijalankan, dan seberapa cepat masalah diselesaikan.</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <select id="period" data-dd aria-label="Periode">
+                <option>30 hari</option><option>90 hari</option>
+              </select>
+            <button type="button" onclick="alert('Prototipe: ekspor laporan kepatuhan & audit ke PDF')" class="flex items-center gap-1.5 h-9 px-4 rounded-full bg-[#222845] text-white text-[12px] font-semibold hover:bg-[#2f3760] transition-colors">
+              <i data-lucide="download" class="size-3.5"></i> Ekspor laporan audit
+            </button>
+          </div>
+        </div>
+
+        <section class="card">
+          <h2 class="card-title">Kepatuhan &amp; Risiko</h2>
+          <div id="compliance-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4"></div>
+        </section>
+
+        <section class="card !p-0 overflow-hidden">
+          <div class="px-5 pt-5 pb-4">
+            <h2 class="card-title">Peringkat Garasi</h2>
+            <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Urut dari kesiapan operasional terendah</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-left text-[13px] min-w-[720px]">
+              <thead>
+                <tr class="border-y border-[#e4e8f0] bg-[#f8f9fc]">
+                  <th class="th w-12">#</th><th class="th">Garasi</th><th class="th">Kesiapan operasional</th>
+                  <th class="th">Kepatuhan checklist</th><th class="th text-right">Masalah belum selesai</th><th class="th text-right w-20">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="garasi-table" data-pager="10" class="divide-y divide-[#f1f3f9]"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <section class="card">
+            <h2 class="card-title">Penyebab Blokir</h2>
+            <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Kejadian blokir kendaraan dalam periode</p>
+            <ul id="cause-list" class="space-y-3.5 mt-4"></ul>
+          </section>
+          <section class="card">
+            <h2 class="card-title">Hasil Uji Petik Auditor</h2>
+            <p class="text-[11.5px] text-[#9aa3bf] mt-0.5">Kesesuaian bukti lapangan dengan data sistem</p>
+            <ul id="sample-list" class="space-y-3.5 mt-4"></ul>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Drill-down panel -->
+    <div id="drill" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="drill-title">
+      <div data-close class="absolute inset-0 bg-[#0f172a]/40"></div>
+      <div class="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] max-w-md bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div class="px-5 py-4 border-b border-[#f1f3f9] flex items-start justify-between gap-3">
+          <div>
+            <h3 id="drill-title" class="text-[16px] font-bold text-[#111827]"></h3>
+            <p id="drill-sub" class="text-[12px] text-[#64748b] mt-0.5"></p>
+          </div>
+          <button type="button" data-close class="icon-btn" aria-label="Tutup"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <ul id="drill-list" class="flex-1 overflow-y-auto divide-y divide-[#f1f3f9]"></ul>
+        <p class="px-5 py-3 border-t border-[#f1f3f9] text-[11px] text-[#9aa3bf]">Executive hanya melihat. Tindak lanjut dilakukan oleh Manager.</p>
+      </div>
+    </div>
+
+    <style type="text/tailwindcss">
+      .card { @apply bg-white border border-[#e4e8f0] rounded-2xl p-5; }
+      .card-title { @apply text-[16px] font-bold text-[#111827] tracking-[-0.2px]; }
+      .kpi { @apply text-left bg-white border border-[#e4e8f0] rounded-2xl p-5 hover:border-[#FF8A0D]/60 hover:shadow-[0_6px_20px_rgba(34,40,69,.06)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .kpi-label { @apply text-[13px] font-medium text-[#4b5675]; }
+      .kpi-icon { @apply size-9 rounded-full border border-[#e4e8f0] bg-[#f8f9fc] text-[#222845] flex items-center justify-center shrink-0; }
+      .kpi-value { @apply text-[30px] font-semibold tracking-[-1px] text-[#111827] mt-1 leading-tight; }
+      .kpi-foot { @apply flex items-center gap-1.5 mt-2 text-[11.5px] text-[#64748b]; }
+      .chip-up { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 font-semibold; }
+      .chip-down { @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 font-semibold; }
+      .icon-btn { @apply size-8 rounded-full border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors; }
+      .stat { @apply flex flex-col items-start rounded-xl px-2 py-1.5 hover:bg-[#f8f9fc] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D]; }
+      .stat-n { @apply text-[18px] font-bold text-[#111827] font-mono; }
+      .stat-l { @apply flex items-center gap-1.5 text-[11px] text-[#64748b]; }
+      .dot { @apply size-1.5 rounded-full inline-block; }
+      .th { @apply px-5 py-3 text-left text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] whitespace-nowrap; }
+    </style>
+
+    <script>
+      lucide.createIcons();
+
+      // Sidebar Mobile Toggle
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+      const toggleBtn = document.getElementById("sidebar-toggle-btn");
+      const closeBtn = document.getElementById("sidebar-close-btn");
+
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarBackdrop.classList.remove("hidden");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarBackdrop.classList.add("hidden");
+      }
+
+      toggleBtn?.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+
+      closeBtn?.addEventListener("click", closeSidebar);
+      sidebarBackdrop?.addEventListener("click", closeSidebar);
+
+      // User Dropdown Toggle
+      const userMenuBtn = document.getElementById("user-menu-btn");
+      const userDropdown = document.getElementById("user-dropdown");
+
+      userMenuBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", () => {
+        userDropdown?.classList.add("hidden");
+      });
+
+      window.DRILL = {
+        'c-dok-habis': { title: 'Dokumen Kedaluwarsa', sub: '1 dokumen', items: [['B 1190 HJK', 'KIR · Garasi Gedung B', 'Kedaluwarsa 18 Nov 2026', 'red']] },
+        'c-dok-hampir': { title: 'Dokumen Hampir Kedaluwarsa', sub: '5 dokumen · ≤ 60 hari', items: [
+          ['B 1234 XY', 'KIR', 'Habis dalam 45 hari'], ['B 3307 KLM', 'Asuransi', 'Habis dalam 38 hari'], ['B 4470 UVW', 'Pajak', 'Habis dalam 21 hari'],
+          ['B 2290 PLM', 'STNK', 'Habis dalam 57 hari'], ['B 7781 TQS', 'Asuransi', 'Habis dalam 59 hari']] },
+        'c-rawat-tempo': { title: 'Perawatan Jatuh Tempo', sub: '4 kendaraan · ≤ 14 hari atau ≤ 500 km', items: [
+          ['B 8812 FAD', 'Servis berkala', '9 hari lagi'], ['B 1023 KJA', 'Ganti oli', '320 km lagi'], ['B 5521 NNO', 'Servis berkala', '12 hari lagi'], ['B 9014 PQR', 'Ganti ban', '480 km lagi']] },
+        'c-rawat-telat': { title: 'Perawatan Terlambat', sub: '1 kendaraan', items: [['B 6602 TRE', 'Servis berkala', 'Terlambat 23 hari', 'red']] },
+        'c-temuan': { title: 'Masalah Serius Belum Selesai', sub: '2 masalah tingkat tinggi yang belum ditutup', items: [
+          ['CASE-0412', 'B 7720 SDA', 'Rem utama gagal · ditindaklanjuti Manager', 'red'],
+          ['CASE-0409', 'B 1190 HJK', 'Beroperasi dengan KIR kedaluwarsa · investigasi Auditor', 'red']] },
+        'c-insiden': { title: 'Insiden 30 Hari', sub: '4 insiden', items: [
+          ['INC-118', 'Ringan', 'Lecet bodi saat parkir · Garasi Annex'], ['INC-121', 'Ringan', 'Ban pecah · Garasi Gedung B'],
+          ['INC-124', 'Sedang', 'Senggolan di tol · Garasi Utama'], ['INC-127', 'Ringan', 'Kaca spion patah · Garasi Gedung C']] },
+        'c-checklist': { title: 'Kepatuhan Checklist', sub: 'Tugas dengan checklist pra dan pasca trip lengkap', items: [
+          ['Garasi Gedung C', '82%', '41 tugas tanpa checklist lengkap', 'red'], ['Garasi Gedung B', '90%', '19 tugas tanpa checklist lengkap'],
+          ['Garasi Annex', '95%', '9 tugas tanpa checklist lengkap'], ['Garasi Utama', '97%', '6 tugas tanpa checklist lengkap']] },
+        'c-tutup': { title: 'Lama Penyelesaian Masalah', sub: 'Rata-rata hari sejak masalah dicatat sampai selesai', items: [
+          ['Garasi Gedung C', '6,8 hari', 'Di atas target 5 hari', 'red'], ['Garasi Gedung B', '4,9 hari', ''], ['Garasi Annex', '3,2 hari', ''], ['Garasi Utama', '2,7 hari', '']] },
+      };
+
+      const TONE = {
+        red: ['bg-rose-50/70 border-rose-200', 'text-rose-700', 'bg-rose-500'],
+        amber: ['bg-white border-[#e4e8f0]', 'text-[#111827]', 'bg-amber-500'],
+        green: ['bg-white border-[#e4e8f0]', 'text-[#111827]', 'bg-emerald-500'],
+        grey: ['bg-white border-[#e4e8f0]', 'text-[#111827]', 'bg-slate-400'],
+      };
+      document.getElementById('compliance-grid').innerHTML = [
+        ['c-dok-habis', 'Dokumen kedaluwarsa', '1', 'Target 0', 'red'],
+        ['c-dok-hampir', 'Dokumen hampir habis', '5', '≤ 60 hari', 'amber'],
+        ['c-rawat-tempo', 'Perawatan jatuh tempo', '4', '≤ 14 hari / 500 km', 'amber'],
+        ['c-rawat-telat', 'Perawatan terlambat', '1', 'Lewat jadwal', 'red'],
+        ['c-temuan', 'Masalah serius', '2', 'Belum selesai, segera tangani', 'red'],
+        ['c-insiden', 'Insiden 30 hari', '4', '3 ringan · 1 sedang', 'grey'],
+        ['c-checklist', 'Kepatuhan checklist', '91%', 'Hijau ≥ 95% · merah < 80%', 'amber'],
+        ['c-tutup', 'Lama penyelesaian', '4,1 hari', 'Rata-rata · target ≤ 5 hari', 'green'],
+      ].map(([k, l, v, s, t]) => `
+        <button type="button" data-drill="${k}" class="text-left border rounded-xl p-3.5 hover:border-[#FF8A0D]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8A0D] ${TONE[t][0]}">
+          <span class="flex items-center gap-1.5 text-[11.5px] font-medium text-[#4b5675] min-w-0" title="${l}"><span class="size-1.5 shrink-0 rounded-full ${TONE[t][2]}"></span><span class="truncate">${l}</span></span>
+          <div class="text-[22px] font-semibold tracking-[-0.5px] mt-1 ${TONE[t][1]}">${v}</div>
+          <span class="text-[11px] text-[#9aa3bf]">${s}</span>
+        </button>`).join('');
+
+      // [garasi, kendaraan total, boleh, siap penuh, driver total, driver boleh, checklist %, temuan, tren]
+      const G = [
+        ['Garasi Gedung C', 9, 8, 6, 11, 9, 82, 5, -1],
+        ['Garasi Gedung B', 10, 9, 8, 12, 11, 90, 3, 1],
+        ['Garasi Annex', 10, 8, 7, 11, 10, 95, 2, -1],
+        ['Garasi Utama', 13, 12, 10, 14, 13, 97, 1, 1],
+      ];
+      const pct = (a, b) => Math.round(a / b * 100);
+      const tone = p => p < 80 ? 'bg-rose-500' : p < 90 ? 'bg-amber-400' : 'bg-emerald-500';
+      const bar = (p, txt) => `<div class="flex items-center gap-2.5"><div class="w-20 h-2 rounded-full bg-[#f5f7fb]"><div class="h-full rounded-full ${tone(p)}" style="width:${p}%"></div></div><span class="text-[12.5px] font-semibold text-[#111827]">${p}%</span>${txt ? `<span class="text-[11px] text-[#9aa3bf]">${txt}</span>` : ''}</div>`;
+      document.getElementById('garasi-table').innerHTML = G.sort((a, b) => pct(a[2], a[1]) - pct(b[2], b[1])).map((g, i) => `
+        <tr class="hover:bg-[#f8f9fc] transition-colors">
+          <td class="px-5 py-3.5 text-[12px] font-mono text-[#9aa3bf]">${i + 1}</td>
+          <td class="px-5 py-3.5 text-[13px] font-semibold text-[#111827] whitespace-nowrap">${g[0]}</td>
+          <td class="px-5 py-3.5">${bar(pct(g[2], g[1]), `${g[2]}/${g[1]}`)}</td>
+          <td class="px-5 py-3.5">${bar(g[6])}</td>
+          <td class="px-5 py-3.5 text-right text-[13px] font-mono font-bold ${g[7] >= 3 ? 'text-rose-700' : 'text-[#111827]'}">${g[7]}</td>
+          <td class="px-5 py-3 text-right">${Exec.actionBtn(`data-garasi="${i}"`)}</td>
+        </tr>`).join('');
+      document.getElementById('garasi-table').addEventListener('click', e => {
+        const b = e.target.closest('[data-garasi]');
+        if (!b) return;
+        const g = G[+b.dataset.garasi];
+        Exec.openDrill({ title: g[0], sub: `Peringkat ${+b.dataset.garasi + 1} dari ${G.length} garasi`, items: [
+          ['Kesiapan operasional', `${pct(g[2], g[1])}% · ${g[2]}/${g[1]} kendaraan`, 'Siap jalan + siap dengan catatan'],
+          ['Kesiapan penuh', `${pct(g[3], g[1])}% · ${g[3]}/${g[1]} kendaraan`, 'Siap jalan tanpa catatan'],
+          ['Kepatuhan checklist', `${g[6]}%`, g[6] < 80 ? 'Di bawah batas merah (80%)' : '', g[6] < 80 ? 'red' : ''],
+          ['Masalah belum selesai', String(g[7]), g[7] >= 3 ? 'Perlu ditindaklanjuti' : '', g[7] >= 3 ? 'red' : ''],
+          ['Tren 7 hari', g[8] > 0 ? 'Naik' : 'Turun'],
+        ] });
+      });
+
+      const list = (id, rows, color) => document.getElementById(id).innerHTML = rows.map(([l, v, w, c]) => `
+        <li>
+          <div class="flex justify-between text-[12.5px]"><span class="text-[#4b5675]">${l}</span><span class="font-bold font-mono text-[#111827]">${v}</span></div>
+          <div class="mt-1.5 h-2 rounded-full bg-[#f5f7fb]"><div class="h-full rounded-full ${c || color}" style="width:${w}%"></div></div>
+        </li>`).join('');
+      list('cause-list', [['Item kritis checklist gagal', 9, 100], ['Dokumen kedaluwarsa', 6, 67], ['Perawatan terlambat', 5, 56], ['Anomali telemetri berat', 3, 33], ['Pajak / asuransi habis', 2, 22]], 'bg-[#222845]');
+      list('sample-list', [
+        ['Foto odometer cocok dengan telemetri', '99,2%', 99.2], ['Lokasi GPS saat checklist di area garasi', '97,0%', 97],
+        ['Nota servis lengkap dan terverifikasi Manager', '100%', 100], ['Checklist diisi sebelum perjalanan dimulai', '93,5%', 93.5, 'bg-amber-400'],
+      ], 'bg-emerald-500');
+
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
