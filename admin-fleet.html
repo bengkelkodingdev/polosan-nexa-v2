@@ -99,6 +99,10 @@
               <i data-lucide="wrench" class="size-4 shrink-0"></i>
               <span>Perawatan</span>
             </a>
+            <a href="admin-mutation.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="arrow-left-right" class="size-4 shrink-0"></i>
+              <span>Mutasi &amp; Penghapusan</span>
+            </a>
             <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
               <i data-lucide="smartphone" class="size-4 shrink-0"></i>
               <span>Simulasi Driver</span>
@@ -142,7 +146,9 @@
           <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
           <a href="admin.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">Admin</a>
           <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
-          <span class="font-bold text-[#111827]">Mobil Dinas</span>
+          <span id="crumb-fleet" class="font-bold text-[#111827]">Mobil Dinas</span>
+          <span id="crumb-sep" class="hidden text-[#d0d6e8]">›</span>
+          <span id="crumb-id" class="hidden font-bold text-[#111827]"></span>
         </nav>
       </div>
 
@@ -208,12 +214,13 @@
     </header>
 
     <!-- Page Body -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+    <main id="main-scroll" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+      <div id="list-view">
       
       <!-- Page Header -->
       <div class="mb-5.5">
         <h1 class="text-2xl font-bold text-[#1a1f36]">Master Data Mobil Dinas</h1>
-        <p class="text-sm text-[#52607a] mt-1">Kelola 42 mobil dinas beserta dokumen, unit kerja, dan status kesiapannya</p>
+        <p class="text-sm text-[#52607a] mt-1">Kelola 42 mobil dinas (Pool &amp; Melekat) beserta dokumen, riwayat pemakaian, dan status kesiapannya</p>
       </div>
 
       <!-- Data Table Card Container -->
@@ -234,6 +241,13 @@
                 class="w-full h-9 pl-9 pr-3 text-[13px] bg-white border border-[#d0d6e8] rounded-[7px] text-[#1a1f36] placeholder-[#9aa3bf] focus:outline-none focus:border-[#2563eb] transition-colors"
               />
             </div>
+
+            <!-- Kategori Filter -->
+            <select id="filter-cat" class="h-9 px-3 text-[12.5px] border border-[#d0d6e8] rounded-[7px] bg-white text-[#52607a] focus:outline-none focus:border-[#2563eb]">
+              <option value="">Semua Kategori</option>
+              <option value="Pool">Pool</option>
+              <option value="Melekat">Melekat</option>
+            </select>
 
             <!-- Tipe Filter -->
             <select id="filter-type" class="h-9 px-3 text-[12.5px] border border-[#d0d6e8] rounded-[7px] bg-white text-[#52607a] focus:outline-none focus:border-[#2563eb]">
@@ -287,7 +301,7 @@
 
         <!-- Table -->
         <div class="overflow-x-auto">
-          <table class="w-full border-collapse text-left min-w-[980px]" id="main-table">
+          <table class="w-full border-collapse text-left min-w-[1080px]" id="main-table">
             <thead>
               <tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]">
                 <th class="py-3 pl-5 pr-2 w-10">
@@ -295,7 +309,8 @@
                 </th>
                 <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] w-12">No</th>
                 <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Kendaraan</th>
-                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Unit Kerja / Pool</th>
+                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Kategori</th>
+                <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Unit Kerja / Pemegang</th>
                 <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Odometer</th>
                 <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status Kesiapan</th>
                 <th class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Catatan</th>
@@ -322,6 +337,75 @@
 
       </div>
 
+      </div>
+
+      <div id="detail-view" class="hidden">
+        <button type="button" onclick="closeDetailModal()" class="inline-flex items-center gap-1.5 mb-3 text-xs font-semibold text-[#52607a] hover:text-[#2563eb]"><i data-lucide="arrow-left" class="size-3.5"></i>Kembali ke daftar</button>
+
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs p-5 mb-5">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-5 border-b border-[#e4e8f0]">
+            <div>
+              <h1 class="text-2xl font-bold text-[#1a1f36] font-mono" id="detail-plate">-</h1>
+              <p class="text-sm text-[#52607a] mt-0.5" id="detail-subtitle">-</p>
+              <div class="mt-3" id="detail-badge"></div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="editFromDetail()" class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-[#e4e8f0] bg-white text-xs font-semibold text-[#374151] hover:bg-[#f5f6fa]"><i data-lucide="pencil" class="size-3.5"></i>Edit</button>
+              <button type="button" onclick="openDeleteModal(currentDetail)" class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-[#dc2626] hover:bg-[#b91c1c] text-xs font-semibold text-white"><i data-lucide="trash-2" class="size-3.5"></i>Hapus</button>
+            </div>
+          </div>
+          <div class="pt-5 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Unit Kerja</p><p class="mt-1 text-[13px] font-semibold text-[#111827]" id="detail-unit">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Odometer</p><p class="mt-1 text-[13px] font-semibold text-[#111827] font-mono" id="detail-odo">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tipe / Tahun</p><p class="mt-1 text-[13px] font-semibold text-[#111827]" id="detail-type">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Sensor GPS</p><p class="mt-1 text-[13px] font-semibold text-[#111827]" id="detail-gps">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Kategori</p><p class="mt-1 text-[13px] font-semibold text-[#111827]" id="detail-cat">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Pemegang</p><p class="mt-1 text-[13px] font-semibold text-[#111827]" id="detail-holder">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">No. Rangka</p><p class="mt-1 text-[13px] font-semibold text-[#111827] font-mono break-all" id="detail-vin">-</p></div>
+              <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Mesin / BBM</p><p class="mt-1 text-[13px] font-semibold text-[#111827]" id="detail-engine">-</p></div>
+          </div>
+        </div>
+
+        <div id="detail-reason-box">
+          <p id="detail-reason-title">Alasan status</p>
+          <p class="mt-1 text-[12.5px] text-[#4b5675] leading-relaxed" id="detail-reason">-</p>
+        </div>
+
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
+          <div role="tablist" class="flex gap-2 px-3 border-b border-[#e4e8f0] overflow-x-auto">
+              <button type="button" role="tab" id="dtab-docs" onclick="showDetailTab('docs')" class="flex items-center gap-2 px-3 py-3.5 -mb-px border-b-2 border-transparent text-[13px] font-semibold whitespace-nowrap text-[#52607a] hover:text-[#2563eb]">Dokumen<span id="dcount-docs" class="rounded-full bg-[#f1f3f9] px-1.5 py-0.5 text-[10.5px] font-bold text-[#52607a]">0</span></button>
+              <button type="button" role="tab" id="dtab-usage" onclick="showDetailTab('usage')" class="flex items-center gap-2 px-3 py-3.5 -mb-px border-b-2 border-transparent text-[13px] font-semibold whitespace-nowrap text-[#52607a] hover:text-[#2563eb]">Riwayat Pemakaian<span id="dcount-usage" class="rounded-full bg-[#f1f3f9] px-1.5 py-0.5 text-[10.5px] font-bold text-[#52607a]">0</span></button>
+              <button type="button" role="tab" id="dtab-service" onclick="showDetailTab('service')" class="flex items-center gap-2 px-3 py-3.5 -mb-px border-b-2 border-transparent text-[13px] font-semibold whitespace-nowrap text-[#52607a] hover:text-[#2563eb]">Riwayat Perawatan<span id="dcount-service" class="rounded-full bg-[#f1f3f9] px-1.5 py-0.5 text-[10.5px] font-bold text-[#52607a]">0</span></button>
+          </div>
+            <div id="dpanel-docs" role="tabpanel" class="hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-[12.5px]">
+                  <thead class="bg-[#f8f9fc]"><tr><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Dokumen</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Berlaku Sampai</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf] text-right">Status</th></tr></thead>
+                  <tbody id="detail-docs" class="divide-y divide-[#f1f3f9]"></tbody>
+                </table>
+              </div>
+              <div class="px-4 py-3 border-t border-[#e4e8f0] text-[11.5px] text-[#9aa3bf]">Batas peringatan 60 hari sebelum kedaluwarsa.</div>
+            </div>
+            <div id="dpanel-usage" role="tabpanel" class="hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-[12.5px] min-w-[560px]">
+                  <thead class="bg-[#f8f9fc]"><tr><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tanggal / Driver</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tujuan / Km</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Pra / Pasca</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Temuan</th></tr></thead>
+                  <tbody id="detail-usage" class="divide-y divide-[#f1f3f9]"></tbody>
+                </table>
+              </div>
+              <div id="dpager-usage" class="px-4 py-3 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"></div><div class="px-4 py-3 border-t border-[#e4e8f0] text-[11.5px] text-[#9aa3bf]">Dari checklist pra/pasca-trip driver · read-only</div>
+            </div>
+            <div id="dpanel-service" role="tabpanel" class="hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-[12.5px] min-w-[480px]">
+                  <thead class="bg-[#f8f9fc]"><tr><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tanggal</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Servis</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Odometer</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf] text-right">Biaya</th></tr></thead>
+                  <tbody id="detail-service" class="divide-y divide-[#f1f3f9]"></tbody>
+                </table>
+              </div>
+              <div id="dpager-service" class="px-4 py-3 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"></div><div class="px-4 py-3 border-t border-[#e4e8f0] text-[11.5px] text-[#9aa3bf]">Verifikasi perawatan dilakukan oleh Manager. <a href="admin-maintenance.html" class="font-semibold text-[#2563eb] hover:underline">Buka Perawatan</a></div>
+            </div>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -383,6 +467,36 @@
               </select>
             </div>
           </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Kategori *</label>
+              <select id="input-cat" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+                <option value="Pool">Pool (dilacak GPS, dipakai bergantian)</option>
+                <option value="Melekat">Melekat (ditugaskan tetap ke pejabat)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Pemegang</label>
+              <input type="text" id="input-holder" placeholder="Khusus Melekat, mis. Kepala Biro Umum" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5">No. Rangka (VIN)</label>
+              <input type="text" id="input-vin" placeholder="MHFAB8GS0P0..." class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] font-mono focus:outline-none focus:border-[#2563eb]" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5">No. Mesin</label>
+              <input type="text" id="input-engine" placeholder="1GD-FTV..." class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] font-mono focus:outline-none focus:border-[#2563eb]" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Jenis BBM</label>
+              <select id="input-fuel" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+                <option>Solar</option><option>Bensin</option><option>Listrik</option>
+              </select>
+            </div>
+          </div>
           <p class="text-[11px] text-[#9aa3bf] leading-relaxed">Status kesiapan dihitung sistem dari dokumen, checklist, perawatan, dan telemetri. Admin tidak dapat mengubah status secara manual.</p>
         </div>
 
@@ -391,78 +505,6 @@
           <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg shadow-xs">Simpan Data</button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- ─── MODAL: DETAIL ARMADA ─── -->
-  <div id="detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeDetailModal()"></div>
-    <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] z-10 animate-fade-in max-h-[90vh] overflow-y-auto">
-      <div class="flex items-start justify-between p-6 pb-4 border-b border-[#e4e8f0] sticky top-0 bg-white z-10">
-        <div>
-          <h3 class="text-lg font-bold text-[#111827]" id="detail-plate">B 7720 SDA</h3>
-          <p class="text-xs text-[#9aa3bf] mt-0.5" id="detail-subtitle">Mercedes-Benz OH 1626</p>
-          <div class="mt-3" id="detail-badge"></div>
-        </div>
-        <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 p-1">
-          <i data-lucide="x" class="size-5"></i>
-        </button>
-      </div>
-
-      <div class="p-6 space-y-5">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5">
-            <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Unit Kerja</p>
-            <p class="mt-1 text-[12.5px] font-semibold text-[#111827]" id="detail-unit">-</p>
-          </div>
-          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5">
-            <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Odometer</p>
-            <p class="mt-1 text-[12.5px] font-semibold font-mono text-[#111827]" id="detail-odo">-</p>
-          </div>
-          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5">
-            <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tipe / Tahun</p>
-            <p class="mt-1 text-[12.5px] font-semibold text-[#111827]" id="detail-type">-</p>
-          </div>
-          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5">
-            <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Sensor GPS</p>
-            <p class="mt-1 text-[12.5px] font-semibold text-[#16a34a]">Online</p>
-          </div>
-        </div>
-
-        <div class="rounded-xl border border-rose-200 bg-rose-50/60 p-4">
-          <p class="text-[10.5px] font-bold uppercase tracking-wide text-rose-700">Alasan status</p>
-          <p class="mt-1 text-[12.5px] text-[#4b5675] leading-relaxed" id="detail-reason">-</p>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between mb-2.5">
-            <h4 class="text-[13px] font-bold text-[#111827]">Dokumen Kendaraan</h4>
-            <span class="text-[11px] text-[#9aa3bf]">Batas 60 hari sebelum kedaluwarsa</span>
-          </div>
-          <div class="overflow-hidden rounded-xl border border-[#e4e8f0]">
-            <table class="w-full text-left text-[12.5px]">
-              <thead class="bg-[#f8f9fc]">
-                <tr>
-                  <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Dokumen</th>
-                  <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Berlaku Sampai</th>
-                  <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf] text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody id="detail-docs" class="divide-y divide-[#f1f3f9]"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 text-[11.5px] text-[#9aa3bf]">
-          <i data-lucide="info" class="size-4"></i>
-          <span>Verifikasi perawatan dan approval pemakaian dilakukan oleh Manager, bukan Admin.</span>
-        </div>
-      </div>
-
-      <div class="px-6 py-4 border-t border-[#e4e8f0] flex justify-end gap-2.5">
-        <button onclick="closeDetailModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Tutup</button>
-        <button onclick="editFromDetail()" class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg">Edit Data</button>
-      </div>
     </div>
   </div>
 
@@ -559,6 +601,52 @@
       { plate: "B 5108 GTA", brand: "Hino", model: "RK8", type: "Bus", year: 2020, unit: "Pool Bus Antar-Jemput", odo: 118320, status: "SIAP JALAN", reason: "Semua dimensi normal." },
     ];
 
+    // Kategori Pool / Melekat + identitas teknis
+    const MELEKAT = { "B 6602 TRE": "Kepala Biro Umum", "B 3307 KLM": "Sekretaris Daerah" };
+    const ENGINE = { Bus: ["OM 906 LA", "Solar"], Hiace: ["1GD-FTV", "Solar"], "Mobil Dinas": ["2.0L Bensin", "Bensin"] };
+    VEHICLES.forEach((v, i) => {
+      v.cat = MELEKAT[v.plate] ? "Melekat" : "Pool";
+      v.holder = MELEKAT[v.plate] || "Bergantian (Pool)";
+      v.vin = "MHF" + (["AB8GS", "SS22P", "HX02P", "BZ1FB"][i % 4]) + String(1203456 + i * 48271).slice(-7) + "P0";
+      v.engine = ENGINE[v.type][0];
+      v.fuel = ENGINE[v.type][1];
+    });
+    function catBadge(cat) {
+      return cat === "Melekat"
+        ? '<span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#fff7ed] text-[#c2410c] border border-[#fed7aa]">Melekat</span>'
+        : '<span class="inline-flex text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-[#eff6ff] text-[#2563eb] border border-[#bfdbfe]">Pool</span>';
+    }
+
+    // Riwayat pemakaian (masukan Sindu 1.1) — sumber: checklist pra/pasca-trip + penugasan Manager
+    const USAGE = {
+      "B 7720 SDA": [
+        ["2026-11-25", "Dedi Wahyu", "Antar-jemput Rute A", 68380, 68420, "GAGAL", "-", "Rem utama gagal uji pra-trip, perjalanan dibatalkan"],
+        ["2026-11-24", "Supardi Ardiansyah", "Antar-jemput Rute B", 68236, 68380, "LOLOS", "CATATAN", "Pedal rem terasa dalam di akhir rute"],
+        ["2026-11-22", "Dedi Wahyu", "Kunjungan kerja Kab. Kendal", 67994, 68236, "LOLOS", "LOLOS", "-"],
+      ],
+      "B 9014 PQR": [
+        ["2026-11-24", "Gita Rahayu", "Rapat koordinasi Provinsi", 44040, 44120, "LOLOS", "CATATAN", "Spion kiri retak (terserempet di parkiran)"],
+        ["2026-11-21", "Ahmad Fauzi", "Antar dokumen ke Bappeda", 43988, 44040, "LOLOS", "LOLOS", "-"],
+        ["2026-11-19", "Budi Setiadi", "Monitoring lapangan Kec. Mijen", 43790, 43988, "LOLOS", "CATATAN", "Ban kanan depan aus, perlu dicek"],
+      ],
+      "B 1234 XY": [
+        ["2026-11-24", "Supardi Ardiansyah", "Study tour pegawai", 105310, 105600, "CATATAN", "CATATAN", "Lampu kabut kiri mati"],
+        ["2026-11-20", "Supardi Ardiansyah", "Antar-jemput Rute C", 105170, 105310, "LOLOS", "LOLOS", "-"],
+      ],
+      "B 2290 PLM": [
+        ["2026-11-24", "Gita Rahayu", "Antar tamu dinas ke bandara", 22410, 22470, "LOLOS", "LOLOS", "-"],
+      ],
+    };
+    const SERVICE_LOG = {
+      "B 7720 SDA": [["2026-10-22", "Ganti Ban", 102340, 6400000]],
+      "B 1234 XY": [["2026-11-18", "Servis Berkala", 48500, 2350000]],
+      "B 2290 PLM": [["2026-10-09", "Servis Berkala", 35980, 1250000]],
+      "B 5521 NNO": [["2026-11-05", "Perbaikan Rem", 61200, 1780000]],
+    };
+    const CHECK = { LOLOS: "bg-emerald-50 text-emerald-700 border-emerald-200", CATATAN: "bg-amber-50 text-amber-700 border-amber-200", GAGAL: "bg-rose-50 text-rose-700 border-rose-200" };
+    const chk = (s) => s === "-" ? '<span class="text-[#9aa3bf]">—</span>' : `<span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${CHECK[s]}">${s}</span>`;
+    const fmtD = (iso) => new Date(iso + "T00:00:00+07:00").toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+
     // Dokumen khusus yang mendekati/melewati kedaluwarsa
     const DOC_OVERRIDES = {
       "B 1190 HJK": { KIR: "2026-11-18" },
@@ -599,7 +687,7 @@
       body.innerHTML = VEHICLES.map((v, i) => {
         const reasonCls = v.status === "TIDAK SIAP JALAN" ? "text-rose-700" : v.status === "SIAP DENGAN CATATAN" ? "text-amber-700" : "text-[#52607a]";
         return `
-          <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" data-type="${v.type}" data-unit="${v.unit}" data-status="${v.status}" onclick="openDetailModal('${v.plate}')">
+          <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" data-type="${v.type}" data-unit="${v.unit}" data-status="${v.status}" data-cat="${v.cat}" onclick="openDetailModal('${v.plate}')">
             <td class="py-3.5 pl-5 pr-2" onclick="event.stopPropagation()">
               <input type="checkbox" class="row-checkbox rounded border-[#d0d6e8] text-[#2563eb] focus:ring-0 cursor-pointer" />
             </td>
@@ -608,7 +696,8 @@
               <div class="font-mono text-[12.5px] font-bold text-[#1a1f36]">${v.plate}</div>
               <div class="text-[11.5px] text-[#9aa3bf]">${v.brand} ${v.model}</div>
             </td>
-            <td class="py-3.5 px-3 text-[12px] text-[#52607a]">${v.unit}</td>
+            <td class="py-3.5 px-3">${catBadge(v.cat)}</td>
+            <td class="py-3.5 px-3 text-[12px] text-[#52607a]">${v.unit}${v.cat === "Melekat" ? `<div class="text-[11.5px] font-semibold text-[#c2410c]">${v.holder}</div>` : ""}</td>
             <td class="py-3.5 px-3 font-mono text-[12px] text-[#52607a]">${fmtKm(v.odo)}</td>
             <td class="py-3.5 px-3">${readinessBadge(v.status)}</td>
             <td class="py-3.5 px-3 text-[11.5px] max-w-[220px] ${reasonCls}">${v.reason}</td>
@@ -708,46 +797,139 @@
       closeFormModal();
     }
 
-    // Detail Modal
-    const detailModal = document.getElementById("detail-modal");
+    // ─── Detail (halaman) ───
+    const PAGE_SIZE = 10;
+    const el = (id) => document.getElementById(id);
+    const listView = el("list-view");
+    const detailView = el("detail-view");
+    const crumbFleet = el("crumb-fleet");
     let currentDetail = null;
+    let detailTab = "docs";
+    const page = { usage: 1, service: 1 };
+
+    const REASON_TONE = {
+      "SIAP JALAN": ["border-emerald-200 bg-emerald-50/60", "text-emerald-700"],
+      "SIAP DENGAN CATATAN": ["border-amber-200 bg-amber-50/60", "text-amber-700"],
+      "TIDAK SIAP JALAN": ["border-rose-200 bg-rose-50/60", "text-rose-700"],
+      "BELUM DINILAI": ["border-slate-200 bg-slate-50", "text-slate-600"],
+    };
 
     function openDetailModal(plate) {
       const v = VEHICLES.find(x => x.plate === plate);
       if (!v) return;
       currentDetail = plate;
-      document.getElementById("detail-plate").innerText = v.plate;
-      document.getElementById("detail-subtitle").innerText = v.brand + " " + v.model;
-      document.getElementById("detail-badge").innerHTML = readinessBadge(v.status);
-      document.getElementById("detail-unit").innerText = v.unit;
-      document.getElementById("detail-odo").innerText = fmtKm(v.odo);
-      document.getElementById("detail-type").innerText = v.type + " · " + v.year;
-      document.getElementById("detail-reason").innerText = v.reason;
+      const set = (id, text) => (el(id).innerText = text);
+      set("detail-plate", v.plate);
+      set("detail-subtitle", v.brand + " " + v.model);
+      el("detail-badge").innerHTML = readinessBadge(v.status);
+      set("detail-unit", v.unit);
+      set("detail-odo", fmtKm(v.odo));
+      set("detail-type", v.type + " · " + v.year);
+      set("detail-reason", v.reason);
+      el("detail-reason-box").className = "rounded-[10px] border px-4 py-3 mb-5 " + REASON_TONE[v.status][0];
+      el("detail-reason-title").className = "text-[10.5px] font-bold uppercase tracking-wide " + REASON_TONE[v.status][1];
+      el("detail-cat").innerHTML = catBadge(v.cat);
+      set("detail-holder", v.holder);
+      set("detail-vin", v.vin);
+      set("detail-engine", v.engine + " · " + v.fuel);
+      const gps = el("detail-gps");
+      gps.innerText = v.cat === "Melekat" ? "Tidak dilacak" : "Online";
+      gps.className = "mt-1 text-[13px] font-semibold " + (v.cat === "Melekat" ? "text-[#9aa3bf]" : "text-[#16a34a]");
 
-      const docRows = docsOf(v).map(([name, iso]) => {
-        const info = docInfo(iso);
-        const date = new Date(iso + "T00:00:00+07:00").toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
-        return `<tr>
-          <td class="px-4 py-2.5 font-semibold text-[#1a1f36]">${name}</td>
-          <td class="px-4 py-2.5 font-mono text-[#52607a]">${date}</td>
-          <td class="px-4 py-2.5 text-right"><span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${info.cls}">${info.label}</span></td>
-        </tr>`;
-      }).join("");
-      document.getElementById("detail-docs").innerHTML = docRows;
+      page.usage = page.service = 1;
+      renderDocs(v); renderUsage(); renderService();
+      showDetailTab("docs");
 
-      detailModal.classList.remove("hidden");
+      listView.classList.add("hidden");
+      detailView.classList.remove("hidden");
+      crumbFleet.className = "text-[#9aa3bf] hover:text-[#2563eb] cursor-pointer transition-colors";
+      crumbFleet.onclick = closeDetailModal;
+      el("crumb-sep").classList.remove("hidden");
+      el("crumb-id").innerText = v.plate;
+      el("crumb-id").classList.remove("hidden");
+      el("main-scroll").scrollTo(0, 0);
+      window.scrollTo(0, 0);
       if (window.lucide) lucide.createIcons();
     }
     function closeDetailModal() {
-      detailModal.classList.add("hidden");
+      detailView.classList.add("hidden");
+      listView.classList.remove("hidden");
+      crumbFleet.className = "font-bold text-[#111827]";
+      crumbFleet.onclick = null;
+      el("crumb-sep").classList.add("hidden");
+      el("crumb-id").classList.add("hidden");
     }
     function editFromDetail() {
-      if (!currentDetail) return;
-      closeDetailModal();
-      openEditModal(currentDetail);
+      if (currentDetail) openEditModal(currentDetail);
     }
 
-    // Delete Modal
+    function showDetailTab(name) {
+      detailTab = name;
+      ["docs", "usage", "service"].forEach(t => {
+        const active = t === name;
+        el("dpanel-" + t).classList.toggle("hidden", !active);
+        const b = el("dtab-" + t);
+        b.setAttribute("aria-selected", active);
+        b.classList.toggle("border-[#2563eb]", active);
+        b.classList.toggle("text-[#2563eb]", active);
+        b.classList.toggle("border-transparent", !active);
+        b.classList.toggle("text-[#52607a]", !active);
+      });
+    }
+
+    function renderDocs(v) {
+      const docs = docsOf(v);
+      el("dcount-docs").innerText = docs.length;
+      el("detail-docs").innerHTML = docs.map(([name, iso]) => {
+        const info = docInfo(iso);
+        return `<tr>
+          <td class="px-4 py-3 font-semibold text-[#1a1f36]">${name}</td>
+          <td class="px-4 py-3 font-mono text-[#52607a]">${fmtD(iso)}</td>
+          <td class="px-4 py-3 text-right"><span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${info.cls}">${info.label}</span></td>
+        </tr>`;
+      }).join("");
+    }
+
+    // Potong daftar per halaman dan gambar tombol Sebelumnya / Selanjutnya
+    function paginate(key, rows) {
+      const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+      page[key] = Math.min(Math.max(1, page[key]), pages);
+      const from = (page[key] - 1) * PAGE_SIZE;
+      const shown = rows.slice(from, from + PAGE_SIZE);
+      el("dcount-" + key).innerText = rows.length;
+      const nav = (step, label, off) => `<button type="button" ${off ? "disabled" : ""} onclick="goPage('${key}', ${step})" class="h-8 px-2.5 rounded-[6px] border border-[#d0d6e8] bg-white text-[#374151] hover:bg-[#f5f7fb] disabled:opacity-40 disabled:pointer-events-none">${label}</button>`;
+      el("dpager-" + key).classList.toggle("hidden", rows.length === 0);
+      el("dpager-" + key).innerHTML = `<span>Menampilkan <b class="text-[#1a1f36]">${from + 1}–${from + shown.length}</b> dari <b class="text-[#1a1f36]">${rows.length}</b></span>
+        <div class="flex items-center gap-2">${nav(-1, "Sebelumnya", page[key] === 1)}<span>${page[key]} / ${pages}</span>${nav(1, "Selanjutnya", page[key] === pages)}</div>`;
+      return shown;
+    }
+    function goPage(key, step) {
+      page[key] += step;
+      if (key === "usage") renderUsage(); else renderService();
+    }
+
+    function renderUsage() {
+      const v = VEHICLES.find(x => x.plate === currentDetail);
+      const rows = paginate("usage", USAGE[v.plate] || []);
+      el("detail-usage").innerHTML = rows.length ? rows.map(([d, drv, dest, ks, ke, pre, post, find]) => `<tr>
+          <td class="px-4 py-3"><div class="font-mono text-[#52607a]">${fmtD(d)}</div><div class="font-semibold text-[#1a1f36]">${drv}</div></td>
+          <td class="px-4 py-3"><div class="text-[#52607a]">${dest}</div><div class="font-mono text-[11px] text-[#9aa3bf]">${ks.toLocaleString("id-ID")} – ${ke.toLocaleString("id-ID")} km</div></td>
+          <td class="px-4 py-3 whitespace-nowrap">${chk(pre)} ${chk(post)}</td>
+          <td class="px-4 py-3 ${find === "-" ? "text-[#9aa3bf]" : "font-semibold text-amber-700"}">${find === "-" ? "—" : find}</td>
+        </tr>`).join("") : `<tr><td colspan="4" class="px-4 py-8 text-center text-[#9aa3bf]">${v.cat === "Melekat" ? "Kendaraan Melekat tidak masuk alur pra/pasca-trip. Riwayat dari inspeksi aset berkala." : "Belum ada perjalanan tercatat."}</td></tr>`;
+    }
+
+    function renderService() {
+      const rows = paginate("service", SERVICE_LOG[currentDetail] || []);
+      el("detail-service").innerHTML = rows.length ? rows.map(([d, t, odo, cost]) => `<tr>
+          <td class="px-4 py-3 font-mono text-[#52607a]">${fmtD(d)}</td>
+          <td class="px-4 py-3 font-semibold text-[#1a1f36]">${t}</td>
+          <td class="px-4 py-3 font-mono text-[#52607a]">${fmtKm(odo)}</td>
+          <td class="px-4 py-3 text-right font-mono text-[#1a1f36]">Rp ${cost.toLocaleString("id-ID")}</td>
+        </tr>`).join("") : '<tr><td colspan="4" class="px-4 py-8 text-center text-[#9aa3bf]">Belum ada catatan perawatan.</td></tr>';
+    }
+
+// Delete Modal
     const deleteModal = document.getElementById("delete-modal");
     function openDeleteModal(plate) {
       selectedPlate = plate || selectedPlate;
@@ -766,18 +948,21 @@
     const filterType = document.getElementById("filter-type");
     const filterUnit = document.getElementById("filter-unit");
     const filterStatus = document.getElementById("filter-status");
+    const filterCat = document.getElementById("filter-cat");
 
     function applyFilters() {
       const q = (searchInput.value || "").toLowerCase();
       const t = filterType.value;
       const u = filterUnit.value;
       const st = filterStatus.value;
+      const c = filterCat.value;
       document.querySelectorAll("#table-body tr").forEach(r => {
         const matchSearch = !q || r.innerText.toLowerCase().includes(q);
         const matchType = !t || r.dataset.type === t;
         const matchUnit = !u || r.dataset.unit === u;
         const matchStatus = !st || r.dataset.status === st;
-        r.style.display = (matchSearch && matchType && matchUnit && matchStatus) ? "" : "none";
+        const matchCat = !c || r.dataset.cat === c;
+        r.style.display = (matchSearch && matchType && matchUnit && matchStatus && matchCat) ? "" : "none";
       });
     }
 
@@ -785,6 +970,7 @@
     filterType?.addEventListener("change", applyFilters);
     filterUnit?.addEventListener("change", applyFilters);
     filterStatus?.addEventListener("change", applyFilters);
+    filterCat?.addEventListener("change", applyFilters);
 
     renderFleet();
   </script>

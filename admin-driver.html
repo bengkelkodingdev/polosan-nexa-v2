@@ -135,6 +135,10 @@
               <i data-lucide="wrench" class="size-4 shrink-0"></i>
               <span>Perawatan</span>
             </a>
+            <a href="admin-mutation.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="arrow-left-right" class="size-4 shrink-0"></i>
+              <span>Mutasi &amp; Penghapusan</span>
+            </a>
             <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
               <i data-lucide="smartphone" class="size-4 shrink-0"></i>
               <span>Simulasi Driver</span>
@@ -323,7 +327,7 @@
         <div class="mb-5.5">
           <h1 class="text-2xl font-bold text-[#1a1f36]">Master Data Driver</h1>
           <p class="text-sm text-[#52607a] mt-1">
-            Kelola data pengemudi, masa berlaku SIM, dan status MCU
+            Kelola data pengemudi, dokumen, dan riwayat pemakaian mobil
           </p>
         </div>
 
@@ -383,6 +387,14 @@
                 <i data-lucide="trash-2" class="size-4"></i>
                 <span>Hapus</span>
               </button>
+              <button
+                onclick="openQueueModal()"
+                class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] border border-[#d0d6e8] text-[#4b5675] bg-white hover:bg-[#f5f7fb] transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <i data-lucide="file-check-2" class="size-4"></i>
+                <span>Verifikasi Dokumen</span>
+                <span class="rounded-full bg-[#f5f3ff] px-1.5 py-0.5 text-[10.5px] font-bold text-[#7c3aed]">3</span>
+              </button>
 
               <button
                 onclick="openAddModal()"
@@ -430,6 +442,11 @@
                     class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
                   >
                     Masa Berlaku SIM
+                  </th>
+                  <th
+                    class="py-3 px-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
+                  >
+                    Kesehatan Pra-Trip
                   </th>
                   <th
                     class="py-3 pr-5 pl-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right w-20"
@@ -484,6 +501,7 @@
                     081122334455
                   </td>
                   <td class="py-3.5 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-200 whitespace-nowrap">BERLAKU</span><div class="text-[11px] text-[#9aa3bf] mt-0.5 font-mono">12 Mar 2027</div></td>
+                  <td class="py-3.5 px-3" data-health="Supardi Ardiansyah"></td>
                   <td
                     class="py-3.5 pr-5 pl-3 text-right"
                     onclick="event.stopPropagation()"
@@ -597,6 +615,7 @@
                     081299887766
                   </td>
                   <td class="py-3.5 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold border bg-rose-50 text-rose-700 border-rose-200 whitespace-nowrap">KEDALUWARSA</span><div class="text-[11px] text-[#9aa3bf] mt-0.5 font-mono">04 Sep 2026</div></td>
+                  <td class="py-3.5 px-3" data-health="Budi Setiadi"></td>
                   <td
                     class="py-3.5 pr-5 pl-3 text-right"
                     onclick="event.stopPropagation()"
@@ -710,6 +729,7 @@
                     081233445566
                   </td>
                   <td class="py-3.5 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold border bg-amber-50 text-amber-700 border-amber-200 whitespace-nowrap">≤60 HARI</span><div class="text-[11px] text-[#9aa3bf] mt-0.5 font-mono">20 Jan 2027</div></td>
+                  <td class="py-3.5 px-3" data-health="Ahmad Fauzi"></td>
                   <td
                     class="py-3.5 pr-5 pl-3 text-right"
                     onclick="event.stopPropagation()"
@@ -823,6 +843,7 @@
                     081244556677
                   </td>
                   <td class="py-3.5 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold border bg-rose-50 text-rose-700 border-rose-200 whitespace-nowrap">KEDALUWARSA</span><div class="text-[11px] text-[#9aa3bf] mt-0.5 font-mono">14 Mar 2026</div></td>
+                  <td class="py-3.5 px-3" data-health="Dedi Wahyu"></td>
                   <td
                     class="py-3.5 pr-5 pl-3 text-right"
                     onclick="event.stopPropagation()"
@@ -926,6 +947,7 @@
                     081277889900
                   </td>
                   <td class="py-3.5 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-200 whitespace-nowrap">BERLAKU</span><div class="text-[11px] text-[#9aa3bf] mt-0.5 font-mono">30 Jun 2028</div></td>
+                  <td class="py-3.5 px-3" data-health="Gita Rahayu"></td>
                   <td
                     class="py-3.5 pr-5 pl-3 text-right"
                     onclick="event.stopPropagation()"
@@ -1057,6 +1079,10 @@
                     <p class="mt-1.5 flex items-center gap-2 text-[13px] font-semibold text-[#2563eb]"><i data-lucide="truck" class="size-4 shrink-0"></i><span id="d-vehicle" class="truncate">-</span></p>
                   </div>
                   <div class="rounded-lg border border-[#e4e8f0] p-3">
+                    <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Kesehatan Pra-Trip</p>
+                    <div id="d-health-status" class="mt-1.5"></div>
+                  </div>
+                  <div class="rounded-lg border border-[#e4e8f0] p-3">
                     <p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Jumlah Insiden</p>
                     <p id="d-incidents" class="mt-1.5 flex items-center gap-2 text-[14px] font-bold text-[#dc2626]"></p>
                   </div>
@@ -1082,6 +1108,39 @@
                     <div class="flex items-start gap-3"><span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f6fb] text-[#52607a]"><i data-lucide="phone" class="size-4"></i></span><div class="min-w-0"><p class="text-[12px] text-[#9aa3bf]">Nomor Telepon</p><p id="d-phone" class="text-[15px] font-semibold text-[#111827]">-</p></div></div>
                     <div class="flex items-start gap-3"><span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f6fb] text-[#52607a]"><i data-lucide="mail" class="size-4"></i></span><div class="min-w-0"><p class="text-[12px] text-[#9aa3bf]">Email</p><p id="d-email" class="text-[15px] font-semibold text-[#111827] truncate">-</p></div></div>
                     <div class="sm:col-span-2 flex items-start gap-3"><span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f6fb] text-[#52607a]"><i data-lucide="map-pin" class="size-4"></i></span><div class="min-w-0"><p class="text-[12px] text-[#9aa3bf]">Alamat</p><p id="d-address" class="text-[15px] font-semibold text-[#111827]">-</p></div></div>
+                  </div>
+                </section>
+
+                <section class="p-6">
+                  <h3 class="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[#8a94b0]"><i data-lucide="briefcase" class="size-4"></i>Kepegawaian &amp; Penugasan</h3>
+                  <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">No. Pegawai</p><p id="d-nip" class="mt-1 text-[15px] font-semibold text-[#111827] font-mono">-</p></div>
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">Unit Kerja</p><p id="d-unit" class="mt-1 text-[15px] font-semibold text-[#111827]">-</p></div>
+                    <div><p class="text-[11.5px] font-semibold uppercase text-[#9aa3bf]">Tipe Penugasan</p><p id="d-assign" class="mt-1 text-[15px] font-semibold text-[#111827]">-</p></div>
+                  </div>
+                </section>
+
+                <section class="p-6">
+                  <h3 class="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[#8a94b0]"><i data-lucide="folder-open" class="size-4"></i>Dokumen</h3>
+                  <div class="mt-4 overflow-hidden rounded-xl border border-[#e4e8f0]">
+                    <table class="w-full text-left text-[12.5px]">
+                      <thead class="bg-[#f8f9fc]"><tr>
+                        <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Dokumen</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Berlaku Sampai</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Sumber</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf] text-right">Status</th>
+                      </tr></thead>
+                      <tbody id="d-docs" class="divide-y divide-[#f1f3f9]"></tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <section class="p-6">
+                  <h3 class="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[#8a94b0]"><i data-lucide="history" class="size-4"></i>Riwayat Mobil yang Dipakai</h3>
+                  <div class="mt-4 overflow-x-auto rounded-xl border border-[#e4e8f0]">
+                    <table class="w-full text-left text-[12.5px] min-w-[520px]">
+                      <thead class="bg-[#f8f9fc]"><tr>
+                        <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tanggal</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Kendaraan</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Tujuan / Jarak</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Temuan</th>
+                      </tr></thead>
+                      <tbody id="d-trips" class="divide-y divide-[#f1f3f9]"></tbody>
+                    </table>
                   </div>
                 </section>
 
@@ -1148,6 +1207,33 @@
             <button type="submit" class="h-11 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-[14px] font-semibold text-white transition-colors">Save Driver</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- ─── MODAL: VERIFIKASI DOKUMEN MOBILE ─── -->
+    <div id="queue-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeQueueModal()"></div>
+      <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] z-10 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-start justify-between p-6 pb-4 border-b border-[#e4e8f0]">
+          <div>
+            <h3 class="text-lg font-bold text-[#111827]">Verifikasi Dokumen dari Aplikasi Mobile</h3>
+            <p class="text-xs text-[#9aa3bf] mt-0.5">Dokumen yang diunggah driver. Data SIM / sertifikat diperbarui setelah disetujui.</p>
+          </div>
+          <button onclick="closeQueueModal()" class="text-gray-400 hover:text-gray-600 p-1"><i data-lucide="x" class="size-5"></i></button>
+        </div>
+        <div class="p-6">
+          <div class="overflow-hidden rounded-xl border border-[#e4e8f0]">
+            <table class="w-full text-left text-[12.5px]">
+              <thead class="bg-[#f8f9fc]"><tr>
+                <th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Driver</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Dokumen</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf]">Dikirim</th><th class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wide text-[#9aa3bf] text-right">Aksi</th>
+              </tr></thead>
+              <tbody id="queue-body" class="divide-y divide-[#f1f3f9]"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="px-6 py-4 border-t border-[#e4e8f0] flex justify-end">
+          <button onclick="closeQueueModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Tutup</button>
+        </div>
       </div>
     </div>
 
@@ -1276,6 +1362,27 @@
       };
       const MONTHS = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
       const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${+d} ${MONTHS[+m - 1]} ${y}`; };
+      // ---- Status kesehatan dari deklarasi pra-trip (contoh) ----
+      const PRETRIP = {
+        "Supardi Ardiansyah": ["sehat", "25 Nov 2026 05:42"],
+        "Budi Setiadi": ["tidak", "25 Nov 2026 06:05"],
+        "Ahmad Fauzi": ["izin", "25 Nov 2026 05:30"],
+        "Dedi Wahyu": ["sehat", "25 Nov 2026 05:55"],
+        "Gita Rahayu": ["sehat", "25 Nov 2026 06:12"],
+      };
+      const HEALTH = {
+        sehat: ["bg-emerald-50 text-emerald-700 border-emerald-200", "SEHAT"],
+        tidak: ["bg-rose-50 text-rose-700 border-rose-200", "TIDAK SEHAT"],
+        izin: ["bg-amber-50 text-amber-700 border-amber-200", "IZIN"],
+      };
+      function healthBadge(name) {
+        if (!PRETRIP[name]) return '<span class="text-[#9aa3bf]">-</span>';
+        const [key, time] = PRETRIP[name];
+        const [cls, label] = HEALTH[key];
+        return `<span class="inline-flex px-2.5 py-1 rounded-full text-[10.5px] font-bold border whitespace-nowrap ${cls}">${label}</span><div class="text-[11px] text-[#9aa3bf] mt-0.5 font-mono whitespace-nowrap">${time}</div>`;
+      }
+      document.querySelectorAll("[data-health]").forEach((td) => (td.innerHTML = healthBadge(td.dataset.health)));
+
       const MON_IDX = { Jan: "01", Feb: "02", Mar: "03", Apr: "04", Mei: "05", Jun: "06", Jul: "07", Agu: "08", Sep: "09", Okt: "10", Nov: "11", Des: "12" };
       const joinToIso = (t) => { const m = (t || "").match(/(\d+)\s+(\w+)\s+(\d{4})/); return m && MON_IDX[m[2]] ? `${m[3]}-${MON_IDX[m[2]]}-${m[1].padStart(2, "0")}` : ""; };
 
@@ -1400,6 +1507,8 @@
           mcuEl.className = "mt-1 text-[15px] font-semibold text-amber-600";
         }
 
+        document.getElementById("d-health-status").innerHTML = healthBadge(name);
+
         const chip = STATUS_CHIP[status] || STATUS_CHIP["On Leave"];
         const st = document.getElementById("d-status");
         st.className = "mt-3 inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1 rounded-full " + chip[0];
@@ -1476,6 +1585,64 @@
       searchInput?.addEventListener("input", applyFilters);
       filterLicense?.addEventListener("change", applyFilters);
       filterStatus?.addEventListener("change", applyFilters);
+      // ─── Tambahan: kepegawaian, dokumen, riwayat mobil ───
+      const EXTRA = {
+        "Supardi Ardiansyah": { nip: "198705122010011003", unit: "Pool Kantor Pusat", assign: "Pool (bergantian)", cert: "2027-09-01",
+          trips: [["2026-11-24", "B 7720 SDA", "Antar-jemput Rute B", 144, "Pedal rem terasa dalam di akhir rute"], ["2026-11-24", "B 1234 XY", "Study tour pegawai", 290, "Lampu kabut kiri mati"], ["2026-11-20", "B 1234 XY", "Antar-jemput Rute C", 140, "-"]] },
+        "Budi Setiadi": { nip: "198911032012011005", unit: "Pool Operasional Regional 1", assign: "Pool (bergantian)", cert: "2026-12-30", pending: true,
+          trips: [["2026-11-19", "B 9014 PQR", "Monitoring lapangan Kec. Mijen", 198, "Ban kanan depan aus, perlu dicek"]] },
+        "Ahmad Fauzi": { nip: "199202142015011002", unit: "Pool Kantor Pusat", assign: "Pool (bergantian)", cert: "2027-04-11",
+          trips: [["2026-11-21", "B 9014 PQR", "Antar dokumen ke Bappeda", 52, "-"]] },
+        "Dedi Wahyu": { nip: "198301302008011004", unit: "Pool Bus Antar-Jemput", assign: "Pool (bergantian)", cert: "",
+          trips: [["2026-11-25", "B 7720 SDA", "Antar-jemput Rute A", 40, "Rem utama gagal uji pra-trip, perjalanan dibatalkan"], ["2026-11-22", "B 7720 SDA", "Kunjungan kerja Kab. Kendal", 242, "-"]] },
+        "Gita Rahayu": { nip: "199506212019012001", unit: "Pool Transportasi VIP", assign: "Tetap (pejabat)", cert: "2028-02-11",
+          trips: [["2026-11-24", "B 9014 PQR", "Rapat koordinasi Provinsi", 80, "Spion kiri retak (terserempet di parkiran)"], ["2026-11-24", "B 2290 PLM", "Antar tamu dinas ke bandara", 60, "-"]] },
+      };
+      const QUEUE = [
+        ["Budi Setiadi", "SIM A (perpanjangan)", "25 Nov 2026 08:14"],
+        ["Dedi Wahyu", "SIM B2 (perpanjangan)", "24 Nov 2026 16:40"],
+        ["Gita Rahayu", "Sertifikat P3K", "23 Nov 2026 10:02"],
+      ];
+      const DOC_CLS = { ok: ["bg-emerald-50 text-emerald-700 border-emerald-200", "LENGKAP"], soon: ["bg-amber-50 text-amber-700 border-amber-200", "≤60 HARI"], exp: ["bg-rose-50 text-rose-700 border-rose-200", "KEDALUWARSA"], none: ["bg-slate-100 text-slate-600 border-slate-200", "BELUM ADA"], wait: ["bg-violet-50 text-violet-700 border-violet-200", "MENUNGGU VERIFIKASI"] };
+      const docState = (iso) => { if (!iso) return "none"; const d = Math.ceil((new Date(iso) - new Date("2026-11-25T00:00:00+07:00")) / 86400000); return d < 0 ? "exp" : d <= 60 ? "soon" : "ok"; };
+      const docPill = (k) => `<span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${DOC_CLS[k][0]}">${DOC_CLS[k][1]}</span>`;
+
+      function renderDriverExtra(name, lic) {
+        const x = DRIVERS[name] || {};
+        const e = EXTRA[name] || { nip: "-", unit: "-", assign: "-", cert: "", trips: [] };
+        document.getElementById("d-nip").innerText = e.nip;
+        document.getElementById("d-unit").innerText = e.unit;
+        document.getElementById("d-assign").innerText = e.assign;
+        const docs = [["KTP", "Seumur hidup", "Admin", "ok"], [lic || "SIM", x.exp ? fmtDate(x.exp) : "-", e.pending ? "Mobile" : "Admin", e.pending ? "wait" : docState(x.exp)], ["Sertifikat Defensive Driving", e.cert ? fmtDate(e.cert) : "-", "Admin", docState(e.cert)]];
+        document.getElementById("d-docs").innerHTML = docs.map(([n, d, s, k]) => `<tr><td class="px-4 py-2.5 font-semibold text-[#1a1f36]">${n}</td><td class="px-4 py-2.5 font-mono text-[#52607a]">${d}</td><td class="px-4 py-2.5 text-[#52607a]">${s}</td><td class="px-4 py-2.5 text-right">${docPill(k)}</td></tr>`).join("");
+        document.getElementById("d-trips").innerHTML = e.trips.length ? e.trips.map(([d, plate, dest, km, find]) => `<tr>
+            <td class="px-4 py-2.5 font-mono text-[#52607a]">${fmtDate(d)}</td>
+            <td class="px-4 py-2.5 font-mono font-bold text-[#2563eb]">${plate}</td>
+            <td class="px-4 py-2.5"><div class="text-[#52607a]">${dest}</div><div class="font-mono text-[11px] text-[#9aa3bf]">${km} km</div></td>
+            <td class="px-4 py-2.5 ${find === "-" ? "text-[#9aa3bf]" : "font-semibold text-amber-700"}">${find === "-" ? "—" : find}</td>
+          </tr>`).join("") : '<tr><td colspan="4" class="px-4 py-6 text-center text-[#9aa3bf]">Belum ada perjalanan.</td></tr>';
+        lucide.createIcons();
+      }
+      const _openDetail = openDetailModal;
+      openDetailModal = function (name, lic, ...rest) { _openDetail(name, lic, ...rest); renderDriverExtra(name, lic); };
+
+      function openQueueModal() {
+        document.getElementById("queue-body").innerHTML = QUEUE.map(([n, doc, sent], i) => `<tr>
+            <td class="px-4 py-3"><div class="flex items-center gap-2.5"><img src="${dummyPhoto(n)}" class="size-8 rounded-full"><span class="font-semibold text-[#1a1f36]">${n}</span></div></td>
+            <td class="px-4 py-3 text-[#52607a]">${doc}<div><a class="text-[11px] font-semibold text-[#2563eb] cursor-pointer hover:underline">Lihat foto</a></div></td>
+            <td class="px-4 py-3 font-mono text-[11.5px] text-[#52607a]">${sent}</td>
+            <td class="px-4 py-3 text-right whitespace-nowrap" id="q-act-${i}">
+              <button onclick="decideQueue(${i}, true)" class="px-3 py-1.5 text-[11.5px] font-semibold text-white bg-[#16a34a] hover:bg-[#15803d] rounded-lg">Setujui</button>
+              <button onclick="decideQueue(${i}, false)" class="px-3 py-1.5 text-[11.5px] font-semibold text-[#dc2626] border border-[#fecaca] hover:bg-[#fef2f2] rounded-lg">Tolak</button>
+            </td></tr>`).join("");
+        document.getElementById("queue-modal").classList.remove("hidden");
+        lucide.createIcons();
+      }
+      function closeQueueModal() { document.getElementById("queue-modal").classList.add("hidden"); }
+      function decideQueue(i, ok) {
+        document.getElementById("q-act-" + i).innerHTML = ok ? docPill("ok").replace("LENGKAP", "DISETUJUI") : docPill("exp").replace("KEDALUWARSA", "DITOLAK");
+      }
+
     </script>
-  </body>
+</body>
 </html>

@@ -136,6 +136,10 @@
               <i data-lucide="wrench" class="size-4 shrink-0"></i>
               <span>Perawatan</span>
             </a>
+            <a href="admin-mutation.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="arrow-left-right" class="size-4 shrink-0"></i>
+              <span>Mutasi &amp; Penghapusan</span>
+            </a>
             <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
               <i data-lucide="smartphone" class="size-4 shrink-0"></i>
               <span>Simulasi Driver</span>
@@ -321,17 +325,16 @@
         <div class="flex items-start justify-between mb-5.5">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">
-              Ringkasan Dashboard
+              Dashboard Aset
             </h1>
             <p class="text-xs sm:text-sm text-gray-500 mt-1">
-              Gambaran umum metrik operasional dan aktivitas perusahaan
+              Kondisi armada, pengemudi, dan administrasi yang perlu ditindaklanjuti Admin
             </p>
           </div>
         </div>
 
-        <!-- ─── 1. KPI CARDS (Admin) ─── -->
+        <!-- ─── 1. RINGKASAN SUMBER DAYA ─── -->
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
-          <!-- Total Mobil Dinas -->
           <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
             <div class="flex items-center justify-between">
               <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Total Mobil Dinas</p>
@@ -341,23 +344,21 @@
               <p class="text-4xl font-extrabold tracking-tight text-[#111827]">42</p>
               <p class="pb-1 text-xs text-[#9aa3bf]">unit aktif</p>
             </div>
-            <p class="mt-3 text-xs text-[#52607a] truncate">Bus, Hiace, dan mobil dinas</p>
+            <p class="mt-3 text-xs text-[#52607a] truncate"><b class="text-[#111827]">36</b> Pool (GPS) · 6 Melekat</p>
           </div>
 
-          <!-- Total Pengguna -->
           <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
             <div class="flex items-center justify-between">
-              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Total Pengguna</p>
-              <i data-lucide="users" class="size-4 text-[#7c3aed]"></i>
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Armada Tidak Siap Jalan</p>
+              <i data-lucide="shield-alert" class="size-4 text-[#dc2626]"></i>
             </div>
             <div class="mt-3 flex items-end gap-2">
-              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">65</p>
-              <p class="pb-1 text-xs text-[#9aa3bf]">akun</p>
+              <p class="text-4xl font-extrabold tracking-tight text-[#111827]">3</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">unit</p>
             </div>
-            <p class="mt-3 text-xs text-[#52607a] truncate"><b class="text-[#111827]">48</b> driver · 17 staf &amp; manajemen</p>
+            <p class="mt-3 text-xs text-[#52607a] truncate"><b class="text-[#dc2626]">Diblokir</b> · 3 belum dinilai</p>
           </div>
 
-          <!-- Dokumen -->
           <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
             <div class="flex items-center justify-between">
               <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Dokumen Perlu Perhatian</p>
@@ -370,206 +371,102 @@
             <p class="mt-3 text-xs text-[#52607a] truncate"><b class="text-[#dc2626]">1 kedaluwarsa</b> · 3 habis ≤60 hari</p>
           </div>
 
-          <!-- Unit Kerja -->
           <div class="bg-white rounded-2xl border border-[#e4e8f0] shadow-xs p-5 hover:shadow-md transition-all duration-200">
             <div class="flex items-center justify-between">
-              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Unit Kerja Aktif</p>
-              <i data-lucide="building-2" class="size-4 text-[#0891b2]"></i>
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#9aa3bf]">Servis Jatuh Tempo</p>
+              <i data-lucide="wrench" class="size-4 text-[#d97706]"></i>
             </div>
             <div class="mt-3 flex items-end gap-2">
               <p class="text-4xl font-extrabold tracking-tight text-[#111827]">5</p>
-              <p class="pb-1 text-xs text-[#9aa3bf]">unit / pool</p>
+              <p class="pb-1 text-xs text-[#9aa3bf]">jadwal</p>
             </div>
-            <p class="mt-3 text-xs text-[#52607a] truncate">42 unit armada · 48 driver</p>
+            <p class="mt-3 text-xs text-[#52607a] truncate"><b class="text-[#dc2626]">1 terlambat</b> · 4 dalam ≤30 hari</p>
           </div>
         </div>
 
-        <!-- ─── 2. ROLE DISTRIBUTION + MODUL OPERASIONAL ─── -->
+        <!-- ─── 2. KONDISI ARMADA + TINDAK LANJUT ADMIN ─── -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
-        <div
-          class="xl:col-span-2 bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs"
-        >
+        <div class="xl:col-span-2 bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs">
           <div class="mb-5">
-            <h2 class="text-[14px] font-bold text-[#111827]">
-              Distribusi Role Pengguna
-            </h2>
-            <p class="text-[12px] text-[#9aa3bf] mt-0.5">
-              Ringkasan jumlah pengguna untuk setiap role di perusahaan
-            </p>
+            <h2 class="text-[14px] font-bold text-[#111827]">Kondisi &amp; Administrasi Armada</h2>
+            <p class="text-[12px] text-[#9aa3bf] mt-0.5">Status kesiapan 4-level seluruh mobil dinas</p>
           </div>
 
           <div class="flex flex-col md:flex-row items-center gap-6">
-            <!-- Donut Chart Container -->
-            <div
-              class="relative w-48 h-48 shrink-0 flex items-center justify-center"
-            >
+            <div class="relative w-48 h-48 shrink-0 flex items-center justify-center">
               <div id="role-donut-chart" class="w-full h-full"></div>
-              <!-- Center Label Overlay -->
-              <div
-                class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
-              >
-                <span
-                  id="donut-center-value"
-                  class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px] transition-colors duration-200"
-                  >65</span
-                >
-                <span id="donut-center-label" class="text-[11px] font-medium text-[#9aa3bf] mt-0.5 max-w-[5.5rem] text-center leading-tight"
-                  >Total User</span
-                >
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span id="donut-center-value" class="text-[28px] font-extrabold text-[#111827] leading-none tracking-[-1px] transition-colors duration-200">42</span>
+                <span id="donut-center-label" class="text-[11px] font-medium text-[#9aa3bf] mt-0.5 max-w-[5.5rem] text-center leading-tight">Total Armada</span>
               </div>
             </div>
 
-            <!-- Slices Progress Breakdown List -->
-            <div
-              class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 w-full flex-1"
-            >
-              <!-- Admin -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 w-full flex-1">
               <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="0">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
-                    <span
-                      class="size-2.5 rounded-full shrink-0 bg-[#16a34a]"
-                    ></span>
-                    <span class="text-[13px] font-semibold text-[#111827]"
-                      >Admin</span
-                    >
+                    <span class="size-2.5 rounded-full shrink-0 bg-[#16a34a]"></span>
+                    <span class="text-[13px] font-semibold text-[#111827]">Siap Jalan</span>
                   </div>
-                  <span
-                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
-                    >4</span
-                  >
+                  <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">28</span>
                 </div>
-                <div
-                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
-                >
-                  <div
-                    class="h-full bg-[#16a34a] rounded-full"
-                    style="width: 6%"
-                  ></div>
+                <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                  <div class="h-full bg-[#16a34a] rounded-full" style="width: 67%"></div>
                 </div>
                 <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-[#9aa3bf]">4 aktif</span>
-                  <span class="font-bold text-[#16a34a]">6%</span>
+                  <span class="text-[#9aa3bf]">24 Pool · 4 Melekat</span>
+                  <span class="font-bold text-[#16a34a]">67%</span>
                 </div>
               </div>
 
-              <!-- Executive -->
               <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="1">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
-                    <span
-                      class="size-2.5 rounded-full shrink-0 bg-[#f97316]"
-                    ></span>
-                    <span class="text-[13px] font-semibold text-[#111827]"
-                      >Executive</span
-                    >
+                    <span class="size-2.5 rounded-full shrink-0 bg-[#f59e0b]"></span>
+                    <span class="text-[13px] font-semibold text-[#111827]">Siap dengan Catatan</span>
                   </div>
-                  <span
-                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
-                    >4</span
-                  >
+                  <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">8</span>
                 </div>
-                <div
-                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
-                >
-                  <div
-                    class="h-full bg-[#f97316] rounded-full"
-                    style="width: 6%"
-                  ></div>
+                <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                  <div class="h-full bg-[#f59e0b] rounded-full" style="width: 19%"></div>
                 </div>
                 <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-[#9aa3bf]">4 aktif</span>
-                  <span class="font-bold text-[#f97316]">6%</span>
+                  <span class="text-[#9aa3bf]">Boleh jalan, perlu tindak lanjut</span>
+                  <span class="font-bold text-[#f59e0b]">19%</span>
                 </div>
               </div>
 
-              <!-- Auditor -->
               <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="2">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
-                    <span
-                      class="size-2.5 rounded-full shrink-0 bg-[#2563eb]"
-                    ></span>
-                    <span class="text-[13px] font-semibold text-[#111827]"
-                      >Auditor</span
-                    >
+                    <span class="size-2.5 rounded-full shrink-0 bg-[#dc2626]"></span>
+                    <span class="text-[13px] font-semibold text-[#111827]">Tidak Siap Jalan</span>
                   </div>
-                  <span
-                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
-                    >3</span
-                  >
+                  <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">3</span>
                 </div>
-                <div
-                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
-                >
-                  <div
-                    class="h-full bg-[#2563eb] rounded-full"
-                    style="width: 5%"
-                  ></div>
+                <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                  <div class="h-full bg-[#dc2626] rounded-full" style="width: 7%"></div>
                 </div>
                 <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-[#9aa3bf]">3 aktif</span>
-                  <span class="font-bold text-[#2563eb]">5%</span>
+                  <span class="text-[#9aa3bf]">Diblokir dari penugasan</span>
+                  <span class="font-bold text-[#dc2626]">7%</span>
                 </div>
               </div>
 
-              <!-- Manager -->
               <div class="role-item cursor-default rounded-lg transition-all duration-200" data-idx="3">
                 <div class="flex items-center justify-between mb-1.25">
                   <div class="flex items-center gap-2 min-w-0">
-                    <span
-                      class="size-2.5 rounded-full shrink-0 bg-[#7c3aed]"
-                    ></span>
-                    <span class="text-[13px] font-semibold text-[#111827]"
-                      >Manager</span
-                    >
+                    <span class="size-2.5 rounded-full shrink-0 bg-[#94a3b8]"></span>
+                    <span class="text-[13px] font-semibold text-[#111827]">Belum Dinilai</span>
                   </div>
-                  <span
-                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
-                    >6</span
-                  >
+                  <span class="text-[13px] font-bold text-[#111827] ml-2 shrink-0">3</span>
                 </div>
-                <div
-                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
-                >
-                  <div
-                    class="h-full bg-[#7c3aed] rounded-full"
-                    style="width: 9%"
-                  ></div>
+                <div class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1">
+                  <div class="h-full bg-[#94a3b8] rounded-full" style="width: 7%"></div>
                 </div>
                 <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-[#9aa3bf]">6 aktif</span>
-                  <span class="font-bold text-[#7c3aed]">9%</span>
-                </div>
-              </div>
-
-              <!-- Driver (col-span-2 on mobile/tablet) -->
-              <div class="role-item cursor-default rounded-lg transition-all duration-200 sm:col-span-2" data-idx="4">
-                <div class="flex items-center justify-between mb-1.25">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span
-                      class="size-2.5 rounded-full shrink-0 bg-[#0891b2]"
-                    ></span>
-                    <span class="text-[13px] font-semibold text-[#111827]"
-                      >Driver Operasional</span
-                    >
-                  </div>
-                  <span
-                    class="text-[13px] font-bold text-[#111827] ml-2 shrink-0"
-                    >48</span
-                  >
-                </div>
-                <div
-                  class="w-full h-1.5 bg-[#f1f3f9] rounded-full overflow-hidden mb-1"
-                >
-                  <div
-                    class="h-full bg-[#0891b2] rounded-full"
-                    style="width: 74%"
-                  ></div>
-                </div>
-                <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-[#9aa3bf]">38 siap bertugas</span>
-                  <span class="font-bold text-[#0891b2]">74%</span>
+                  <span class="text-[#9aa3bf]">Belum ada checklist hari ini</span>
+                  <span class="font-bold text-[#94a3b8]">7%</span>
                 </div>
               </div>
             </div>
@@ -577,130 +474,181 @@
         </div>
         <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-5 shadow-xs flex flex-col">
           <div class="mb-4">
-            <h2 class="text-[14px] font-bold text-[#111827]">Modul Operasional</h2>
-            <p class="text-[12px] text-[#9aa3bf] mt-0.5">Pintasan kerja admin</p>
+            <h2 class="text-[14px] font-bold text-[#111827]">Tindak Lanjut Admin</h2>
+            <p class="text-[12px] text-[#9aa3bf] mt-0.5">Urut dari yang paling mendesak</p>
           </div>
           <div class="flex-1 flex flex-col divide-y divide-[#e4e8f0]">
             <a href="admin-fleet.html" class="group flex items-center gap-3 flex-1 py-3">
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#eff6ff"><i data-lucide="car-front" class="size-4" style="color:#2563eb"></i></span>
-              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Armada &amp; Dokumen</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">42 unit · 4 dokumen perlu perhatian</span></span>
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#fef2f2"><i data-lucide="shield-alert" class="size-4" style="color:#dc2626"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Kendaraan Diblokir</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">B 7720 SDA · rem gagal pra-trip</span></span>
+              <span class="rounded-full px-2 py-0.5 text-[10.5px] font-bold" style="background:#fef2f2;color:#dc2626">3</span>
               <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
             </a>
-            <a href="admin-work-units.html" class="group flex items-center gap-3 flex-1 py-3">
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#ecfeff"><i data-lucide="building-2" class="size-4" style="color:#0891b2"></i></span>
-              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Unit Kerja</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">5 unit · 5 PIC</span></span>
-              
+            <a href="admin-fleet.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#fef2f2"><i data-lucide="file-warning" class="size-4" style="color:#dc2626"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Dokumen Kedaluwarsa</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">KIR B 1190 HJK habis 18 Nov 2026</span></span>
+              <span class="rounded-full px-2 py-0.5 text-[10.5px] font-bold" style="background:#fef2f2;color:#dc2626">1</span>
               <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
             </a>
             <a href="admin-maintenance.html" class="group flex items-center gap-3 flex-1 py-3">
               <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#fffbeb"><i data-lucide="wrench" class="size-4" style="color:#d97706"></i></span>
-              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Perawatan</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">1 menunggu verifikasi</span></span>
-              <span class="rounded-full bg-[#fffbeb] px-2 py-0.5 text-[10.5px] font-bold text-[#d97706]">1</span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Servis Terlambat</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">B 6602 TRE (Melekat) · 23 hari</span></span>
+              <span class="rounded-full px-2 py-0.5 text-[10.5px] font-bold" style="background:#fffbeb;color:#d97706">1</span>
               <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
             </a>
-            <a href="admin-templates.html" class="group flex items-center gap-3 flex-1 py-3">
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#f5f3ff"><i data-lucide="clipboard-check" class="size-4" style="color:#7c3aed"></i></span>
-              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Template Checklist</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">15 item kritis · 3 minor</span></span>
-              
+            <a href="admin-driver.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#f5f3ff"><i data-lucide="id-card" class="size-4" style="color:#7c3aed"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Verifikasi Dokumen Driver</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">Unggahan dari aplikasi mobile</span></span>
+              <span class="rounded-full px-2 py-0.5 text-[10.5px] font-bold" style="background:#f5f3ff;color:#7c3aed">3</span>
+              <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+            <a href="admin-maintenance.html" class="group flex items-center gap-3 flex-1 py-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg" style="background:#fffbeb"><i data-lucide="receipt" class="size-4" style="color:#d97706"></i></span>
+              <span class="min-w-0 flex-1"><span class="block text-[13px] font-semibold text-[#111827] truncate">Lampiran Servis Perlu Revisi</span><span class="block text-[11.5px] text-[#9aa3bf] truncate">B 7720 SDA · nota diminta ulang</span></span>
+              <span class="rounded-full px-2 py-0.5 text-[10.5px] font-bold" style="background:#fffbeb;color:#d97706">1</span>
               <i data-lucide="chevron-right" class="size-4 shrink-0 text-[#9aa3bf] transition-transform group-hover:translate-x-0.5"></i>
             </a>
           </div>
         </div>
         </div>
 
-        <!-- ─── 3. ADMIN ACTIVITY LOG ─── -->
-        <div
-          class="bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col"
-        >
-          <!-- Header -->
-          <div
-            class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between"
-          >
+        <!-- ─── 3. JATUH TEMPO + KONDISI PENGEMUDI ─── -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col">
+          <div class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between">
             <div>
-              <h2 class="text-[14px] font-bold text-[#111827]">
-                Log Aktivitas Pengguna
-              </h2>
-              <p class="text-[12px] text-[#9aa3bf] mt-0.5">
-                Log Aktivitas Pengguna · real-time
-              </p>
+              <h2 class="text-[14px] font-bold text-[#111827]">Jatuh Tempo Dokumen &amp; Servis</h2>
+              <p class="text-[12px] text-[#9aa3bf] mt-0.5">Kendaraan yang perlu diurus dalam 60 hari</p>
             </div>
-            <a
-              href="#"
-              class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline"
-            >
-              Lihat Semua <i data-lucide="chevron-right" class="size-3.5"></i>
+            <a href="admin-fleet.html" class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline">
+              Lihat Armada <i data-lucide="chevron-right" class="size-3.5"></i>
             </a>
           </div>
-
-          <!-- Log Items -->
-          <div class="divide-y divide-[#e4e8f0]">
-            <!-- Item 1 -->
+          <div class="flex-1 divide-y divide-[#e4e8f0]">
             <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
+              <span class="size-2 rounded-full bg-[#dc2626] shrink-0 mt-1.5"></span>
               <div class="flex-1 min-w-0">
-                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Siti Rahma</strong></p>
-                <p class="text-[12px] text-[#4b5675] mt-0.5">Mengunggah dokumen KIR untuk Bus B 1190 HJK dan menandai pengingat 60 hari</p>
-                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">14:22 WIB</p>
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>B 1190 HJK · Toyota Hiace Commuter</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">KIR sudah kedaluwarsa, kendaraan otomatis tidak siap jalan</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">18 Nov 2026</p>
               </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]">Admin</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fef2f2] text-[#dc2626]">Kedaluwarsa</span>
             </div>
 
-            <!-- Item 2 -->
             <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
+              <span class="size-2 rounded-full bg-[#dc2626] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>B 6602 TRE · Toyota Innova Zenix</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">Servis berkala terlambat 23 hari · pemegang: Kepala Biro Umum</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">03 Nov 2026</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fef2f2] text-[#dc2626]">Terlambat</span>
+            </div>
+
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#f59e0b] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>B 8812 FAD · Toyota Hiace Premio</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">Servis berkala 62.000 km</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">04 Des 2026</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fffbeb] text-[#d97706]">9 hari</span>
+            </div>
+
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#f59e0b] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>B 4470 UVW · Hino RK8</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">Pajak tahunan</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">16 Des 2026</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fffbeb] text-[#d97706]">21 hari</span>
+            </div>
+
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#f59e0b] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>B 3307 KLM · Toyota Camry</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">Asuransi kendaraan</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">02 Jan 2027</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fffbeb] text-[#d97706]">38 hari</span>
+            </div>
+
+          </div>
+          <div class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0">
+            <i data-lucide="bell" class="size-3 text-[#9aa3bf]"></i>
+            <p class="text-[11.5px] text-[#9aa3bf]">Pengingat otomatis <span class="font-semibold text-[#4b5675]">60 hari</span> sebelum jatuh tempo</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] overflow-hidden shadow-xs flex flex-col">
+          <div class="px-5 py-4 border-b border-[#e4e8f0] flex items-center justify-between">
+            <div>
+              <h2 class="text-[14px] font-bold text-[#111827]">Kondisi &amp; Administrasi Pengemudi</h2>
+              <p class="text-[12px] text-[#9aa3bf] mt-0.5">SIM, MCU, dan dokumen dari aplikasi mobile</p>
+            </div>
+            <a href="admin-driver.html" class="flex items-center gap-1 text-[12.5px] font-semibold text-[#2563eb] hover:underline">
+              Lihat Driver <i data-lucide="chevron-right" class="size-3.5"></i>
+            </a>
+          </div>
+          <div class="flex-1 divide-y divide-[#e4e8f0]">
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#dc2626] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Dedi Wahyu</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">SIM B2 kedaluwarsa sejak 14 Mar 2026 · MCU belum ada</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">DRV-004</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fef2f2] text-[#dc2626]">Tidak Siap</span>
+            </div>
+
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#dc2626] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Budi Setiadi</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">SIM A kedaluwarsa sejak 04 Sep 2026 · perpanjangan sudah diunggah, menunggu verifikasi</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">DRV-002</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]">Verifikasi</span>
+            </div>
+
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#f59e0b] shrink-0 mt-1.5"></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Ahmad Fauzi</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">MCU berakhir 15 Des 2026</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">DRV-003</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fffbeb] text-[#d97706]">20 hari</span>
+            </div>
+
+            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
+              <span class="size-2 rounded-full bg-[#16a34a] shrink-0 mt-1.5"></span>
               <div class="flex-1 min-w-0">
                 <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Supardi Ardiansyah</strong></p>
-                <p class="text-[12px] text-[#4b5675] mt-0.5">Mengirim checklist pra-trip Bus B 1234 XY lengkap dengan foto dan odometer</p>
-                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">14:05 WIB</p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">SIM & MCU berlaku · 14 perjalanan bulan ini</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">DRV-001</p>
               </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f0fdf4] text-[#16a34a]">Driver</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f0fdf4] text-[#16a34a]">Lengkap</span>
             </div>
 
-            <!-- Item 3 -->
             <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
+              <span class="size-2 rounded-full bg-[#16a34a] shrink-0 mt-1.5"></span>
               <div class="flex-1 min-w-0">
-                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Hendra Pratama</strong></p>
-                <p class="text-[12px] text-[#4b5675] mt-0.5">Memverifikasi perawatan Hiace B 8812 FAD beserta nota dan foto bengkel</p>
-                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">13:50 WIB</p>
+                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Gita Rahayu</strong></p>
+                <p class="text-[12px] text-[#4b5675] mt-0.5">SIM & MCU berlaku · 9 perjalanan bulan ini</p>
+                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">DRV-005</p>
               </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f5f3ff] text-[#7c3aed]">Manager</span>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-              <div class="flex-1 min-w-0">
-                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Siti Rahma</strong></p>
-                <p class="text-[12px] text-[#4b5675] mt-0.5">Membuka temuan kritis: indikasi checklist fiktif pada Bus B 7720 SDA</p>
-                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">12:15 WIB</p>
-              </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#eff6ff] text-[#2563eb]">Auditor</span>
-            </div>
-
-            <!-- Item 5 -->
-            <div class="flex items-start gap-2.5 px-5 py-3.25 hover:bg-[#f9fafc] transition-colors">
-              <span class="size-2 rounded-full bg-[#2563eb] shrink-0 mt-1.5"></span>
-              <div class="flex-1 min-w-0">
-                <p class="text-[12.5px] font-medium text-[#111827] leading-snug"><strong>Bambang Wijaya</strong></p>
-                <p class="text-[12px] text-[#4b5675] mt-0.5">Mengunduh laporan kesiapan armada dan driver periode 30 hari</p>
-                <p class="font-mono text-[11px] text-[#9aa3bf] mt-0.5">10:45 WIB</p>
-              </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#fff7ed] text-[#92400e]">Executive</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-[#f0fdf4] text-[#16a34a]">Lengkap</span>
             </div>
 
           </div>
-
-          <!-- Footer -->
-          <div
-            class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0"
-          >
-            <i data-lucide="refresh-cw" class="size-3 text-[#9aa3bf]"></i>
-            <p class="text-[11.5px] text-[#9aa3bf]">
-              Diperbarui setiap
-              <span class="font-semibold text-[#4b5675]">30 detik</span>
-            </p>
+          <div class="px-5 py-2.5 border-t border-[#e4e8f0] bg-[#f8f9fc] flex items-center justify-center gap-1.5 shrink-0">
+            <i data-lucide="users" class="size-3 text-[#9aa3bf]"></i>
+            <p class="text-[11.5px] text-[#9aa3bf]"><span class="font-semibold text-[#4b5675]">48</span> driver aktif · 38 siap bertugas</p>
           </div>
+        </div>
         </div>
       </main>
     </div>
@@ -750,9 +698,9 @@
 
       // Render Apex Donut Chart for User Roles
       const donutOptions = {
-        series: [4, 4, 3, 6, 48],
-        labels: ["Admin", "Executive", "Auditor", "Manager", "Driver"],
-        colors: ["#16a34a", "#f97316", "#2563eb", "#7c3aed", "#0891b2"],
+        series: [28, 8, 3, 3],
+        labels: ["Siap Jalan", "Siap dengan Catatan", "Tidak Siap Jalan", "Belum Dinilai"],
+        colors: ["#16a34a", "#f59e0b", "#dc2626", "#94a3b8"],
         chart: {
           type: "donut",
           height: 190,
@@ -789,7 +737,7 @@
           theme: "dark",
           y: {
             formatter: function (val) {
-              return val + " user (" + Math.round((val / 65) * 100) + "%)";
+              return val + " unit (" + Math.round((val / 42) * 100) + "%)";
             },
           },
         },
@@ -797,11 +745,10 @@
 
       // Hover donut <-> daftar role
       const ROLES = [
-        { n: "Admin", v: 4, c: "#16a34a" },
-        { n: "Executive", v: 4, c: "#f97316" },
-        { n: "Auditor", v: 3, c: "#2563eb" },
-        { n: "Manager", v: 6, c: "#7c3aed" },
-        { n: "Driver Operasional", v: 48, c: "#0891b2" },
+        { n: "Siap Jalan", v: 28, c: "#16a34a" },
+        { n: "Siap dengan Catatan", v: 8, c: "#f59e0b" },
+        { n: "Tidak Siap Jalan", v: 3, c: "#dc2626" },
+        { n: "Belum Dinilai", v: 3, c: "#94a3b8" },
       ];
       const cVal = document.getElementById("donut-center-value");
       const cLbl = document.getElementById("donut-center-label");
@@ -826,9 +773,9 @@
         });
       }
       function resetRole() {
-        cVal.textContent = "65";
+        cVal.textContent = "42";
         cVal.style.color = "";
-        cLbl.textContent = "Total User";
+        cLbl.textContent = "Total Armada";
         slices().forEach((el) => {
           el.style.opacity = "1";
           el.style.transform = "scale(1)";
@@ -849,5 +796,5 @@
       );
       donutChart.render();
     </script>
-  </body>
+</body>
 </html>

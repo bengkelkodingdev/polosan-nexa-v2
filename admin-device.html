@@ -134,6 +134,10 @@
               <i data-lucide="wrench" class="size-4 shrink-0"></i>
               <span>Perawatan</span>
             </a>
+            <a href="admin-mutation.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="arrow-left-right" class="size-4 shrink-0"></i>
+              <span>Mutasi &amp; Penghapusan</span>
+            </a>
             <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
               <i data-lucide="smartphone" class="size-4 shrink-0"></i>
               <span>Simulasi Driver</span>
@@ -405,6 +409,8 @@
                   >
                     Model
                   </th>
+                  <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Provider</th>
+                  <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tgl Pasang</th>
                   <th
                     class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]"
                   >
@@ -472,6 +478,8 @@
                   <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
                     Teltonika FMB920
                   </td>
+                  <td class="py-3.5 px-4 text-[#52607a]">Telkomsel</td>
+                  <td class="py-3.5 px-4 font-mono text-[11.5px] text-[#52607a]">12 Feb 2025</td>
                   <td class="py-3.5 px-4" onclick="event.stopPropagation()">
                     <div class="flex items-center gap-1.5 max-w-[170px]">
                       <span
@@ -598,6 +606,8 @@
                   <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
                     Concox WeTrack2
                   </td>
+                  <td class="py-3.5 px-4 text-[#52607a]">XL</td>
+                  <td class="py-3.5 px-4 font-mono text-[11.5px] text-[#52607a]">04 Mar 2025</td>
                   <td class="py-3.5 px-4" onclick="event.stopPropagation()">
                     <div class="flex items-center gap-1.5 max-w-[170px]">
                       <span
@@ -724,6 +734,8 @@
                   <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
                     Queclink GV300
                   </td>
+                  <td class="py-3.5 px-4 text-[#52607a]">Indosat</td>
+                  <td class="py-3.5 px-4 font-mono text-[11.5px] text-[#52607a]">21 Mei 2025</td>
                   <td class="py-3.5 px-4" onclick="event.stopPropagation()">
                     <div class="flex items-center gap-1.5 max-w-[170px]">
                       <span
@@ -850,6 +862,8 @@
                   <td class="py-3.5 px-4 font-semibold text-[#1a1f36]">
                     Teltonika FMB920
                   </td>
+                  <td class="py-3.5 px-4 text-[#52607a]">Telkomsel</td>
+                  <td class="py-3.5 px-4 font-mono text-[11.5px] text-[#52607a]">—</td>
                   <td class="py-3.5 px-4" onclick="event.stopPropagation()">
                     <div class="flex items-center gap-1.5 max-w-[170px]">
                       <span
@@ -1026,6 +1040,28 @@
                 placeholder="Misal: Teltonika FMB920"
                 class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"
               />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5">Provider SIM *</label>
+                <select id="input-provider" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+                  <option>Telkomsel</option><option>XL</option><option>Indosat</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-[#374151] mb-1.5">Tanggal Pasang</label>
+                <input type="date" id="input-installed" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#374151] mb-1.5">Pasang ke Mobil Dinas</label>
+              <select id="input-vehicle" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+                <option value="">Belum dipasang (stok)</option>
+                <option>B 7781 TQS - Mercedes-Benz OH 1626</option>
+                <option>B 1023 KJA - Toyota Hiace Commuter</option>
+                <option>B 6614 RRA - Mitsubishi Pajero Sport</option>
+              </select>
+              <p class="mt-1.5 text-[11px] text-[#9aa3bf]">Hanya kendaraan kategori Pool. Kendaraan Melekat tidak dilacak GPS.</p>
             </div>
 
             <div>
@@ -1330,5 +1366,5 @@
       searchInput?.addEventListener("input", applyFilters);
       filterStatus?.addEventListener("change", applyFilters);
     </script>
-  </body>
+</body>
 </html>

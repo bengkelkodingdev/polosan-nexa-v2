@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutasi &amp; Penghapusan - Admin FleetTrack Nexa v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: { spacing: { '1.25': '0.3125rem', '1.75': '0.4375rem', '3.25': '0.8125rem', '4.5': '1.125rem', '5.5': '1.375rem', '7.5': '1.875rem', '8.5': '2.125rem' },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d6e8; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9aa3bf; }
+  </style>
+<link rel="stylesheet" href="assets/sidebar.css">
+<script src="assets/sidebar.js"></script>
+</head>
+<body class="bg-[#f5f7fb] text-[#111827] min-h-screen flex antialiased font-sans">
+
+  <!-- Mobile Backdrop -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300"></div>
+
+<!-- ─── SIDEBAR ─── -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#222845] text-slate-300 flex flex-col transition-all duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+    <!-- Logo -->
+    <div class="h-14 px-4 flex items-center gap-2.5">
+      <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+        <img src="assets/nexa-logo.png" alt="Nexa" class="h-9 object-contain" onerror="this.src='https://placehold.co/72x22/222845/ffffff?text=NEXA'">
+        <span class="text-[9px] font-bold uppercase tracking-[2px] text-white/40 whitespace-nowrap">Fleet Management</span>
+      </a>
+      <button id="sidebar-close-btn" class="ml-auto lg:hidden text-white/50 hover:text-white p-1">
+        <i data-lucide="x" class="size-5"></i>
+      </button>
+    </div>
+
+    <!-- Navigation Menu -->
+          <div class="flex-1 overflow-y-auto pl-0 pr-3 py-3 space-y-3 text-xs font-medium">
+        <div>
+          <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Ringkasan</p>
+          <div class="space-y-1.5">
+            <a href="admin.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="layout-grid" class="size-4 shrink-0"></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+        </div>
+        <div>
+          <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Master Data</p>
+          <div class="space-y-1.5">
+            <a href="admin-fleet-type.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="layers" class="size-4 shrink-0"></i>
+              <span>Tipe Mobil Dinas</span>
+            </a>
+            <a href="admin-fleet.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="truck" class="size-4 shrink-0"></i>
+              <span>Data Mobil Dinas</span>
+            </a>
+            <a href="admin-driver.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="users" class="size-4 shrink-0"></i>
+              <span>Data Driver</span>
+            </a>
+            <a href="admin-device.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="cpu" class="size-4 shrink-0"></i>
+              <span>Data Device</span>
+            </a>
+            <a href="admin-work-units.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="building-2" class="size-4 shrink-0"></i>
+              <span>Unit Kerja</span>
+            </a>
+            <a href="admin-users.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="user-cog" class="size-4 shrink-0"></i>
+              <span>Manajemen Pengguna</span>
+            </a>
+          </div>
+        </div>
+        <div>
+          <p class="flex h-8 shrink-0 items-center rounded-md px-6 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[1px] text-white/55 whitespace-nowrap">Safety & Perawatan</p>
+          <div class="space-y-1.5">
+            <a href="admin-templates.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="clipboard-check" class="size-4 shrink-0"></i>
+              <span>Template Checklist</span>
+            </a>
+            <a href="admin-maintenance.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="wrench" class="size-4 shrink-0"></i>
+              <span>Perawatan</span>
+            </a>
+            <a href="admin-mutation.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full bg-[#FF8A0D] text-white text-[13px] font-semibold shadow-md shadow-orange-500/20">
+              <i data-lucide="arrow-left-right" class="size-4 shrink-0 text-white"></i>
+              <span>Mutasi &amp; Penghapusan</span>
+            </a>
+            <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="smartphone" class="size-4 shrink-0"></i>
+              <span>Simulasi Driver</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+<!-- Sidebar User Footer -->
+    <div class="p-2.5 pt-0 border-t border-white/5">
+      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/8">
+        <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white text-xs select-none shadow-xs">
+          AD
+        </div>
+        <div class="flex flex-col leading-tight min-w-0 flex-1">
+          <span class="text-sm font-bold text-white/90 truncate">Administrator</span>
+          <span class="text-[11px] text-white/50 truncate">admin@nexa.id</span>
+        </div>
+        <a href="index.html" title="Kembali ke Beranda" class="size-7 flex items-center justify-center text-white/40 hover:bg-red-500 hover:text-white rounded-md transition-colors">
+          <i data-lucide="log-out" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN CONTENT WRAPPER ─── -->
+  <div class="flex-1 flex flex-col min-w-0 lg:pl-64 transition-all duration-300">
+    
+    <!-- Top Site Header -->
+    <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center px-4 lg:px-7 bg-white border-b border-[#e4e8f0] justify-between">
+      <!-- Left: Toggle & Breadcrumb -->
+      <div class="flex items-center gap-0 min-w-0 flex-1">
+        <button id="sidebar-toggle-btn" class="size-8.5 rounded-md border border-[#e4e8f0] bg-white flex items-center justify-center text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-colors mr-3.5 shrink-0">
+          <i data-lucide="panel-left" class="size-4"></i>
+        </button>
+
+        <div class="w-px h-5 bg-[#e4e8f0] mr-3.5 shrink-0"></div>
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-1.5 text-[13px] whitespace-nowrap overflow-hidden">
+          <a href="index.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">FleetTrack</a>
+          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+          <a href="admin.html" class="text-[#9aa3bf] hover:text-[#2563eb] transition-colors">Admin</a>
+          <i data-lucide="chevron-right" class="size-3 text-[#d0d6e8] stroke-[2.5]"></i>
+          <span class="font-bold text-[#111827]">Mutasi &amp; Penghapusan</span>
+        </nav>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-2 shrink-0 pl-2">
+        <button class="relative flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
+          <i data-lucide="bell" class="size-4"></i>
+          <span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
+        </button>
+
+        <button title="Pengaturan" class="flex size-9 items-center justify-center rounded-md border border-[#e4e8f0] bg-white text-[#4b5675] hover:bg-[#f5f7fb] hover:text-[#111827] transition-all">
+          <i data-lucide="settings" class="size-4"></i>
+        </button>
+
+        <div class="w-px h-5.5 bg-[#e4e8f0] mx-1"></div>
+
+        <!-- Profile Dropdown -->
+        <div class="relative">
+          <button id="user-menu-btn" class="flex items-center gap-2 px-2.5 py-1.25 rounded-md hover:bg-[#f5f7fb] transition-colors">
+            <div class="flex size-7.5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1e2340] to-[#16a34a] text-[11px] font-black text-white">
+              AD
+            </div>
+            <div class="hidden sm:flex flex-col text-left leading-tight">
+              <span class="text-[12.5px] font-bold text-[#111827]">Administrator</span>
+              <span class="text-[10.5px] text-[#9aa3bf]">Admin</span>
+            </div>
+            <i data-lucide="chevron-down" class="size-3.5 text-[#9aa3bf] ml-0.5"></i>
+          </button>
+
+          <!-- Dropdown Popover -->
+          <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#e4e8f0] shadow-lg py-2 z-50 text-xs">
+            <div class="px-4 py-2 border-b border-gray-100">
+              <p class="text-[11px] font-medium text-gray-400">Masuk sebagai</p>
+              <p class="font-bold text-[#111827] truncate">admin@nexa.id</p>
+            </div>
+            <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              Beralih Tampilan Role:
+            </div>
+            <a href="superadmin.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Super Admin</span>
+            </a>
+            <a href="executive.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Executive</span>
+            </a>
+            <a href="admin.html" class="flex items-center justify-between px-4 py-2 text-blue-600 font-bold bg-blue-50/60">
+              <span>Admin</span>
+              <i data-lucide="check" class="size-3.5 text-blue-600"></i>
+            </a>
+            <a href="manager.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Manager</span>
+            </a>
+            <a href="auditor.html" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50">
+              <span>Auditor</span>
+            </a>
+            <div class="border-t border-gray-100 my-1"></div>
+            <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50">
+              <i data-lucide="home" class="size-3.5"></i>
+              <span>Kembali ke Beranda</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+      <div class="mb-5.5">
+        <h1 class="text-2xl font-bold text-[#1a1f36]">Mutasi &amp; Penghapusan</h1>
+        <p class="text-sm text-[#52607a] mt-1">Ajukan perpindahan unit kerja, perubahan kategori Pool / Melekat, penarikan, dan penghapusan mobil dinas. Persetujuan oleh Manager.</p>
+      </div>
+
+
+      <!-- KPI -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4 flex items-center gap-3.5">
+          <div class="size-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="arrow-left-right" class="size-5"></i></div>
+          <div><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Mutasi Unit</p><p id="kpi-pool" class="text-xl font-bold text-[#1a1f36]">0</p></div>
+        </div>
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4 flex items-center gap-3.5">
+          <div class="size-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center"><i data-lucide="repeat" class="size-5"></i></div>
+          <div><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Perubahan Kategori</p><p id="kpi-fleet" class="text-xl font-bold text-[#1a1f36]">0</p></div>
+        </div>
+        <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4 flex items-center gap-3.5">
+          <div class="size-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i data-lucide="archive-x" class="size-5"></i></div>
+          <div><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Penarikan &amp; Penghapusan</p><p id="kpi-driver" class="text-xl font-bold text-[#1a1f36]">0</p></div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
+        <div class="p-4 sm:p-5 border-b border-[#e4e8f0] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div class="relative flex-1 max-w-sm">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#9aa3bf]"></i>
+            <input type="text" id="search-input" placeholder="Cari plat nomor, jenis, atau unit..."
+              class="w-full h-9 pl-9 pr-3 text-[13px] bg-white border border-[#d0d6e8] rounded-[7px] text-[#1a1f36] placeholder-[#9aa3bf] focus:outline-none focus:border-[#2563eb] transition-colors" />
+          </div>
+          <button onclick="openAddModal()" class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] bg-[#2563eb] text-white hover:bg-[#1d4ed8] shadow-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer self-end sm:self-auto">
+            <i data-lucide="plus" class="size-4"></i><span>Ajukan Mutasi</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse text-left">
+            <thead>
+              <tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]">
+                <th class="py-3 pl-5 pr-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] w-14">No</th>
+                <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tanggal</th>
+                <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Mobil Dinas</th>
+                <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Jenis</th>
+                <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Dari → Ke</th>
+                <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th>
+                <th class="py-3 pr-5 pl-3 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right w-20">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#f1f3f9] text-[13px]" id="table-body"></tbody>
+          </table>
+          <p id="empty-state" class="hidden py-10 text-center text-sm text-[#9aa3bf]">Tidak ada pengajuan yang cocok.</p>
+        </div>
+
+        <div class="px-5 py-3.5 border-t border-[#e4e8f0] text-xs text-[#52607a]" id="table-footer"></div>
+      </div>
+
+    </main>
+  </div>
+
+
+  <!-- Modal Tambah / Edit -->
+  <div id="form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/50" onclick="closeFormModal()"></div>
+    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+        <h3 id="modal-title" class="text-base font-bold text-[#111827]">Ajukan Mutasi</h3>
+        <button onclick="closeFormModal()" class="text-gray-400 hover:text-gray-600 p-1"><i data-lucide="x" class="size-5"></i></button>
+      </div>
+      <form onsubmit="handleFormSubmit(event)">
+        <div class="space-y-3.5">
+          <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Mobil Dinas *</label><select id="f-vehicle" required class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+            <option value="">Pilih mobil dinas...</option>
+            <option>B 7720 SDA</option><option>B 1190 HJK</option><option>B 6602 TRE</option><option>B 1234 XY</option><option>B 3307 KLM</option><option>B 9014 PQR</option><option>B 2290 PLM</option>
+          </select></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Jenis *</label><select id="f-type" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
+              <option>Mutasi Unit</option><option>Perubahan Kategori</option><option>Penarikan</option><option>Penghapusan</option><option>Penjualan</option>
+            </select></div>
+            <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Tanggal Efektif *</label><input id="f-date" type="date" required class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]" /></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Dari</label><input id="f-from" placeholder="Unit / kategori saat ini" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]" /></div>
+            <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Ke *</label><input id="f-to" required placeholder="Unit / kategori tujuan" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]" /></div>
+          </div>
+          <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Alasan *</label><textarea id="f-reason" required rows="3" placeholder="Jelaskan alasan pengajuan" class="w-full px-3 py-2 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"></textarea></div>
+          <p class="text-[11px] text-[#9aa3bf] leading-relaxed">Pengajuan diteruskan ke Manager. Setelah disetujui, unit kerja / kategori kendaraan diperbarui otomatis.</p>
+        </div>
+        <div class="mt-6 flex justify-end gap-2.5 pt-4 border-t border-gray-100">
+          <button type="button" onclick="closeFormModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+          <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg shadow-xs">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Hapus -->
+  <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/50" onclick="closeDeleteModal()"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] p-6 z-10 text-center">
+      <div class="size-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3.5"><i data-lucide="alert-triangle" class="size-6"></i></div>
+      <h3 class="text-base font-bold text-[#111827]">Batalkan Pengajuan?</h3>
+      <p id="delete-text" class="text-xs text-gray-500 mt-1.5 leading-relaxed"></p>
+      <div class="mt-6 flex justify-center gap-2.5">
+        <button onclick="closeDeleteModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+        <button onclick="confirmDelete()" class="px-4 py-2 text-xs font-semibold text-white bg-[#dc2626] hover:bg-[#b91c1c] rounded-lg shadow-xs">Batalkan Pengajuan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Sidebar mobile toggle
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const closeBtn = document.getElementById('sidebar-close-btn');
+    function openSidebar() { sidebar.classList.remove('-translate-x-full'); sidebarBackdrop.classList.remove('hidden'); }
+    function closeSidebar() { sidebar.classList.add('-translate-x-full'); sidebarBackdrop.classList.add('hidden'); }
+    toggleBtn?.addEventListener('click', () => {
+      if (sidebar.classList.contains('-translate-x-full')) openSidebar(); else closeSidebar();
+    });
+    closeBtn?.addEventListener('click', closeSidebar);
+    sidebarBackdrop?.addEventListener('click', closeSidebar);
+
+    // User dropdown
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+    userMenuBtn?.addEventListener('click', (e) => { e.stopPropagation(); userDropdown.classList.toggle('hidden'); });
+    document.addEventListener('click', () => {
+      userDropdown?.classList.add('hidden');
+      document.querySelectorAll('.row-menu').forEach(m => m.classList.add('hidden'));
+    });
+    function toggleRowMenu(e, btn) {
+      e.stopPropagation();
+      const menu = btn.nextElementSibling;
+      document.querySelectorAll('.row-menu').forEach(m => { if (m !== menu) m.classList.add('hidden'); });
+      menu.classList.toggle('hidden');
+    }
+    function toast(msg) {
+      const el = document.createElement('div');
+      el.className = 'fixed bottom-5 right-5 z-[70] flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#1a1f36] text-white text-xs font-semibold shadow-lg';
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2600);
+    }
+
+    const STATUS = {
+      Diajukan: 'bg-amber-50 text-amber-700 border-amber-200',
+      Disetujui: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      Ditolak: 'bg-rose-50 text-rose-700 border-rose-200',
+    };
+    let items = [
+      { id: 1, date: '2026-11-20', plate: 'B 1190 HJK', model: 'Toyota Hiace Commuter', type: 'Penghapusan', from: 'Pool Operasional Regional 1', to: 'Lelang aset', reason: 'Umur 5 tahun, biaya perawatan tinggi', status: 'Diajukan' },
+      { id: 2, date: '2026-11-10', plate: 'B 2290 PLM', model: 'Toyota Innova Zenix', type: 'Perubahan Kategori', from: 'Pool', to: 'Melekat · Asisten Pemerintahan', reason: 'Penetapan kendaraan jabatan', status: 'Disetujui' },
+      { id: 3, date: '2026-10-02', plate: 'B 6614 RRA', model: 'Mitsubishi Pajero Sport', type: 'Mutasi Unit', from: 'Pool Kantor Pusat', to: 'Pool Operasional Regional 1', reason: 'Kebutuhan operasional lapangan', status: 'Disetujui' },
+      { id: 4, date: '2026-09-15', plate: 'B 3381 OPA', model: 'Toyota Avanza', type: 'Penarikan', from: 'Pool Operasional Regional 2', to: 'Gudang aset', reason: 'Menunggu perbaikan besar', status: 'Ditolak' },
+    ];
+    let deletingId = null, query = '';
+    const el = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    function render() {
+      const q = query.toLowerCase();
+      const rows = items.filter(u => (u.plate + u.type + u.from + u.to).toLowerCase().includes(q));
+      el('table-body').innerHTML = rows.map((u, i) => `
+        <tr class="hover:bg-[#f8f9fc] transition-colors">
+          <td class="py-3 pl-5 pr-3 font-mono text-[12.5px] font-semibold text-[#1a1f36]">${i + 1}</td>
+          <td class="py-3 px-4 whitespace-nowrap text-[#52607a]">${fmtDate(u.date)}</td>
+          <td class="py-3 px-4"><p class="font-mono text-[12.5px] font-bold text-[#1a1f36]">${esc(u.plate)}</p><p class="text-[11.5px] text-[#9aa3bf]">${esc(u.model)}</p></td>
+          <td class="py-3 px-4"><span class="font-mono text-[12px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">${esc(u.type)}</span></td>
+          <td class="py-3 px-4 text-[12.5px] text-[#52607a]">${esc(u.from)} <span class="text-[#9aa3bf]">→</span> <span class="font-semibold text-[#1a1f36]">${esc(u.to)}</span><p class="text-[11.5px] text-[#9aa3bf]">${esc(u.reason)}</p></td>
+          <td class="py-3 px-4"><span class="inline-block whitespace-nowrap text-[10.5px] font-bold px-2 py-1 rounded-md border ${STATUS[u.status]}">${u.status === 'Diajukan' ? 'Menunggu Persetujuan Manager' : u.status}</span></td>
+          <td class="py-3 pr-5 pl-3 text-right">
+            ${u.status === 'Diajukan' ? `<div class="relative inline-block text-left">
+              <button class="w-8 h-8 flex items-center justify-center rounded-md text-[#9aa3bf] hover:bg-[#f5f6fa] hover:text-[#1a1f36] transition-colors" onclick="toggleRowMenu(event, this)"><i data-lucide="more-vertical" class="size-4"></i></button>
+              <div class="hidden row-menu absolute right-0 mt-1 w-40 rounded-xl bg-white border border-[#e4e8f0] shadow-lg py-1 z-20 text-xs">
+                <button onclick="openDeleteModal(${u.id})" class="w-full flex items-center gap-2 px-3 py-1.75 text-[#dc2626] hover:bg-[#fef2f2] text-left"><i data-lucide="x-circle" class="size-3.5"></i> Batalkan</button>
+              </div>
+            </div>` : ''}
+          </td>
+        </tr>`).join('');
+      el('empty-state').classList.toggle('hidden', rows.length > 0);
+      el('table-footer').innerHTML = `Menampilkan <span class="font-semibold text-[#1a1f36]">${rows.length}</span> dari <span class="font-semibold text-[#1a1f36]">${items.length}</span> pengajuan`;
+      el('kpi-pool').textContent = items.filter(u => u.type === 'Mutasi Unit').length;
+      el('kpi-fleet').textContent = items.filter(u => u.type === 'Perubahan Kategori').length;
+      el('kpi-driver').textContent = items.filter(u => !['Mutasi Unit', 'Perubahan Kategori'].includes(u.type)).length;
+      lucide.createIcons();
+    }
+
+    function openAddModal() {
+      el('modal-title').textContent = 'Ajukan Mutasi';
+      ['f-vehicle', 'f-from', 'f-to', 'f-reason'].forEach(i => el(i).value = '');
+      el('f-date').valueAsDate = new Date();
+      el('form-modal').classList.remove('hidden');
+    }
+    function closeFormModal() { el('form-modal').classList.add('hidden'); }
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      items.unshift({ id: Date.now(), date: el('f-date').value, plate: el('f-vehicle').value, model: '-', type: el('f-type').value,
+        from: el('f-from').value || '-', to: el('f-to').value, reason: el('f-reason').value, status: 'Diajukan' });
+      closeFormModal(); render(); toast('Pengajuan dikirim ke Manager');
+    }
+    function openDeleteModal(id) {
+      deletingId = id;
+      el('delete-text').textContent = `Pengajuan untuk ${items.find(x => x.id === id).plate} akan dibatalkan.`;
+      el('delete-modal').classList.remove('hidden');
+    }
+    function closeDeleteModal() { el('delete-modal').classList.add('hidden'); }
+    function confirmDelete() { items = items.filter(x => x.id !== deletingId); closeDeleteModal(); render(); toast('Pengajuan dibatalkan'); }
+    el('search-input').addEventListener('input', (e) => { query = e.target.value; render(); });
+    render();
+  </script>
+</body>
+</html>

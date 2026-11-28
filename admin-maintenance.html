@@ -99,6 +99,10 @@
               <i data-lucide="wrench" class="size-4 shrink-0 text-white"></i>
               <span>Perawatan</span>
             </a>
+            <a href="admin-mutation.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
+              <i data-lucide="arrow-left-right" class="size-4 shrink-0"></i>
+              <span>Mutasi &amp; Penghapusan</span>
+            </a>
             <a href="driver-mobile.html" class="flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-r-full text-[13px] text-slate-300/80 hover:text-white hover:bg-white/5 transition-colors">
               <i data-lucide="smartphone" class="size-4 shrink-0"></i>
               <span>Simulasi Driver</span>
@@ -210,22 +214,90 @@
 
     <!-- Page Body -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
-      <div class="mb-5.5">
+      <div class="mb-5">
         <h1 class="text-2xl font-bold text-[#1a1f36]">Pencatatan Perawatan</h1>
-        <p class="text-sm text-[#52607a] mt-1">Input riwayat servis mobil dinas. Setiap catatan wajib disertai bukti dan diverifikasi oleh Manager.</p>
+        <p class="text-sm text-[#52607a] mt-1">Tindak lanjuti permintaan perbaikan, pantau jadwal servis, dan catat hasilnya.</p>
       </div>
 
-
-      <div class="flex items-start gap-3 rounded-[10px] border border-amber-200 bg-amber-50 text-amber-800 px-4 py-3 mb-5 text-[12.5px] leading-relaxed">
-        <i data-lucide="shield-alert" class="size-4.5 shrink-0 mt-0.5"></i>
-        <p><span class="font-bold">Alur verifikasi:</span> catatan yang Anda simpan berstatus <span class="font-bold">Tercatat (Menunggu Verifikasi Manager)</span>. Admin tidak dapat menyetujui catatan sendiri; persetujuan dilakukan oleh Manager setelah memeriksa bukti.</p>
+      <div role="tablist" class="inline-flex max-w-full overflow-x-auto p-1 rounded-lg bg-white border border-[#e4e8f0] mb-5">
+        <button type="button" role="tab" id="tab-repair" onclick="showTab('repair')" class="flex items-center gap-2 px-4 py-2 rounded-md text-[13px] font-semibold whitespace-nowrap"><i data-lucide="hammer" class="size-4"></i>Perbaikan<span id="count-repair" class="rounded-full bg-[#f1f3f9] px-1.5 py-0.5 text-[10.5px] font-bold text-[#52607a]">0</span></button>
+        <button type="button" role="tab" id="tab-service" onclick="showTab('service')" class="flex items-center gap-2 px-4 py-2 rounded-md text-[13px] font-semibold whitespace-nowrap"><i data-lucide="calendar-clock" class="size-4"></i>Servis Berkala<span id="count-service" class="rounded-full bg-[#f1f3f9] px-1.5 py-0.5 text-[10.5px] font-bold text-[#52607a]">0</span></button>
       </div>
 
-      <div class="grid grid-cols-1 gap-5">
-        <!-- Form -->
-        <form id="service-form" class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs p-5" onsubmit="submitService(event)">
-          <h2 class="text-sm font-bold text-[#1a1f36] mb-4 flex items-center gap-2"><i data-lucide="wrench" class="size-4 text-[#2563eb]"></i> Form Input Servis</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <section id="panel-repair" role="tabpanel">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+            <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4"><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Permintaan Baru</p><p id="repair-new" class="text-xl font-bold text-rose-600">0</p></div>
+            <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4"><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Dalam Perbaikan</p><p id="repair-progress" class="text-xl font-bold text-amber-600">0</p></div>
+            <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4"><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Menunggu Verifikasi</p><p id="repair-verify" class="text-xl font-bold text-[#2563eb]">0</p></div>
+          </div>
+          <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
+            <div class="px-4 py-3 border-b border-[#e4e8f0] flex flex-wrap items-center justify-between gap-3">
+              <div class="inline-flex p-1 rounded-lg border border-[#e4e8f0]"><button type="button" id="repair-view-active" onclick="showView('repair', 'active')" class="px-3 py-1.5 text-[12px] font-semibold rounded-md whitespace-nowrap">Aktif (<span id="repair-view-active-count">0</span>)</button><button type="button" id="repair-view-history" onclick="showView('repair', 'history')" class="px-3 py-1.5 text-[12px] font-semibold rounded-md whitespace-nowrap">Riwayat (<span id="repair-view-history-count">0</span>)</button></div>
+            </div>
+            <div id="repair-active" class="overflow-x-auto">
+              <table class="w-full border-collapse text-left">
+                <thead><tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]"><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">No.</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Armada</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Masalah</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Prioritas</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right">Aksi</th></tr></thead>
+                <tbody id="wo-body" class="divide-y divide-[#f1f3f9] text-[13px]"></tbody>
+              </table>
+              <div id="pager-repair-active" class="px-4 py-3 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"></div>
+            </div>
+            <div id="repair-history" class="overflow-x-auto">
+              <table class="w-full border-collapse text-left">
+                <thead><tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]"><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tanggal</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">No.</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Armada</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Masalah</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right">Biaya</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-center">Bukti</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th></tr></thead>
+                <tbody id="repair-history-body" class="divide-y divide-[#f1f3f9] text-[13px]"></tbody>
+              </table>
+              <div id="pager-repair-history" class="px-4 py-3 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"></div>
+            </div>
+            <p id="repair-empty" class="hidden py-10 text-center text-sm text-[#9aa3bf]">Belum ada data.</p>
+          </div>
+      </section>
+
+      <section id="panel-service" role="tabpanel" class="hidden">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+            <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4"><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Servis Terlambat</p><p id="service-late" class="text-xl font-bold text-rose-600">0</p></div>
+            <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4"><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Jatuh Tempo ≤30 Hari</p><p id="service-soon" class="text-xl font-bold text-amber-600">0</p></div>
+            <div class="bg-white border border-[#e4e8f0] rounded-[10px] p-4"><p class="text-[11px] font-semibold text-[#9aa3bf] uppercase tracking-wide">Menunggu Verifikasi</p><p id="service-verify" class="text-xl font-bold text-[#2563eb]">0</p></div>
+          </div>
+          <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
+            <div class="px-4 py-3 border-b border-[#e4e8f0] flex flex-wrap items-center justify-between gap-3">
+              <div class="inline-flex p-1 rounded-lg border border-[#e4e8f0]"><button type="button" id="service-view-active" onclick="showView('service', 'active')" class="px-3 py-1.5 text-[12px] font-semibold rounded-md whitespace-nowrap">Jadwal (<span id="service-view-active-count">0</span>)</button><button type="button" id="service-view-history" onclick="showView('service', 'history')" class="px-3 py-1.5 text-[12px] font-semibold rounded-md whitespace-nowrap">Riwayat (<span id="service-view-history-count">0</span>)</button></div>
+              <button type="button" onclick="openForm()" class="h-9 px-3.5 text-[12.5px] font-semibold rounded-[7px] bg-[#2563eb] text-white hover:bg-[#1d4ed8] shadow-xs flex items-center gap-1.5 whitespace-nowrap"><i data-lucide="plus" class="size-4"></i> Catat Servis</button>
+            </div>
+            <div id="service-active" class="overflow-x-auto">
+              <table class="w-full border-collapse text-left">
+                <thead><tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]"><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Armada</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Jenis</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tanggal</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right">Aksi</th></tr></thead>
+                <tbody id="schedule-body" class="divide-y divide-[#f1f3f9] text-[13px]"></tbody>
+              </table>
+              <div id="pager-service-active" class="px-4 py-3 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"></div>
+            </div>
+            <div id="service-history" class="overflow-x-auto">
+              <table class="w-full border-collapse text-left">
+                <thead><tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]"><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tanggal</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Armada</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Servis</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right">Biaya</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Berikutnya</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-center">Bukti</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th></tr></thead>
+                <tbody id="service-history-body" class="divide-y divide-[#f1f3f9] text-[13px]"></tbody>
+              </table>
+              <div id="pager-service-history" class="px-4 py-3 border-t border-[#e4e8f0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52607a]"></div>
+            </div>
+            <p id="service-empty" class="hidden py-10 text-center text-sm text-[#9aa3bf]">Belum ada data.</p>
+          </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ─── PANEL SAMPING: FORM SERVIS ─── -->
+  <div id="form-drawer" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/50" onclick="closeForm()"></div>
+    <div class="absolute inset-y-0 right-0 w-full max-w-xl bg-white shadow-2xl flex flex-col">
+      <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-[#e4e8f0]">
+        <div>
+          <h3 id="form-title" class="text-lg font-bold text-[#111827]">Catat Servis</h3>
+          <p id="form-source" class="text-xs text-[#9aa3bf] mt-0.5"></p>
+        </div>
+        <button type="button" onclick="closeForm()" class="text-gray-400 hover:text-gray-600 p-1" title="Tutup"><i data-lucide="x" class="size-5"></i></button>
+      </div>
+      <form id="service-form" class="flex flex-col min-h-0 flex-1" onsubmit="submitService(event)">
+          <div class="flex-1 overflow-y-auto px-5 py-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-[#374151] mb-1.5">Mobil Dinas *</label>
               <select id="f-vehicle" required class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]">
@@ -250,11 +322,11 @@
               <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Odometer Saat Servis (km) *</label><input id="f-odo" type="number" min="0" required placeholder="48500" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb] font-mono" /></div>
               <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Biaya (Rp) *</label><input id="f-cost" type="number" min="0" required placeholder="1500000" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb] font-mono" /></div>
             </div>
-            <div class="contents">
+            <div id="f-next" class="contents">
               <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Servis Berikutnya (km)</label><input id="f-next-km" type="number" min="0" placeholder="53500" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb] font-mono" /></div>
               <div><label class="block text-xs font-semibold text-[#374151] mb-1.5">Servis Berikutnya (tanggal)</label><input id="f-next-date" type="date" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]" /></div>
             </div>
-            <div class="col-span-full grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+            <div class="col-span-full grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-[#374151] mb-1.5">Foto Nota Bengkel *</label>
                 <div id="up-nota" role="button" tabindex="0" onclick="pickDoc('nota')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickDoc('nota')}"
@@ -280,41 +352,110 @@
             </div>
             <p id="form-error" class="hidden col-span-full text-xs font-semibold text-rose-600 flex items-center gap-1.5"><i data-lucide="alert-circle" class="size-3.5"></i><span></span></p>
           </div>
-          <div class="mt-5 pt-4 border-t border-gray-100 flex justify-end gap-2.5">
+          </div>
+          <div class="px-5 py-4 border-t border-[#e4e8f0] flex justify-end gap-2.5 shrink-0">
             <button type="reset" onclick="resetForm()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Reset</button>
             <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg shadow-xs flex items-center gap-1.5"><i data-lucide="send" class="size-3.5"></i> Simpan Catatan</button>
           </div>
         </form>
-
-        <!-- Riwayat -->
-        <div class="bg-white border border-[#e4e8f0] rounded-[10px] shadow-xs overflow-hidden">
-          <div class="p-4 sm:p-5 border-b border-[#e4e8f0] flex items-center justify-between gap-3">
-            <h2 class="text-sm font-bold text-[#1a1f36] flex items-center gap-2"><i data-lucide="history" class="size-4 text-[#2563eb]"></i> Riwayat Perawatan</h2>
-            <select id="filter-status" class="h-9 px-2.5 text-[12.5px] bg-white border border-[#d0d6e8] rounded-[7px] text-[#1a1f36] focus:outline-none focus:border-[#2563eb]">
-              <option value="">Semua Status</option>
-              <option value="pending">Menunggu Verifikasi</option>
-              <option value="approved">Terverifikasi</option>
-              <option value="revision">Perlu Revisi</option>
-            </select>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse text-left">
-              <thead>
-                <tr class="border-b border-[#e4e8f0] bg-[#f8f9fc]">
-                  <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Tanggal</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Armada</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Servis</th>
-                  <th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-right">Biaya</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Berikutnya</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px] text-center">Bukti</th><th class="py-3 px-4 text-[10.5px] font-bold text-[#9aa3bf] uppercase tracking-[0.6px]">Status</th>
-                </tr>
-              </thead>
-              <tbody id="history-body" class="divide-y divide-[#f1f3f9] text-[13px]"></tbody>
-            </table>
-            <p id="history-empty" class="hidden py-10 text-center text-sm text-[#9aa3bf]">Belum ada catatan.</p>
-          </div>
-        </div>
-      </div>
-
-    </main>
+    </div>
   </div>
 
+  <!-- ─── MODAL: DETAIL PERMINTAAN PERBAIKAN ─── -->
+  <div id="wo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/50" onclick="closeOrder()"></div>
+    <div class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] z-10">
+      <div class="flex items-start justify-between gap-3 p-6 pb-4 border-b border-[#e4e8f0]">
+        <div>
+          <p id="w-id" class="font-mono text-[11px] text-[#9aa3bf]"></p>
+          <h3 id="w-title" class="text-lg font-bold text-[#111827]"></h3>
+          <p id="w-sub" class="text-xs text-[#9aa3bf] mt-0.5"></p>
+          <div id="w-badge" class="mt-3"></div>
+        </div>
+        <button type="button" onclick="closeOrder()" class="text-gray-400 hover:text-gray-600 p-1" title="Tutup"><i data-lucide="x" class="size-5"></i></button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div id="w-blocked" class="rounded-lg border border-rose-200 bg-rose-50 px-3.5 py-3 text-[12.5px] text-rose-800">Temuan kritis: kendaraan tetap <span class="font-bold">Tidak Siap Jalan</span> sampai hasil perbaikan diverifikasi Manager.</div>
+        <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Sumber Temuan</p><p id="w-source" class="mt-1 text-[13px] font-semibold text-[#111827]"></p></div>
+        <div><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf] mb-1.5">Foto Temuan (contoh)</p><div id="w-photo" class="h-40 rounded-xl border border-[#e4e8f0] bg-cover bg-center"></div></div>
+        <div id="w-shop-info"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Bengkel</p><p id="w-shop-name" class="mt-1 text-[13px] font-semibold text-[#111827]"></p></div>
+        <div id="w-revision" class="rounded-lg border border-rose-200 bg-rose-50/60 px-3.5 py-3"><p class="text-[10.5px] font-bold uppercase tracking-wide text-rose-700">Catatan revisi dari Manager</p><p id="w-revision-text" class="mt-1 text-[12.5px] text-[#4b5675]"></p></div>
+        <div id="w-verified" class="rounded-lg border border-emerald-200 bg-emerald-50 px-3.5 py-3"><p class="text-[10.5px] font-bold uppercase tracking-wide text-emerald-700">Diverifikasi Manager</p><p id="w-verified-text" class="mt-1 text-[12.5px] font-semibold text-[#111827]"></p></div>
+        <div id="w-info-note" class="rounded-lg border border-violet-200 bg-violet-50 px-3.5 py-3"><p class="text-[10.5px] font-bold uppercase tracking-wide text-violet-700">Info yang diminta ke Manager</p><p id="w-info-text" class="mt-1 text-[12.5px] text-[#4b5675]"></p></div>
+        <div id="w-note-box"><label class="block text-xs font-semibold text-[#374151] mb-1.5" for="w-note">Catatan untuk Manager (wajib bila minta info)</label><textarea id="w-note" rows="2" class="w-full px-3 py-2 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] focus:outline-none focus:border-[#2563eb]"></textarea></div>
+        <div id="w-plan" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-[#374151] mb-1.5" for="w-shop">Bengkel *</label><input id="w-shop" placeholder="Misal: Auto2000 Sudirman" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"></div>
+          <div><label class="block text-xs font-semibold text-[#374151] mb-1.5" for="w-entry">Tanggal Masuk *</label><input id="w-entry" type="date" class="w-full h-10 px-3 text-[13px] border border-[#d0d6e8] rounded-lg text-[#111827] bg-white focus:outline-none focus:border-[#2563eb]"></div>
+        </div>
+        <p id="w-error" class="hidden text-xs font-semibold text-rose-600"></p>
+      </div>
+      <div id="w-actions" class="px-6 py-4 border-t border-[#e4e8f0] flex flex-wrap justify-end gap-2.5"></div>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: DETAIL CATATAN PERAWATAN (lampiran) ─── -->
+  <div id="record-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-2xs" onclick="closeRecord()"></div>
+    <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-[#e4e8f0] z-10 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between p-6 pb-4 border-b border-[#e4e8f0] sticky top-0 bg-white z-10">
+        <div>
+          <p class="font-mono text-[11px] text-[#9aa3bf]" id="r-id">-</p>
+          <h3 class="text-lg font-bold text-[#111827]" id="r-title">-</h3>
+          <p class="text-xs text-[#9aa3bf] mt-0.5" id="r-sub">-</p>
+          <div class="mt-3" id="r-badge"></div>
+        </div>
+        <button onclick="closeRecord()" class="text-gray-400 hover:text-gray-600 p-1"><i data-lucide="x" class="size-5"></i></button>
+      </div>
+      <div class="p-6 space-y-5">
+        <div id="r-revision" class="hidden rounded-xl border border-rose-200 bg-rose-50/60 p-4">
+          <p class="text-[10.5px] font-bold uppercase tracking-wide text-rose-700">Catatan revisi dari Manager</p>
+          <p class="mt-1 text-[12.5px] text-[#4b5675] leading-relaxed" id="r-note">-</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Bengkel</p><p class="mt-1 text-[12.5px] font-semibold text-[#111827]" id="r-shop">-</p></div>
+          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Odometer</p><p class="mt-1 text-[12.5px] font-semibold font-mono text-[#111827]" id="r-odo">-</p></div>
+          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Biaya</p><p class="mt-1 text-[12.5px] font-semibold font-mono text-[#111827]" id="r-cost">-</p></div>
+          <div class="rounded-xl bg-[#f8f9fc] border border-[#e4e8f0] p-3.5"><p class="text-[10.5px] font-bold uppercase tracking-wide text-[#9aa3bf]">Berikutnya</p><p class="mt-1 text-[12.5px] font-semibold text-[#111827]" id="r-next">-</p></div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <h4 class="text-[13px] font-bold text-[#111827]">Foto Nota Bengkel</h4>
+            <a id="r-nota-dl" download="nota-bengkel.svg" class="flex items-center gap-1 text-[11.5px] font-semibold text-[#2563eb] hover:underline"><i data-lucide="download" class="size-3.5"></i>Unduh</a>
+          </div>
+          <button type="button" onclick="zoomImg('nota')" class="block w-full h-48 rounded-xl border border-[#e4e8f0] bg-cover bg-center hover:ring-2 ring-[#2563eb] transition" id="r-nota"></button>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <h4 class="text-[13px] font-bold text-[#111827]">Foto Pengerjaan Fisik</h4>
+            <span class="text-[11px] text-[#9aa3bf]">Klik untuk memperbesar</span>
+          </div>
+          <div id="r-photos" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+        </div>
+        <div class="flex items-center gap-2 text-[11.5px] text-[#9aa3bf]">
+          <i data-lucide="info" class="size-4"></i>
+          <span>Verifikasi dilakukan oleh Manager. Admin hanya dapat mengunggah ulang bila diminta revisi.</span>
+        </div>
+      </div>
+      <div class="px-6 py-4 border-t border-[#e4e8f0] flex justify-end gap-2.5">
+        <button onclick="closeRecord()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg">Tutup</button>
+        <button id="r-reupload" onclick="reupload()" class="hidden px-4 py-2 text-xs font-semibold text-white bg-[#2563eb] hover:bg-[#1d4ed8] rounded-lg flex items-center gap-1.5"><i data-lucide="upload" class="size-3.5"></i> Unggah Ulang Nota</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Perbesar foto -->
+  <div id="zoom-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/80" onclick="this.classList.add('hidden')">
+    <div class="w-full max-w-3xl" onclick="event.stopPropagation()">
+      <img id="zoom-img" class="w-full rounded-xl bg-white" alt="Lampiran">
+      <div class="mt-3 flex items-center justify-between text-white">
+        <span id="zoom-cap" class="text-[13px] font-semibold"></span>
+        <div class="flex gap-2">
+          <a id="zoom-dl" download="lampiran.svg" class="px-3.5 py-2 text-xs font-semibold rounded-lg bg-white text-[#1a1f36] flex items-center gap-1.5"><i data-lucide="download" class="size-3.5"></i>Unduh</a>
+          <button onclick="document.getElementById('zoom-modal').classList.add('hidden')" class="px-3.5 py-2 text-xs font-semibold rounded-lg bg-white/15 hover:bg-white/25">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     lucide.createIcons();
@@ -359,34 +500,249 @@
       approved: { label: 'Terverifikasi', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
       revision: { label: 'Perlu Revisi', cls: 'bg-rose-50 text-rose-700 border-rose-200' },
     };
+    const WO_STATUS = {
+      new: ['bg-rose-50 text-rose-700 border-rose-200', 'Menunggu Tindak Lanjut'],
+      info: ['bg-violet-50 text-violet-700 border-violet-200', 'Perlu Info Tambahan'],
+      accepted: ['bg-blue-50 text-blue-700 border-blue-200', 'Diterima'],
+      progress: ['bg-amber-50 text-amber-700 border-amber-200', 'Dalam Perbaikan'],
+      verify: ['bg-amber-50 text-amber-700 border-amber-200', 'Menunggu Verifikasi Manager'],
+      revision: ['bg-rose-50 text-rose-700 border-rose-200', 'Perlu Revisi'],
+      done: ['bg-emerald-50 text-emerald-700 border-emerald-200', 'Selesai'],
+    };
+    const WO_PRIORITY = {
+      Kritis: 'bg-rose-50 text-rose-700 border-rose-200',
+      Rendah: 'bg-slate-100 text-slate-600 border-slate-200',
+    };
+
+    // kind: 'repair' = dari permintaan perbaikan, 'service' = servis berkala
     let records = [
-      { date: '2026-11-18', vehicle: 'B 1234 XY - Bus Medium', shop: 'Auto2000 Sudirman', type: 'Servis Berkala', odo: 48500, cost: 2350000, next: '53.500 km / 18 Mei 2027', status: 'pending' },
-      { date: '2026-11-05', vehicle: 'B 5521 NNO - Hiace Commuter', shop: 'Bengkel Resmi Hiace', type: 'Perbaikan Rem', odo: 61200, cost: 1780000, next: '66.200 km', status: 'approved' },
-      { date: '2026-10-22', vehicle: 'B 7720 SDA - Bus', shop: 'Karoseri Mandiri', type: 'Ganti Ban', odo: 102340, cost: 6400000, next: '- ', status: 'revision' },
-      { date: '2026-10-09', vehicle: 'B 2290 PLM - Innova Zenix', shop: 'Toyota Cempaka Putih', type: 'Servis Berkala', odo: 35980, cost: 1250000, next: '40.980 km / 9 Apr 2027', status: 'approved' },
+      { id: 'SRV-0412', kind: 'service', date: '2026-11-18', vehicle: 'B 1234 XY - Bus Medium', shop: 'Auto2000 Sudirman', type: 'Servis Berkala', odo: 48500, cost: 2350000, next: '53.500 km / 18 Mei 2027', status: 'pending', photos: ['Ruang mesin sesudah ganti oli', 'Filter udara lama vs baru'] },
+      { id: 'SRV-0405', kind: 'repair', order: 'WO-028', date: '2026-11-05', vehicle: 'B 5521 NNO - Hiace Commuter', shop: 'Bengkel Resmi Hiace', type: 'Perbaikan Rem', odo: 61200, cost: 1780000, next: '-', status: 'approved', photos: ['Kampas rem lama', 'Kampas rem terpasang', 'Uji pengereman'] },
+      { id: 'SRV-0398', kind: 'repair', order: 'WO-027', date: '2026-10-22', vehicle: 'B 7720 SDA - Bus', shop: 'Karoseri Mandiri', type: 'Ganti Ban', odo: 102340, cost: 6400000, next: '-', status: 'revision', note: 'Foto nota buram, nominal tidak terbaca. Mohon unggah ulang nota asli dari bengkel.', photos: ['Ban terpasang'] },
+      { id: 'SRV-0391', kind: 'service', date: '2026-10-09', vehicle: 'B 2290 PLM - Innova Zenix', shop: 'Toyota Cempaka Putih', type: 'Servis Berkala', odo: 35980, cost: 1250000, next: '40.980 km / 9 Apr 2027', status: 'approved', photos: ['Ruang mesin', 'Hasil scan ECU'] },
     ];
+    const orders = [
+      { id: 'WO-031', vehicle: 'B 7720 SDA - Bus', issue: 'Rem utama gagal uji pra-trip', source: 'Checklist pra-trip 25 Nov · Dedi Wahyu', priority: 'Kritis', status: 'new', type: 'Perbaikan Rem' },
+      { id: 'WO-030', vehicle: 'B 9014 PQR - CR-V', issue: 'Spion kiri retak', source: 'Checklist pasca-trip 24 Nov · Gita Rahayu', priority: 'Rendah', status: 'accepted', type: 'Perbaikan Lainnya' },
+      { id: 'WO-029', vehicle: 'B 1234 XY - Bus Medium', issue: 'Lampu kabut kiri mati', source: 'Checklist pasca-trip 24 Nov · Supardi Ardiansyah', priority: 'Rendah', status: 'progress', type: 'Perbaikan Lainnya', shop: 'Auto2000 Sudirman' },
+      { id: 'WO-027', vehicle: 'B 7720 SDA - Bus', issue: 'Ban aus, perlu diganti', source: 'Checklist pasca-trip 20 Okt · Dedi Wahyu', priority: 'Rendah', status: 'revision', type: 'Ganti Ban', shop: 'Karoseri Mandiri' },
+      { id: 'WO-028', vehicle: 'B 5521 NNO - Hiace Commuter', issue: 'Kampas rem aus', source: 'Checklist pra-trip 4 Nov · Budi Setiadi', priority: 'Kritis', status: 'done', type: 'Perbaikan Rem', shop: 'Bengkel Resmi Hiace', verified: { by: 'Sari Manager', date: '2026-11-06' } },
+    ];
+    // days: sisa hari menuju jatuh tempo (negatif = terlambat)
+    const schedules = [
+      { vehicle: 'B 6602 TRE - Innova Zenix', holder: 'Melekat · Kepala Biro Umum', job: 'Servis Berkala 35.000 km', due: '2026-11-03', days: -23 },
+      { vehicle: 'B 8812 FAD - Hiace Premio', holder: 'Pool Operasional Regional 2', job: 'Servis Berkala 62.000 km', due: '2026-12-04', days: 9 },
+      { vehicle: 'B 3381 OPA - Avanza', holder: 'Pool Operasional Regional 2', job: 'Inspeksi Aset Berkala', due: '2026-12-10', days: 15 },
+      { vehicle: 'B 1234 XY - Bus Medium', holder: 'Pool Kantor Pusat', job: 'Servis Berkala 53.500 km', due: '2027-05-18', days: 174 },
+      { vehicle: 'B 3307 KLM - Camry', holder: 'Melekat · Sekretaris Daerah', job: 'Inspeksi Aset Berkala', due: '2027-01-20', days: 56 },
+    ];
+    const TYPES = {
+      repair: ['Perbaikan Rem', 'Ganti Ban', 'Ganti Aki', 'Perbaikan Lainnya'],
+      service: ['Servis Berkala', 'Inspeksi Aset Berkala', 'Ganti Ban', 'Ganti Aki'],
+    };
+
     const el = (id) => document.getElementById(id);
     const rp = (n) => 'Rp ' + Number(n).toLocaleString('id-ID');
     const fmtDate = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
     const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const badge = (cls, label) => `<span class="inline-block whitespace-nowrap text-[10.5px] font-bold px-2 py-1 rounded-md border ${cls}">${label}</span>`;
+    const recordBadge = (r) => badge(STATUS[r.status].cls, STATUS[r.status].label);
+    const btnPrimary = 'h-8 px-3 rounded-[7px] text-[12px] font-semibold whitespace-nowrap bg-[#2563eb] text-white hover:bg-[#1d4ed8]';
+    const btnPlain = 'h-8 px-3 rounded-[7px] text-[12px] font-semibold whitespace-nowrap border border-[#d0d6e8] bg-white text-[#374151] hover:bg-[#f5f7fb]';
+    const button = (cls, label, call) => `<button type="button" onclick="event.stopPropagation(); ${call}" class="${cls}">${label}</button>`;
+    const recordOf = (o) => records.findIndex(r => r.order === o.id);
+    const proofButton = (i) => `<button type="button" onclick="event.stopPropagation(); openRecord(${i})" class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-emerald-600 hover:bg-emerald-50 transition-colors" title="Lihat nota & foto pengerjaan"><i data-lucide="receipt" class="size-3.5"></i><i data-lucide="camera" class="size-3.5"></i><span class="text-[11px] font-semibold">${1 + (records[i].photos || [1]).length}</span></button>`;
+    const vehicleCell = (name, sub) => `<td class="py-3 px-4"><p class="font-semibold text-[#1a1f36] whitespace-nowrap">${esc(name)}</p><p class="text-[11.5px] text-[#9aa3bf]">${esc(sub)}</p></td>`;
 
-    function renderHistory() {
-      const f = el('filter-status').value;
-      const rows = records.filter(r => !f || r.status === f);
-      el('history-body').innerHTML = rows.map(r => `
+    // ─── Pembagian halaman ───
+    const PAGE_SIZE = 10;
+    const pages = { 'repair-active': 1, 'repair-history': 1, 'service-active': 1, 'service-history': 1 };
+    // Ambil baris untuk halaman aktif dan gambar tombol Sebelumnya / Selanjutnya
+    function paginate(key, rows) {
+      const total = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+      pages[key] = Math.min(Math.max(1, pages[key]), total);
+      const from = (pages[key] - 1) * PAGE_SIZE;
+      const shown = rows.slice(from, from + PAGE_SIZE);
+      const nav = (step, label, off) => `<button type="button" ${off ? 'disabled' : ''} onclick="goPage('${key}', ${step})" class="h-8 px-2.5 rounded-[6px] border border-[#d0d6e8] bg-white text-[#374151] hover:bg-[#f5f7fb] disabled:opacity-40 disabled:pointer-events-none">${label}</button>`;
+      el('pager-' + key).classList.toggle('hidden', rows.length === 0);
+      el('pager-' + key).innerHTML = `<span>Menampilkan <b class="text-[#1a1f36]">${from + 1}–${from + shown.length}</b> dari <b class="text-[#1a1f36]">${rows.length}</b></span>
+        <div class="flex items-center gap-2">${nav(-1, 'Sebelumnya', pages[key] === 1)}<span>${pages[key]} / ${total}</span>${nav(1, 'Selanjutnya', pages[key] === total)}</div>`;
+      return shown;
+    }
+    function goPage(key, step) { pages[key] += step; render(); }
+
+    // ─── Tab utama dan tampilan di dalamnya ───
+    const view = { repair: 'active', service: 'active' };
+    function showTab(name) {
+      ['repair', 'service'].forEach(t => {
+        const active = t === name;
+        el('panel-' + t).classList.toggle('hidden', !active);
+        const b = el('tab-' + t);
+        b.setAttribute('aria-selected', active);
+        b.classList.toggle('bg-[#222845]', active);
+        b.classList.toggle('text-white', active);
+        b.classList.toggle('text-[#52607a]', !active);
+      });
+    }
+    function showView(kind, name) { view[kind] = name; render(); }
+
+    // ─── Perbaikan ───
+    // Tombol utama per status: [label, tindakan]
+    const WO_ACTION = { new: ['Tinjau', 'openOrder'], accepted: ['Proses', 'openOrder'], progress: ['Catat Perbaikan', 'recordOrder'], revision: ['Unggah Ulang', 'openOrder'] };
+    function renderRepair() {
+      const open = orders.map((o, i) => [o, i]).filter(([o]) => o.status !== 'done');
+      el('wo-body').innerHTML = paginate('repair-active', open).map(([o, i]) => {
+        const a = WO_ACTION[o.status];
+        return `
+        <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openOrder(${i})">
+          <td class="py-3 px-4 font-mono text-[12px] font-semibold text-[#1a1f36] whitespace-nowrap">${o.id}</td>
+          <td class="py-3 px-4 font-semibold text-[#1a1f36] whitespace-nowrap">${esc(o.vehicle)}</td>
+          <td class="py-3 px-4"><p class="text-[#1a1f36]">${esc(o.issue)}</p><p class="text-[11.5px] text-[#9aa3bf]">${esc(o.source)}</p></td>
+          <td class="py-3 px-4">${badge(WO_PRIORITY[o.priority], o.priority)}</td>
+          <td class="py-3 px-4">${badge(...WO_STATUS[o.status])}</td>
+          <td class="py-3 px-4 text-right">${a ? button(btnPrimary, a[0], `${a[1]}(${i})`) : button(btnPlain, 'Detail', `openOrder(${i})`)}</td>
+        </tr>`;
+      }).join('');
+
+      const done = orders.map((o, i) => [o, i, recordOf(o)]).filter(([o]) => o.status === 'done')
+        .sort((a, b) => (records[b[2]]?.date || '').localeCompare(records[a[2]]?.date || ''));
+      el('repair-history-body').innerHTML = paginate('repair-history', done).map(([o, i, r]) => `
+        <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openOrder(${i})">
+          <td class="py-3 px-4 whitespace-nowrap text-[#52607a]">${fmtDate(records[r]?.date)}</td>
+          <td class="py-3 px-4 font-mono text-[12px] font-semibold text-[#1a1f36] whitespace-nowrap">${o.id}</td>
+          ${vehicleCell(o.vehicle, o.shop || '-')}
+          <td class="py-3 px-4"><p class="text-[#1a1f36]">${esc(o.issue)}</p><p class="text-[11.5px] text-[#9aa3bf]">${esc(o.source)}</p></td>
+          <td class="py-3 px-4 text-right font-mono text-[12.5px] font-semibold text-[#1a1f36] whitespace-nowrap">${r < 0 ? '-' : rp(records[r].cost)}</td>
+          <td class="py-3 px-4 text-center">${r < 0 ? '-' : proofButton(r)}</td>
+          <td class="py-3 px-4">${badge(...WO_STATUS.done)}</td>
+        </tr>`).join('');
+
+      const count = (s) => orders.filter(o => o.status === s).length;
+      el('repair-new').textContent = count('new');
+      el('repair-progress').textContent = count('progress');
+      el('repair-verify').textContent = count('verify');
+      return { active: orders.length - done.length, history: done.length };
+    }
+
+    // ─── Servis berkala ───
+    function scheduleBadge(days) {
+      if (days < 0) return badge('bg-rose-50 text-rose-700 border-rose-200', 'Terlambat ' + -days + ' hari');
+      if (days <= 30) return badge('bg-amber-50 text-amber-700 border-amber-200', days + ' hari lagi');
+      return badge('bg-blue-50 text-blue-700 border-blue-200', 'Terjadwal');
+    }
+    function renderService() {
+      // Catatan servis yang belum terverifikasi tetap di daftar kerja
+      const waiting = records.map((r, i) => [r, i]).filter(([r]) => r.kind === 'service' && r.status !== 'approved');
+      const planned = schedules.map((s, i) => [s, i]).filter(([s]) => !s.record);
+      el('schedule-body').innerHTML = paginate('service-active', waiting.map(([r, i]) => `
+        <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openRecord(${i})">
+          ${vehicleCell(r.vehicle, r.shop)}
+          <td class="py-3 px-4 text-[#52607a]">${esc(r.type)}</td>
+          <td class="py-3 px-4 whitespace-nowrap text-[#52607a]">${fmtDate(r.date)}<p class="text-[11.5px] text-[#9aa3bf]">Tanggal servis</p></td>
+          <td class="py-3 px-4">${recordBadge(r)}</td>
+          <td class="py-3 px-4 text-right">${r.status === 'revision' ? button(btnPrimary, 'Unggah Ulang', `openRecord(${i})`) : button(btnPlain, 'Detail', `openRecord(${i})`)}</td>
+        </tr>`).concat(planned.map(([s, i]) => `
         <tr class="hover:bg-[#f8f9fc] transition-colors">
+          ${vehicleCell(s.vehicle, s.holder)}
+          <td class="py-3 px-4 text-[#52607a]">${esc(s.job)}</td>
+          <td class="py-3 px-4 whitespace-nowrap text-[#52607a]">${fmtDate(s.due)}</td>
+          <td class="py-3 px-4">${scheduleBadge(s.days)}</td>
+          <td class="py-3 px-4 text-right">${button(btnPlain, 'Catat Servis', `recordSchedule(${i})`)}</td>
+        </tr>`))).join('');
+
+      const done = records.map((r, i) => [r, i]).filter(([r]) => r.kind === 'service' && r.status === 'approved');
+      el('service-history-body').innerHTML = paginate('service-history', done).map(([r, i]) => `
+        <tr class="hover:bg-[#f8f9fc] transition-colors cursor-pointer" onclick="openRecord(${i})">
           <td class="py-3 px-4 whitespace-nowrap text-[#52607a]">${fmtDate(r.date)}</td>
-          <td class="py-3 px-4"><p class="font-semibold text-[#1a1f36]">${esc(r.vehicle)}</p><p class="text-[11.5px] text-[#9aa3bf]">${esc(r.shop)}</p></td>
+          ${vehicleCell(r.vehicle, r.shop)}
           <td class="py-3 px-4 text-[#52607a]">${esc(r.type)}<p class="font-mono text-[11.5px] text-[#9aa3bf]">${Number(r.odo).toLocaleString('id-ID')} km</p></td>
           <td class="py-3 px-4 text-right font-mono text-[12.5px] font-semibold text-[#1a1f36] whitespace-nowrap">${rp(r.cost)}</td>
           <td class="py-3 px-4 text-[12px] text-[#52607a]">${esc(r.next)}</td>
-          <td class="py-3 px-4 text-center"><span class="inline-flex items-center gap-1 text-emerald-600" title="Nota & foto pengerjaan terlampir"><i data-lucide="receipt" class="size-3.5"></i><i data-lucide="camera" class="size-3.5"></i></span></td>
-          <td class="py-3 px-4"><span class="inline-block whitespace-nowrap text-[10.5px] font-bold px-2 py-1 rounded-md border ${STATUS[r.status].cls}">${STATUS[r.status].label}</span></td>
+          <td class="py-3 px-4 text-center">${proofButton(i)}</td>
+          <td class="py-3 px-4">${recordBadge(r)}</td>
         </tr>`).join('');
-      el('history-empty').classList.toggle('hidden', rows.length > 0);
+
+      el('service-late').textContent = planned.filter(([s]) => s.days < 0).length;
+      el('service-soon').textContent = planned.filter(([s]) => s.days >= 0 && s.days <= 30).length;
+      el('service-verify').textContent = waiting.filter(([r]) => r.status === 'pending').length;
+      return { active: waiting.length + planned.length, history: done.length };
+    }
+
+    function render() {
+      const counts = { repair: renderRepair(), service: renderService() };
+      ['repair', 'service'].forEach(kind => {
+        el('count-' + kind).textContent = counts[kind].active;
+        ['active', 'history'].forEach(name => {
+          const on = view[kind] === name;
+          const b = el(kind + '-view-' + name);
+          b.setAttribute('aria-pressed', on);
+          b.classList.toggle('bg-[#222845]', on);
+          b.classList.toggle('text-white', on);
+          b.classList.toggle('text-[#52607a]', !on);
+          el(kind + '-view-' + name + '-count').textContent = counts[kind][name];
+          el(kind + '-' + name).classList.toggle('hidden', !on);
+        });
+        el(kind + '-empty').classList.toggle('hidden', counts[kind][view[kind]] > 0);
+      });
       lucide.createIcons();
     }
 
+    // ─── Detail permintaan perbaikan ───
+    let curOrder = null;
+    function openOrder(i) {
+      const o = curOrder = orders[i];
+      el('w-id').textContent = o.id;
+      el('w-title').textContent = o.issue;
+      el('w-sub').textContent = o.vehicle;
+      el('w-badge').innerHTML = badge(...WO_STATUS[o.status]) + ' ' + badge(WO_PRIORITY[o.priority], o.priority);
+      el('w-source').textContent = o.source;
+      el('w-photo').style.backgroundImage = `url("${svgImg('work')}")`;
+      const rec = recordOf(o);
+      el('w-blocked').classList.toggle('hidden', o.priority !== 'Kritis' || o.status === 'done');
+      el('w-revision').classList.toggle('hidden', o.status !== 'revision');
+      el('w-revision-text').textContent = rec < 0 ? '' : records[rec].note || '';
+      el('w-verified').classList.toggle('hidden', o.status !== 'done');
+      el('w-verified-text').textContent = o.verified ? o.verified.by + ' · ' + fmtDate(o.verified.date) + (o.priority === 'Kritis' ? ' · Kendaraan kembali Siap Jalan' : '') : '';
+      el('w-shop-info').classList.toggle('hidden', !o.shop);
+      el('w-shop-name').textContent = o.shop ? o.shop + (o.entry ? ' · masuk ' + fmtDate(o.entry) : '') : '';
+      el('w-info-note').classList.toggle('hidden', o.status !== 'info');
+      el('w-info-text').textContent = o.note || '';
+      el('w-note-box').classList.toggle('hidden', o.status !== 'new');
+      el('w-plan').classList.toggle('hidden', o.status !== 'accepted');
+      el('w-note').value = ''; el('w-shop').value = o.shop || ''; el('w-entry').value = '';
+      el('w-error').classList.add('hidden');
+      const actions = {
+        new: button(btnPlain, 'Minta Info Tambahan', 'askInfo()') + button(btnPrimary, 'Terima', 'acceptOrder()'),
+        accepted: button(btnPrimary, 'Mulai Perbaikan', 'startOrder()'),
+        progress: button(btnPrimary, 'Catat Perbaikan', `recordOrder(${i})`),
+        revision: button(btnPrimary, 'Unggah Ulang Nota', `reuploadOrder(${i})`),
+      };
+      const proof = rec < 0 ? '' : button(btnPlain, 'Lihat Bukti', `closeOrder(); openRecord(${rec})`);
+      el('w-actions').innerHTML = button(btnPlain, 'Tutup', 'closeOrder()') + proof + (actions[o.status] || '');
+      el('wo-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeOrder() { el('wo-modal').classList.add('hidden'); }
+    function orderError(msg) { el('w-error').textContent = msg; el('w-error').classList.remove('hidden'); }
+    function updateOrder(status, msg) {
+      curOrder.status = status;
+      closeOrder(); render(); toast(msg);
+    }
+    function acceptOrder() { updateOrder('accepted', curOrder.id + ' diterima.'); }
+    function askInfo() {
+      const note = el('w-note').value.trim();
+      if (!note) return orderError('Tulis informasi yang dibutuhkan terlebih dahulu.');
+      curOrder.note = note;
+      updateOrder('info', curOrder.id + ' dikembalikan ke Manager.');
+    }
+    function startOrder() {
+      const shop = el('w-shop').value.trim(), entry = el('w-entry').value;
+      if (!shop || !entry) return orderError('Isi bengkel dan tanggal masuk terlebih dahulu.');
+      curOrder.shop = shop; curOrder.entry = entry;
+      updateOrder('progress', curOrder.id + ' masuk tahap perbaikan.');
+    }
+
+    // ─── Panel form: Catat Perbaikan / Catat Servis ───
     // Simulasi unggah: klik langsung mengisi foto contoh
     const docs = { nota: null, work: null };
     const svgImg = (k) => 'data:image/svg+xml;utf8,' + encodeURIComponent(k === 'nota'
@@ -417,6 +773,38 @@
     }
     function resetForm() { clearDoc('nota'); clearDoc('work'); el('form-error').classList.add('hidden'); }
 
+    let formSource = { kind: 'service' };
+    function openForm(preset = {}) {
+      formSource = { kind: 'service', ...preset };
+      const repair = formSource.kind === 'repair';
+      el('service-form').reset(); resetForm();
+      el('f-date').valueAsDate = new Date();
+      el('form-title').textContent = repair ? 'Catat Perbaikan' : 'Catat Servis';
+      el('f-type').replaceChildren(...TYPES[formSource.kind].map(t => new Option(t, t)));
+      el('f-next').classList.toggle('hidden', repair);
+      el('f-next').classList.toggle('contents', !repair);
+      const sel = el('f-vehicle');
+      if (preset.vehicle) {
+        if (![...sel.options].some(o => o.value === preset.vehicle)) sel.add(new Option(preset.vehicle, preset.vehicle));
+        sel.value = preset.vehicle;
+      }
+      sel.disabled = repair; // kendaraan mengikuti permintaan perbaikan
+      if (preset.type) el('f-type').value = preset.type;
+      if (preset.shop) el('f-shop').value = preset.shop;
+      el('form-source').textContent = preset.label || 'Servis di luar jadwal';
+      el('form-drawer').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeForm() { el('form-drawer').classList.add('hidden'); }
+    function recordOrder(i) {
+      const o = orders[i];
+      closeOrder();
+      openForm({ kind: 'repair', vehicle: o.vehicle, type: o.type, shop: o.shop, order: o, label: 'Untuk ' + o.id + ' · ' + o.issue });
+    }
+    function recordSchedule(i) {
+      const s = schedules[i];
+      openForm({ vehicle: s.vehicle, type: s.job.startsWith('Inspeksi') ? 'Inspeksi Aset Berkala' : 'Servis Berkala', schedule: s, label: 'Dari jadwal · ' + s.job });
+    }
     function submitService(e) {
       e.preventDefault();
       if (!docs.nota || !docs.work) {
@@ -424,17 +812,72 @@
         el('form-error').classList.remove('hidden');
         return;
       }
+      const { kind, order, schedule } = formSource;
       const nextKm = el('f-next-km').value, nextDate = el('f-next-date').value;
       const next = [nextKm ? Number(nextKm).toLocaleString('id-ID') + ' km' : '', nextDate ? fmtDate(nextDate) : ''].filter(Boolean).join(' / ') || '-';
-      records.unshift({ date: el('f-date').value, vehicle: el('f-vehicle').value, shop: el('f-shop').value, type: el('f-type').value,
-        odo: el('f-odo').value, cost: el('f-cost').value, next, status: 'pending' });
-      el('service-form').reset(); resetForm();
-      renderHistory();
+      const record = { id: 'SRV-' + (413 + records.length), kind, date: el('f-date').value, vehicle: el('f-vehicle').value, shop: el('f-shop').value, type: el('f-type').value,
+        odo: el('f-odo').value, cost: el('f-cost').value, next, status: 'pending', photos: ['Foto pengerjaan'] };
+      if (order) { order.status = 'verify'; record.order = order.id; }
+      if (schedule) schedule.record = record.id;
+      records.unshift(record);
+      closeForm();
+      view[kind] = 'active';
+      pages[kind + '-active'] = 1;
+      render(); showTab(kind);
       toast('Tercatat. Menunggu verifikasi Manager.');
     }
-    el('filter-status').addEventListener('change', renderHistory);
-    el('f-date').valueAsDate = new Date();
-    renderHistory();
+
+    // ─── Detail lampiran ───
+    let curRec = null;
+    function openRecord(i) {
+      const r = curRec = records[i];
+      el('r-id').textContent = r.id || '-';
+      el('r-title').textContent = r.type;
+      el('r-sub').textContent = r.vehicle + ' · ' + fmtDate(r.date) + (r.order ? ' · ' + r.order : '');
+      el('r-badge').innerHTML = recordBadge(r);
+      el('r-shop').textContent = r.shop;
+      el('r-odo').textContent = Number(r.odo).toLocaleString('id-ID') + ' km';
+      el('r-cost').textContent = rp(r.cost);
+      el('r-next').textContent = r.next;
+      el('r-next').parentElement.classList.toggle('hidden', r.kind === 'repair');
+      el('r-revision').classList.toggle('hidden', r.status !== 'revision');
+      el('r-reupload').classList.toggle('hidden', r.status !== 'revision');
+      el('r-note').textContent = r.note || '';
+      el('r-nota').style.backgroundImage = `url("${svgImg('nota')}")`;
+      el('r-nota').style.filter = r.status === 'revision' ? 'blur(2px)' : '';
+      el('r-nota-dl').href = svgImg('nota');
+      el('r-photos').innerHTML = (r.photos || []).map((p, k) => `
+        <button type="button" onclick="zoomImg('work', ${k})" class="text-left group">
+          <span class="block h-28 rounded-xl border border-[#e4e8f0] bg-cover bg-center group-hover:ring-2 ring-[#2563eb] transition" style="background-image:url('${svgImg('work')}')"></span>
+          <span class="mt-1.5 block text-[11.5px] text-[#52607a] truncate">${esc(p)}</span>
+        </button>`).join('');
+      el('record-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeRecord() { el('record-modal').classList.add('hidden'); }
+    function zoomImg(kind, k) {
+      el('zoom-img').src = svgImg(kind);
+      el('zoom-dl').href = svgImg(kind);
+      el('zoom-cap').textContent = kind === 'nota' ? 'Nota bengkel · ' + curRec.id : curRec.photos[k];
+      el('zoom-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    // Unggah ulang menyamakan status catatan dan permintaan
+    function resubmit(record) {
+      record.status = 'pending';
+      const o = orders.find(x => x.id === record.order);
+      if (o) o.status = 'verify';
+      render();
+      toast('Simulasi: nota baru diunggah, status kembali Menunggu Verifikasi.');
+    }
+    function reupload() { closeRecord(); resubmit(curRec); }
+    function reuploadOrder(i) { closeOrder(); resubmit(records[recordOf(orders[i])]); }
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { el('zoom-modal').classList.add('hidden'); closeRecord(); closeOrder(); closeForm(); } });
+    render();
+    showTab('repair');
+
   </script>
 </body>
 </html>
